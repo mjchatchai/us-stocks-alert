@@ -119,11 +119,11 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
         key=_score_portfolio_exit_urgency,
     )
     zone2_buy = sorted(
-        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"]["side"] == "BUY"],
+        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"].get("trend_locked") == "BUY"],
         key=_score_stock_progress,
     )
     zone3_sell = sorted(
-        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"]["side"] == "SELL"],
+        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"].get("trend_locked") != "BUY"],
         key=_score_stock_progress,
     )
 
