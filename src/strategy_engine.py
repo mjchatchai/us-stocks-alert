@@ -56,6 +56,7 @@ def compute_dot_colors(
     b4: bool,
     b5: bool,
     b6: bool,
+    action_today: str = "",
 ) -> List[str]:
     fg = "G" if side == "BUY" else "R"
     if trend_locked == "BUY":
@@ -66,16 +67,33 @@ def compute_dot_colors(
         bg = "W"
 
     flags = [b1, b2, b3, b4, b5, b6]
-    return [fg if flag else bg for flag in flags]
+    colors = [fg if flag else bg for flag in flags]
+    if action_today == "BUY_NOW":
+        colors[5] = "BUY_Rocket"
+    elif action_today == "SELL_NOW":
+        colors[5] = "SELL_Siren"
+    return colors
 
 
 def format_dots_compact(dot_colors: List[str]) -> str:
-    m = {"G": "🟢", "R": "🔴", "W": "⚪"}
+    m = {
+        "G": "🟢",
+        "R": "🔴",
+        "W": "⚪",
+        "BUY_Rocket": "🚀",
+        "SELL_Siren": "🚨",
+    }
     return "".join(m.get(c, "⚪") for c in dot_colors)
 
 
 def format_dots_visual(dot_colors: List[str], b3: bool, bar_count: int, max_bars: int) -> str:
-    m = {"G": "🟢", "R": "🔴", "W": "⚪"}
+    m = {
+        "G": "🟢",
+        "R": "🔴",
+        "W": "⚪",
+        "BUY_Rocket": "🚀",
+        "SELL_Siren": "🚨",
+    }
     parts = [m.get(c, "⚪") for c in dot_colors]
     if b3 and bar_count > 0:
         parts[2] = f"{parts[2]}({bar_count}/{max_bars})"
@@ -409,6 +427,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
             b4=b4,
             b5=b5,
             b6=b6,
+            action_today=action_today,
         )
         buttons_compact = format_dots_compact(dot_colors)
         buttons_visual = format_dots_visual(dot_colors, b3, bar_count, max_bars=max_wait_bars)
