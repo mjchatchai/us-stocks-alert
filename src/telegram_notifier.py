@@ -262,31 +262,67 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
     return cfg
 
 
-def _score_stock_progress(item: Dict[str, Any]) -> tuple:
+def _score_zone2_uptrend(item: Dict[str, Any]) -> tuple:
     """
-    Sorts Watchlist stocks (Zone 2 & Zone 3) across all 6 distinct button stages:
-    1. 5 dots (🟢🟢🟢🟢🟢🔴 / 🔴🔴🔴🔴🔴🟢) — วันคอนเฟิร์มจุดซื้อ/ขายวันนี้วันแรก!
-    2. 4 dots (🟢🟢🟢🟢🔴🔴 / 🔴🔴🔴🔴🟢🟢) — EMA เพิ่งตัดวันนี้ พรุ่งนี้ลุ้นเม็ด 5
-    3. 3 dots (🟢🟢🟢🔴🔴🔴 / 🔴🔴🔴🟢🟢🟢) — นับแท่งวันที่ 2..9 รอ EMA ตัด
-    4. 2 dots (🟢🟢🔴🔴🔴🔴 / 🔴🔴🟢🟢🟢🟢) — เพิ่งเกิดจุดกลม MACD วันแรก (แท่งที่ 1)
-    5. 6 dots (🟢🟢🟢🟢🟢🟢 / 🔴🔴🔴🔴🔴🔴) — ผ่านจุดซื้อ/ขายมาแล้ว กำลังถือรันเทรนด์เต็มตัว
-    6. 1 dot  (🟢🔴🔴🔴🔴🔴 / 🔴🟢🟢🟢🟢🟢) — KDJ เพิ่งเปลี่ยนสีเม็ดที่ 1
+    Sorts Zone 2 (Uptrend Watchlist - trend_locked == 'BUY'):
+    1. 🟢🟢🟢🟢🟢🚀 (BUY_NOW - เพิ่งเลื่อนชั้นขึ้นมาเป็นขาขึ้นวันนี้วันแรก!)
+    2. 🟢🟢🟢🟢🟢🟢 (6 Green - ขาขึ้นเต็มตัว 6 เม็ด)
+    3. 🔴🟢🟢🟢🟢🟢 (1 Red, 5 Green - ย่อเม็ดที่ 1)
+    4. 🔴🔴🟢🟢🟢🟢 (2 Red, 4 Green - จุดแดง MACD วันแรก)
+    5. 🔴🔴🔴🟢🟢🟢 (3 Red, 3 Green - พักตัวนับแท่ง)
+    6. 🔴🔴🔴🔴🟢🟢 (4 Red, 2 Green - EMA9 ตัดลง EMA21 วันแรก)
     """
     st = item["latest"]
+    act = st["action_today"]
     colors = st.get("dot_colors", [])
-    target_c = "G" if st["side"] == "BUY" else "R"
-    cnt = colors.count(target_c)
+    r_cnt = colors.count("R")
 
-    rank_map = {
-        5: 1,
-        4: 2,
-        3: 3,
-        2: 4,
-        6: 5,
-        1: 6,
-    }
-    rank = rank_map.get(cnt, 9)
+    if act == "BUY_NOW":
+        rank = 1
+    elif r_cnt == 0:
+        rank = 2
+    else:
+        rank = 2 + r_cnt  # r_cnt=1 -> 3, r_cnt=2 -> 4, r_cnt=3 -> 5, r_cnt=4 -> 6
+    return (rank, item["ticker"])
+
+
+def _score_zone3_downtrend(item: Dict[str, Any]) -> tuple:
+    """
+    Sorts Zone 3 (Downtrend Watchlist - trend_locked != 'BUY'):
+    Puts stocks climbing the Green ladder at the top (4 Green -> 3 Green -> 2 Green -> 1 Green),
+    followed by stocks that just turned SELL_NOW (🚨), and full 6 Red at the bottom:
+    1. 🟢🟢🟢🟢🔴🔴 (4 Green - EMA9 ตัดขึ้นแล้ว รอพรุ่งนี้คอนเฟิร์ม 🚀 เพื่อเลื่อนชั้นขึ้นโซน 2!)
+    2. 🟢🟢🟢🔴🔴🔴 (3 Green - กำลังนับแท่งรอ EMA ตัดขึ้น)
+    3. 🟢🟢🔴🔴🔴🔴 (2 Green - เพิ่งเกิดจุดเขียว MACD วันแรก)
+    4. 🟢🔴🔴🔴🔴🔴 (1 Green - KDJ เริ่มเขียวเม็ดแรก)
+    5. 🔴🔴🔴🔴🔴🚨 (SELL_NOW - เพิ่งหลุดเป็นขาลงวันนี้วันแรก)
+    6. 🔴🔴🔴🔴🔴🔴 (6 Red - ขาลงเต็มตัว)
+    """
+    st = item["latest"]
+    act = st["action_today"]
+    colors = st.get("dot_colors", [])
+    g_cnt = colors.count("G")
+
+    if g_cnt == 4:
+        rank = 1
+    elif g_cnt == 3:
+        rank = 2
+    elif g_cnt == 2:
+        rank = 3
+    elif g_cnt == 1:
+        rank = 4
+    elif act == "SELL_NOW":
+        rank = 5
+    else:
+        rank = 6
     return (rank, -st.get("bar_count", 0), item["ticker"])
+
+
+def _score_stock_progress(item: Dict[str, Any]) -> tuple:
+    st = item["latest"]
+    if st.get("trend_locked") == "BUY":
+        return _score_zone2_uptrend(item)
+    return _score_zone3_downtrend(item)
 
 
 def _score_portfolio_exit_urgency(item: Dict[str, Any]) -> tuple:
@@ -370,12 +406,12 @@ def format_daily_board_message(
         key=_score_portfolio_exit_urgency,
     )
     zone2_watchlist_buy = sorted(
-        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"]["side"] == "BUY"],
-        key=_score_stock_progress,
+        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"].get("trend_locked") == "BUY"],
+        key=_score_zone2_uptrend,
     )
     zone3_watchlist_sell = sorted(
-        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"]["side"] == "SELL"],
-        key=_score_stock_progress,
+        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"].get("trend_locked") != "BUY"],
+        key=_score_zone3_downtrend,
     )
 
     lines = [
