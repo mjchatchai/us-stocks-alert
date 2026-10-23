@@ -20,6 +20,9 @@ import sys
 from dataclasses import asdict
 from typing import List, Dict, Any
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 import yfinance as yf
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
