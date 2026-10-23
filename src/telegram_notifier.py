@@ -264,42 +264,41 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
 
 def _score_stock_progress(item: Dict[str, Any]) -> tuple:
     """
-    Sorts Watchlist stocks (Zone 2 & Zone 3) so identical button patterns stay grouped together:
-    1. Just completed 6 dots today (BUY_NOW / SELL_NOW)
-    2. Actively forming 4 dots (WAIT_CONFIRM)
-    3. Actively forming 3 dots (COUNTING)
-    4. Full 6 dots holding (🟢🟢🟢🟢🟢🟢 in Zone 2, 🔴🔴🔴🔴🔴🔴 in Zone 3)
-    5. 1 dot challenging 5 opposite dots (🟢🔴🔴🔴🔴🔴 in Zone 2, 🔴🟢🟢🟢🟢🟢 in Zone 3)
+    Sorts Watchlist stocks (Zone 2 & Zone 3) across all 6 distinct button stages:
+    1. 5 dots (🟢🟢🟢🟢🟢🔴 / 🔴🔴🔴🔴🔴🟢) — วันคอนเฟิร์มจุดซื้อ/ขายวันนี้วันแรก!
+    2. 4 dots (🟢🟢🟢🟢🔴🔴 / 🔴🔴🔴🔴🟢🟢) — EMA เพิ่งตัดวันนี้ พรุ่งนี้ลุ้นเม็ด 5
+    3. 3 dots (🟢🟢🟢🔴🔴🔴 / 🔴🔴🔴🟢🟢🟢) — นับแท่งวันที่ 2..9 รอ EMA ตัด
+    4. 2 dots (🟢🟢🔴🔴🔴🔴 / 🔴🔴🟢🟢🟢🟢) — เพิ่งเกิดจุดกลม MACD วันแรก (แท่งที่ 1)
+    5. 6 dots (🟢🟢🟢🟢🟢🟢 / 🔴🔴🔴🔴🔴🔴) — ผ่านจุดซื้อ/ขายมาแล้ว กำลังถือรันเทรนด์เต็มตัว
+    6. 1 dot  (🟢🔴🔴🔴🔴🔴 / 🔴🟢🟢🟢🟢🟢) — KDJ เพิ่งเปลี่ยนสีเม็ดที่ 1
     """
     st = item["latest"]
-    act = st["action_today"]
     colors = st.get("dot_colors", [])
     target_c = "G" if st["side"] == "BUY" else "R"
     cnt = colors.count(target_c)
 
-    if act in ("BUY_NOW", "SELL_NOW"):
-        rank = 1
-    elif cnt == 4:
-        rank = 2
-    elif cnt == 3:
-        rank = 3
-    elif cnt == 6:
-        rank = 4
-    else:
-        rank = 5
-    return (rank, -cnt, -st.get("bar_count", 0), item["ticker"])
+    rank_map = {
+        5: 1,
+        4: 2,
+        3: 3,
+        2: 4,
+        6: 5,
+        1: 6,
+    }
+    rank = rank_map.get(cnt, 9)
+    return (rank, -st.get("bar_count", 0), item["ticker"])
 
 
 def _score_portfolio_exit_urgency(item: Dict[str, Any]) -> tuple:
     """
     For Zone 1 (Portfolio stocks waiting for exit):
-    Groups identical button patterns cleanly by exit urgency:
-    1. 🔴🔴🔴🔴🔴🔴 (6 Red - ครบ 6 เม็ดแดง ขายออก)
-    2. 🔴🔴🔴🔴🟢🟢 (4 Red - EMA ตัดลง รอคอนเฟิร์ม)
-    3. 🔴🔴🔴🟢🟢🟢 (3 Red - MACD จุดแดง นับแท่ง 1-9)
-    4. 🔴🟢🟢🟢🟢🟢 (1 Red - KDJ เริ่มย่อแดงเม็ดแรก)
-    5. 🟢🟢🟢🟢🟢🟢 (6 Green - ขาขึ้นเต็มตัว ถือรันกำไร)
-    6. 🟢🟢🟢🟢🔴🔴 / 🟢🟢🟢🔴🔴🔴 / 🟢🔴🔴🔴🔴🔴 (กำลังฟื้นตัวจากแดงเป็นเขียว)
+    1. 5 Red (🔴🔴🔴🔴🔴🟢) - เพิ่งคอนเฟิร์มจุดขายออกวันนี้วันแรก!
+    2. 6 Red (🔴🔴🔴🔴🔴🔴) - ขาลงเต็มตัว 6 เม็ดแดง
+    3. 4 Red (🔴🔴🔴🔴🟢🟢) - EMA ตัดลงวันแรก รอพรุ่งนี้คอนเฟิร์ม
+    4. 3 Red (🔴🔴🔴🟢🟢🟢) - นับแท่งแดงวันที่ 2..9
+    5. 2 Red (🔴🔴🟢🟢🟢🟢) - เพิ่งเกิดจุดแดง MACD วันแรก (แท่งที่ 1)
+    6. 1 Red (🔴🟢🟢🟢🟢🟢) - KDJ เริ่มย่อแดงเม็ดแรก
+    7. 6..1 Green (🟢...)      - ฝั่งขาขึ้น ถือรันกำไร
     """
     st = item["latest"]
     colors = st.get("dot_colors", [])
@@ -307,27 +306,11 @@ def _score_portfolio_exit_urgency(item: Dict[str, Any]) -> tuple:
     g_cnt = colors.count("G")
 
     if st["side"] == "SELL":
-        # Red is eating Green from left to right
-        if r_cnt == 6:
-            rank = 1
-        elif r_cnt == 4:
-            rank = 2
-        elif r_cnt == 3:
-            rank = 3
-        else:
-            rank = 4
-        return (rank, -r_cnt, item["ticker"])
+        sell_rank_map = {5: 1, 6: 2, 4: 3, 3: 4, 2: 5, 1: 6}
+        return (sell_rank_map.get(r_cnt, 7), -r_cnt, item["ticker"])
     else:
-        # Green is active
-        if g_cnt == 6:
-            rank = 5
-        elif g_cnt == 4:
-            rank = 6
-        elif g_cnt == 3:
-            rank = 7
-        else:
-            rank = 8
-        return (rank, -g_cnt, item["ticker"])
+        buy_rank_map = {6: 8, 5: 9, 4: 10, 3: 11, 2: 12, 1: 13}
+        return (buy_rank_map.get(g_cnt, 14), -g_cnt, item["ticker"])
 
 
 def format_portfolio_exit_status(st: Dict[str, Any]) -> str:
@@ -397,7 +380,7 @@ def format_daily_board_message(
 
     lines = [
         f"📊 <b>กระดานเม็ดกระดุม US (1D) — {scan_date}</b>",
-        "<code>1:KDJ | 2:MACD | 3:นับ9 | 4:EMAตัด | 5:ยืนยัน | 6:ครบ</code>",
+        "<code>1:KDJ | 2:จุดMACD | 3:นับ2-9 | 4:EMAตัด | 5:จุดซื้อ/ขาย | 6:รันเทรนด์</code>",
         "",
         f"💼 <b>โซน 1: หุ้นในพอร์ต ({len(zone1_portfolio)})</b>",
         "━━━━━━━━━━━━━━━━━━",
