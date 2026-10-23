@@ -509,10 +509,11 @@ def build_dashboard_html(
       const colors = st.dot_colors || ['W','W','W','W','W','W'];
       const labels = ['KDJ', 'MACD', 'นับแท่ง', 'EMAตัด', 'ยืนยัน', 'สัญญาณ'];
       return `<div class="button-strip">` + colors.map((c, idx) => {{
-        const colorClass = c === 'G' ? 'dot-green' : (c === 'R' ? 'dot-red' : '');
+        const colorClass = (c === 'G' || c === 'BUY_Rocket') ? 'dot-green' : ((c === 'R' || c === 'SELL_Siren') ? 'dot-red' : '');
+        const text = c === 'BUY_Rocket' ? '🚀' : (c === 'SELL_Siren' ? '🚨' : (idx + 1));
         return `
           <div class="btn-node">
-            <div class="dot-circle ${{colorClass}}">${{idx + 1}}</div>
+            <div class="dot-circle ${{colorClass}}">${{text}}</div>
             <span class="dot-label">${{labels[idx]}}</span>
           </div>
         `;
