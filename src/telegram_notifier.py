@@ -263,48 +263,71 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
 
 
 def _score_stock_progress(item: Dict[str, Any]) -> tuple:
+    """
+    Sorts Watchlist stocks (Zone 2 & Zone 3) so identical button patterns stay grouped together:
+    1. Just completed 6 dots today (BUY_NOW / SELL_NOW)
+    2. Actively forming 4 dots (WAIT_CONFIRM)
+    3. Actively forming 3 dots (COUNTING)
+    4. Full 6 dots holding (🟢🟢🟢🟢🟢🟢 in Zone 2, 🔴🔴🔴🔴🔴🔴 in Zone 3)
+    5. 1 dot challenging 5 opposite dots (🟢🔴🔴🔴🔴🔴 in Zone 2, 🔴🟢🟢🟢🟢🟢 in Zone 3)
+    """
     st = item["latest"]
     act = st["action_today"]
-    action_rank = {
-        "BUY_NOW": 1,
-        "SELL_NOW": 1,
-        "WAIT_CONFIRM_BUY": 2,
-        "WAIT_CONFIRM_SELL": 2,
-        "COUNTING_BUY": 3,
-        "COUNTING_SELL": 3,
-        "HOLD_BUY": 4,
-        "HOLD_SELL": 4,
-        "RESET_TO_GREEN": 5,
-        "RESET_TO_RED": 5,
-        "WATCH_KDJ_GREEN": 6,
-        "WATCH_KDJ_RED": 6,
-    }.get(act, 9)
-    return (action_rank, -st.get("bar_count", 0), item["ticker"])
+    colors = st.get("dot_colors", [])
+    target_c = "G" if st["side"] == "BUY" else "R"
+    cnt = colors.count(target_c)
+
+    if act in ("BUY_NOW", "SELL_NOW"):
+        rank = 1
+    elif cnt == 4:
+        rank = 2
+    elif cnt == 3:
+        rank = 3
+    elif cnt == 6:
+        rank = 4
+    else:
+        rank = 5
+    return (rank, -cnt, -st.get("bar_count", 0), item["ticker"])
 
 
 def _score_portfolio_exit_urgency(item: Dict[str, Any]) -> tuple:
     """
     For Zone 1 (Portfolio stocks waiting for exit):
-    Put Red (SELL side) stocks at the top by urgency (6 red -> 4 red -> 3 red -> 1 red),
-    and Green (BUY side - safe holding) stocks below.
+    Groups identical button patterns cleanly by exit urgency:
+    1. 🔴🔴🔴🔴🔴🔴 (6 Red - ครบ 6 เม็ดแดง ขายออก)
+    2. 🔴🔴🔴🔴🟢🟢 (4 Red - EMA ตัดลง รอคอนเฟิร์ม)
+    3. 🔴🔴🔴🟢🟢🟢 (3 Red - MACD จุดแดง นับแท่ง 1-9)
+    4. 🔴🟢🟢🟢🟢🟢 (1 Red - KDJ เริ่มย่อแดงเม็ดแรก)
+    5. 🟢🟢🟢🟢🟢🟢 (6 Green - ขาขึ้นเต็มตัว ถือรันกำไร)
+    6. 🟢🟢🟢🟢🔴🔴 / 🟢🟢🟢🔴🔴🔴 / 🟢🔴🔴🔴🔴🔴 (กำลังฟื้นตัวจากแดงเป็นเขียว)
     """
     st = item["latest"]
-    act = st["action_today"]
-    urgency_rank = {
-        "SELL_NOW": 1,
-        "HOLD_SELL": 2,
-        "WAIT_CONFIRM_SELL": 3,
-        "COUNTING_SELL": 4,
-        "RESET_TO_RED": 5,
-        "WATCH_KDJ_RED": 6,
-        "BUY_NOW": 7,
-        "HOLD_BUY": 8,
-        "WAIT_CONFIRM_BUY": 9,
-        "COUNTING_BUY": 10,
-        "RESET_TO_GREEN": 11,
-        "WATCH_KDJ_GREEN": 12,
-    }.get(act, 99)
-    return (urgency_rank, -st.get("bar_count", 0), item["ticker"])
+    colors = st.get("dot_colors", [])
+    r_cnt = colors.count("R")
+    g_cnt = colors.count("G")
+
+    if st["side"] == "SELL":
+        # Red is eating Green from left to right
+        if r_cnt == 6:
+            rank = 1
+        elif r_cnt == 4:
+            rank = 2
+        elif r_cnt == 3:
+            rank = 3
+        else:
+            rank = 4
+        return (rank, -r_cnt, item["ticker"])
+    else:
+        # Green is active
+        if g_cnt == 6:
+            rank = 5
+        elif g_cnt == 4:
+            rank = 6
+        elif g_cnt == 3:
+            rank = 7
+        else:
+            rank = 8
+        return (rank, -g_cnt, item["ticker"])
 
 
 def format_portfolio_exit_status(st: Dict[str, Any]) -> str:
