@@ -324,9 +324,16 @@ def _score_zone3_downtrend(item: Dict[str, Any]) -> tuple:
     return (rank, -st.get("bar_count", 0), item["ticker"])
 
 
+def _is_uptrend_watchlist(st: Dict[str, Any]) -> bool:
+    colors = st.get("dot_colors") or []
+    if colors:
+        return colors[-1] in ("G", "BUY_Rocket", "HOLD_ChartUp")
+    return st.get("trend_locked") == "BUY"
+
+
 def _score_stock_progress(item: Dict[str, Any]) -> tuple:
     st = item["latest"]
-    if st.get("trend_locked") == "BUY":
+    if _is_uptrend_watchlist(st):
         return _score_zone2_uptrend(item)
     return _score_zone3_downtrend(item)
 
@@ -428,11 +435,11 @@ def format_daily_board_message(
         key=_score_portfolio_exit_urgency,
     )
     zone2_watchlist_buy = sorted(
-        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"].get("trend_locked") == "BUY"],
+        [x for x in scan_results if x["ticker"] not in portfolio_tickers and _is_uptrend_watchlist(x["latest"])],
         key=_score_zone2_uptrend,
     )
     zone3_watchlist_sell = sorted(
-        [x for x in scan_results if x["ticker"] not in portfolio_tickers and x["latest"].get("trend_locked") != "BUY"],
+        [x for x in scan_results if x["ticker"] not in portfolio_tickers and not _is_uptrend_watchlist(x["latest"])],
         key=_score_zone3_downtrend,
     )
 
