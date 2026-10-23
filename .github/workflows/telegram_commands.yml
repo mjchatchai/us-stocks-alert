@@ -1,0 +1,40 @@
+name: Telegram Command Listener (/buy, /sell, /scan)
+
+on:
+  schedule:
+    # เช็คคำสั่งในแชท Telegram ทุกๆ 15 นาที (ใช้เวลาแค่ 2 วินาทีถ้าไม่มีคำสั่งใหม่)
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check_telegram_commands:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check & Process Telegram Commands
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python src/check_commands.py
+
+      - name: Save Updated Portfolio / Watchlist State
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add config/watchlist.json docs/
+          git diff --staged --quiet || git commit -m "Auto-sync Telegram command update [skip ci]"
+          git push
