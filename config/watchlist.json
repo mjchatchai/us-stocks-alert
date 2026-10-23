@@ -1,0 +1,136 @@
+{
+  "timeframe": "1d",
+  "max_wait_bars": 9,
+  "ema_fast": 9,
+  "ema_slow": 21,
+  "macd_fast": 12,
+  "macd_slow": 26,
+  "macd_signal": 9,
+  "kdj_period": 9,
+  "kdj_signal": 3,
+  "last_telegram_update_id": 169916606,
+  "portfolio": {
+    "ASTS": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "AVGO": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "BMNR": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "BULL": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "CLPT": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "FICO": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "GLD": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "HIMS": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "IONQ": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "NVO": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "PONY": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "PRCT": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "RR": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "RXRX": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "STRL": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "TTD": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    },
+    "ZETA": {
+      "buy_price": 0.0,
+      "buy_date": "-"
+    }
+  },
+  "tickers": [
+    "ASTS",
+    "AVGO",
+    "BMNR",
+    "BULL",
+    "CLPT",
+    "FICO",
+    "GLD",
+    "HIMS",
+    "IONQ",
+    "NVO",
+    "PONY",
+    "PRCT",
+    "RR",
+    "RXRX",
+    "STRL",
+    "TTD",
+    "ZETA",
+    "AAPL",
+    "ALAB",
+    "AMZN",
+    "ARGT",
+    "ARM",
+    "ASML",
+    "CBRS",
+    "COST",
+    "CRM",
+    "CRWD",
+    "CRWV",
+    "EOSE",
+    "GOOGL",
+    "LLY",
+    "MELI",
+    "META",
+    "MRK",
+    "MSFT",
+    "NFLX",
+    "NVDA",
+    "O",
+    "ONDS",
+    "PANW",
+    "PEP",
+    "PLTR",
+    "RBRK",
+    "RKLB",
+    "TEM",
+    "TMDX",
+    "TMO",
+    "TSLA",
+    "UNH",
+    "UPS",
+    "VKTX",
+    "WM"
+  ]
+}
