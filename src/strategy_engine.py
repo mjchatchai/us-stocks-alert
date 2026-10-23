@@ -72,6 +72,10 @@ def compute_dot_colors(
         colors[5] = "BUY_Rocket"
     elif action_today == "SELL_NOW":
         colors[5] = "SELL_Siren"
+    elif action_today == "HOLD_BUY":
+        colors[5] = "HOLD_ChartUp"
+    elif action_today == "HOLD_SELL":
+        colors[5] = "HOLD_ChartDown"
     return colors
 
 
@@ -82,6 +86,8 @@ def format_dots_compact(dot_colors: List[str]) -> str:
         "W": "⚪",
         "BUY_Rocket": "🚀",
         "SELL_Siren": "🚨",
+        "HOLD_ChartUp": "📈",
+        "HOLD_ChartDown": "📉",
     }
     return "".join(m.get(c, "⚪") for c in dot_colors)
 
@@ -93,6 +99,8 @@ def format_dots_visual(dot_colors: List[str], b3: bool, bar_count: int, max_bars
         "W": "⚪",
         "BUY_Rocket": "🚀",
         "SELL_Siren": "🚨",
+        "HOLD_ChartUp": "📈",
+        "HOLD_ChartDown": "📉",
     }
     parts = [m.get(c, "⚪") for c in dot_colors]
     if b3 and bar_count > 0:
