@@ -234,11 +234,19 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
                 portfolio.pop(tk, None)
                 send_telegram_message(f"🗑️ ลบ <b>{tk}</b> ออกจาก Watchlist แล้วครับ", chat_id=msg_chat_id)
 
+        elif cmd in ("/scan", "/report"):
+            cfg["_trigger_scan_now"] = True
+            send_telegram_message(
+                "⏳ <b>รับคำสั่ง /scan แล้วครับ!</b> กำลังดึงกราฟล่าสุดและสร้างกระดานเม็ดกระดุม 3 โซนส่งให้สักครู่ครับ...",
+                chat_id=msg_chat_id,
+            )
+
         elif cmd in ("/help", "/start"):
             send_telegram_message(
                 "🤖 <b>คำสั่งควบคุมพอร์ตและ Watchlist ผ่าน Telegram</b>\n"
-                "• <code>/buy TQQQ 65.50</code> — บันทึกว่าซื้อหุ้นแล้ว (ย้ายเข้าโซนที่ 1 รอจุดขายออก)\n"
-                "• <code>/sell TQQQ</code> — บันทึกว่าขายหุ้นแล้ว (ย้ายกลับเข้า Watchlist)\n"
+                "• <code>/scan</code> — สั่งสแกนกราฟและส่งกระดาน 3 โซนให้ดูทันที\n"
+                "• <code>/buy AAPL</code> — บันทึกว่าซื้อหุ้นแล้ว (ย้ายเข้าโซนที่ 1 รอจุดขายออก)\n"
+                "• <code>/sell RXRX</code> — บันทึกว่าขายหุ้นแล้ว (ย้ายกลับเข้า Watchlist)\n"
                 "• <code>/add NVDA AMD</code> — เพิ่มหุ้นเข้า Watchlist\n"
                 "• <code>/remove NVDA</code> — ลบหุ้นออกจาก Watchlist",
                 chat_id=msg_chat_id,
@@ -247,8 +255,9 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
     cfg["tickers"] = tickers
     cfg["portfolio"] = portfolio
     if changed:
+        save_copy = {k: v for k, v in cfg.items() if not k.startswith("_")}
         with open(config_path, "w", encoding="utf-8") as f:
-            json.dump(cfg, f, indent=2, ensure_ascii=False)
+            json.dump(save_copy, f, indent=2, ensure_ascii=False)
 
     return cfg
 
