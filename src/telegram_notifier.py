@@ -330,9 +330,14 @@ def format_portfolio_exit_status(st: Dict[str, Any]) -> str:
 
 def _compact_buttons(st: Dict[str, Any]) -> str:
     """
-    Pure 6-button strip without (X/9) text so all 6 dots align vertically.
-    Example: 🔴🔴🔴🔴🔴🔴 or 🔴🔴🔴⚪⚪⚪ or 🟢⚪⚪⚪⚪⚪
+    Pure 6-button strip using progressive takeover colors (G=🟢, R=🔴, W=⚪).
+    Example: 🔴🟢🟢🟢🟢🟢 or 🔴🔴🔴🟢🟢🟢 or 🟢🔴🔴🔴🔴🔴
     """
+    if "buttons_compact" in st and st["buttons_compact"]:
+        return st["buttons_compact"]
+    if "dot_colors" in st and st["dot_colors"]:
+        m = {"G": "🟢", "R": "🔴", "W": "⚪"}
+        return "".join(m.get(c, "⚪") for c in st["dot_colors"])
     dot = "🟢" if st["side"] == "BUY" else "🔴"
     s1 = dot if st["b1_kdj"] else "⚪"
     s2 = dot if st["b2_macd_dot"] else "⚪"
