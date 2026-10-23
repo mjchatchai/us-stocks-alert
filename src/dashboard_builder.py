@@ -652,8 +652,12 @@ def build_dashboard_html(
         if (pa !== pb) return pa - pb;
         return (b.latest.bar_count || 0) - (a.latest.bar_count || 0);
       }});
-      const zone2Buy = sortZoneItems(baseFiltered.filter(x => !portfolioTickers.has(x.ticker) && x.latest.trend_locked === 'BUY'));
-      const zone3Sell = sortZoneItems(baseFiltered.filter(x => !portfolioTickers.has(x.ticker) && x.latest.trend_locked !== 'BUY'));
+      const isUptrend = x => {{
+        const c = (x.latest.dot_colors || []);
+        return c.length ? ['G', 'BUY_Rocket', 'HOLD_ChartUp'].includes(c[c.length - 1]) : (x.latest.trend_locked === 'BUY');
+      }};
+      const zone2Buy = sortZoneItems(baseFiltered.filter(x => !portfolioTickers.has(x.ticker) && isUptrend(x)));
+      const zone3Sell = sortZoneItems(baseFiltered.filter(x => !portfolioTickers.has(x.ticker) && !isUptrend(x)));
 
       document.getElementById('portfolioZoneSection').style.display = (['BUY_ONLY', 'SELL_ONLY'].includes(currentFilter)) ? 'none' : 'block';
       document.getElementById('buyZoneSection').style.display = (['PORTFOLIO_ONLY', 'SELL_ONLY'].includes(currentFilter)) ? 'none' : 'block';
