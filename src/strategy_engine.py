@@ -59,12 +59,7 @@ def compute_dot_colors(
     action_today: str = "",
 ) -> List[str]:
     fg = "G" if side == "BUY" else "R"
-    if trend_locked == "BUY":
-        bg = "G"
-    elif trend_locked == "SELL":
-        bg = "R"
-    else:
-        bg = "W"
+    bg = "R" if side == "BUY" else "G"
 
     flags = [b1, b2, b3, b4, b5, b6]
     colors = [fg if flag else bg for flag in flags]
@@ -202,7 +197,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                 just_crossed_on_prev_bar = False
                 just_confirmed_on_prev_bar = False
 
-                if ema_cross_up:
+                if ema_cross_up or ema_bullish:
                     b3 = True
                     b4 = True
                     ema_cross_date = date_str
@@ -251,7 +246,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                     if just_crossed_on_prev_bar and b4:
                         # Confirmation bar right after EMA 9 crossed above EMA 21 -> 5 Dots (BUY_NOW)!
                         ema_lifting = (prev_ema_fast is not None) and (ema_fast_val >= prev_ema_fast)
-                        if bar_count <= max_wait_bars and ema_bullish and ema_lifting:
+                        if bar_count <= max_wait_bars + 1 and ema_bullish and ema_lifting:
                             b5 = True
                             b6 = False  # Button 5 = BUY_NOW today! Button 6 lights up tomorrow (HOLD_BUY)
                             trend_locked = "BUY"
@@ -336,7 +331,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                 just_crossed_on_prev_bar = False
                 just_confirmed_on_prev_bar = False
 
-                if ema_cross_down:
+                if ema_cross_down or ema_bearish:
                     b3 = True
                     b4 = True
                     ema_cross_date = date_str
@@ -382,7 +377,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
 
                     if just_crossed_on_prev_bar and b4:
                         ema_dropping = (prev_ema_fast is not None) and (ema_fast_val <= prev_ema_fast)
-                        if bar_count <= max_wait_bars and ema_bearish and ema_dropping:
+                        if bar_count <= max_wait_bars + 1 and ema_bearish and ema_dropping:
                             b5 = True
                             b6 = False  # Button 5 = SELL_NOW today! Button 6 lights up tomorrow (HOLD_SELL)
                             trend_locked = "SELL"
