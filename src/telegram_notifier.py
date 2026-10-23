@@ -262,11 +262,17 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
     return cfg
 
 
+def _count_green_red(colors: List[str]) -> tuple:
+    g_cnt = sum(1 for c in colors if c in ("G", "BUY_Rocket", "HOLD_ChartUp"))
+    r_cnt = sum(1 for c in colors if c in ("R", "SELL_Siren", "HOLD_ChartDown"))
+    return g_cnt, r_cnt
+
+
 def _score_zone2_uptrend(item: Dict[str, Any]) -> tuple:
     """
     Sorts Zone 2 (Uptrend Watchlist - trend_locked == 'BUY'):
     1. 🟢🟢🟢🟢🟢🚀 (BUY_NOW - เพิ่งเลื่อนชั้นขึ้นมาเป็นขาขึ้นวันนี้วันแรก!)
-    2. 🟢🟢🟢🟢🟢🟢 (6 Green - ขาขึ้นเต็มตัว 6 เม็ด)
+    2. 🟢🟢🟢🟢🟢📈 (HOLD_BUY - ขาขึ้นเต็มตัว รันเทรนด์)
     3. 🔴🟢🟢🟢🟢🟢 (1 Red, 5 Green - ย่อเม็ดที่ 1)
     4. 🔴🔴🟢🟢🟢🟢 (2 Red, 4 Green - จุดแดง MACD วันแรก)
     5. 🔴🔴🔴🟢🟢🟢 (3 Red, 3 Green - พักตัวนับแท่ง)
@@ -275,7 +281,7 @@ def _score_zone2_uptrend(item: Dict[str, Any]) -> tuple:
     st = item["latest"]
     act = st["action_today"]
     colors = st.get("dot_colors", [])
-    r_cnt = colors.count("R")
+    _, r_cnt = _count_green_red(colors)
 
     if act == "BUY_NOW":
         rank = 1
@@ -290,18 +296,18 @@ def _score_zone3_downtrend(item: Dict[str, Any]) -> tuple:
     """
     Sorts Zone 3 (Downtrend Watchlist - trend_locked != 'BUY'):
     Puts stocks climbing the Green ladder at the top (4 Green -> 3 Green -> 2 Green -> 1 Green),
-    followed by stocks that just turned SELL_NOW (🚨), and full 6 Red at the bottom:
+    followed by stocks that just turned SELL_NOW (🚨), and full 6 Red (📉) at the bottom:
     1. 🟢🟢🟢🟢🔴🔴 (4 Green - EMA9 ตัดขึ้นแล้ว รอพรุ่งนี้คอนเฟิร์ม 🚀 เพื่อเลื่อนชั้นขึ้นโซน 2!)
     2. 🟢🟢🟢🔴🔴🔴 (3 Green - กำลังนับแท่งรอ EMA ตัดขึ้น)
     3. 🟢🟢🔴🔴🔴🔴 (2 Green - เพิ่งเกิดจุดเขียว MACD วันแรก)
     4. 🟢🔴🔴🔴🔴🔴 (1 Green - KDJ เริ่มเขียวเม็ดแรก)
     5. 🔴🔴🔴🔴🔴🚨 (SELL_NOW - เพิ่งหลุดเป็นขาลงวันนี้วันแรก)
-    6. 🔴🔴🔴🔴🔴🔴 (6 Red - ขาลงเต็มตัว)
+    6. 🔴🔴🔴🔴🔴📉 (HOLD_SELL - ขาลงเต็มตัว รันเทรนด์ขาลง)
     """
     st = item["latest"]
     act = st["action_today"]
     colors = st.get("dot_colors", [])
-    g_cnt = colors.count("G")
+    g_cnt, _ = _count_green_red(colors)
 
     if g_cnt == 4:
         rank = 1
@@ -328,24 +334,32 @@ def _score_stock_progress(item: Dict[str, Any]) -> tuple:
 def _score_portfolio_exit_urgency(item: Dict[str, Any]) -> tuple:
     """
     For Zone 1 (Portfolio stocks waiting for exit):
-    1. 5 Red (🔴🔴🔴🔴🔴🟢) - เพิ่งคอนเฟิร์มจุดขายออกวันนี้วันแรก!
-    2. 6 Red (🔴🔴🔴🔴🔴🔴) - ขาลงเต็มตัว 6 เม็ดแดง
+    1. SELL_NOW (🔴🔴🔴🔴🔴🚨) - เพิ่งคอนเฟิร์มจุดขายออกวันนี้วันแรก!
+    2. HOLD_SELL (🔴🔴🔴🔴🔴📉) - ขาลงเต็มตัว 6 เม็ดแดง
     3. 4 Red (🔴🔴🔴🔴🟢🟢) - EMA ตัดลงวันแรก รอพรุ่งนี้คอนเฟิร์ม
     4. 3 Red (🔴🔴🔴🟢🟢🟢) - นับแท่งแดงวันที่ 2..9
     5. 2 Red (🔴🔴🟢🟢🟢🟢) - เพิ่งเกิดจุดแดง MACD วันแรก (แท่งที่ 1)
     6. 1 Red (🔴🟢🟢🟢🟢🟢) - KDJ เริ่มย่อแดงเม็ดแรก
-    7. 6..1 Green (🟢...)      - ฝั่งขาขึ้น ถือรันกำไร
+    7. BUY_NOW / HOLD_BUY / Green (🟢...) - ฝั่งขาขึ้น ถือรันกำไร
     """
     st = item["latest"]
+    act = st["action_today"]
     colors = st.get("dot_colors", [])
-    r_cnt = colors.count("R")
-    g_cnt = colors.count("G")
+    g_cnt, r_cnt = _count_green_red(colors)
 
     if st["side"] == "SELL":
-        sell_rank_map = {5: 1, 6: 2, 4: 3, 3: 4, 2: 5, 1: 6}
+        if act == "SELL_NOW":
+            return (1, -r_cnt, item["ticker"])
+        if act == "HOLD_SELL":
+            return (2, -r_cnt, item["ticker"])
+        sell_rank_map = {4: 3, 3: 4, 2: 5, 1: 6}
         return (sell_rank_map.get(r_cnt, 7), -r_cnt, item["ticker"])
     else:
-        buy_rank_map = {6: 8, 5: 9, 4: 10, 3: 11, 2: 12, 1: 13}
+        if act == "BUY_NOW":
+            return (8, -g_cnt, item["ticker"])
+        if act == "HOLD_BUY":
+            return (9, -g_cnt, item["ticker"])
+        buy_rank_map = {4: 10, 3: 11, 2: 12, 1: 13}
         return (buy_rank_map.get(g_cnt, 14), -g_cnt, item["ticker"])
 
 
@@ -372,13 +386,21 @@ def format_portfolio_exit_status(st: Dict[str, Any]) -> str:
 
 def _compact_buttons(st: Dict[str, Any]) -> str:
     """
-    Pure 6-button strip using progressive takeover colors (G=🟢, R=🔴, W=⚪).
-    Example: 🔴🟢🟢🟢🟢🟢 or 🔴🔴🔴🟢🟢🟢 or 🟢🔴🔴🔴🔴🔴
+    Pure 6-button strip using progressive takeover colors (G=🟢, R=🔴, W=⚪, 🚀/🚨, 📈/📉).
+    Example: 🟢🟢🟢🟢🟢📈 or 🔴🔴🟢🟢🟢🟢 or 🟢🟢🟢🟢🟢🚀
     """
     if "buttons_compact" in st and st["buttons_compact"]:
         return st["buttons_compact"]
     if "dot_colors" in st and st["dot_colors"]:
-        m = {"G": "🟢", "R": "🔴", "W": "⚪"}
+        m = {
+            "G": "🟢",
+            "R": "🔴",
+            "W": "⚪",
+            "BUY_Rocket": "🚀",
+            "SELL_Siren": "🚨",
+            "HOLD_ChartUp": "📈",
+            "HOLD_ChartDown": "📉",
+        }
         return "".join(m.get(c, "⚪") for c in st["dot_colors"])
     dot = "🟢" if st["side"] == "BUY" else "🔴"
     s1 = dot if st["b1_kdj"] else "⚪"
