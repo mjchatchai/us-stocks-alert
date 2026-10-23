@@ -506,21 +506,17 @@ def build_dashboard_html(
     }}
 
     function renderButtonStrip(st) {{
-      const colorClass = st.side === 'BUY' ? 'dot-green' : 'dot-red';
-      const steps = [
-        {{ active: st.b1_kdj, text: '1', label: 'KDJ' }},
-        {{ active: st.b2_macd_dot, text: '2', label: 'MACD' }},
-        {{ active: st.b3_counting, text: st.b3_counting ? `${{st.bar_count}}/9` : '3', label: 'นับแท่ง' }},
-        {{ active: st.b4_ema_cross, text: '4', label: 'EMAตัด' }},
-        {{ active: st.b5_ema_confirm, text: '5', label: 'ยืนยัน' }},
-        {{ active: st.b6_signal, text: st.b6_signal ? (st.side === 'BUY' ? 'BUY' : 'SELL') : '6', label: 'สัญญาณ' }},
-      ];
-      return `<div class="button-strip">` + steps.map(s => `
-        <div class="btn-node">
-          <div class="dot-circle ${{s.active ? colorClass : ''}}">${{s.text}}</div>
-          <span class="dot-label">${{s.label}}</span>
-        </div>
-      `).join('') + `</div>`;
+      const colors = st.dot_colors || ['W','W','W','W','W','W'];
+      const labels = ['KDJ', 'MACD', 'นับแท่ง', 'EMAตัด', 'ยืนยัน', 'สัญญาณ'];
+      return `<div class="button-strip">` + colors.map((c, idx) => {{
+        const colorClass = c === 'G' ? 'dot-green' : (c === 'R' ? 'dot-red' : '');
+        return `
+          <div class="btn-node">
+            <div class="dot-circle ${{colorClass}}">${{idx + 1}}</div>
+            <span class="dot-label">${{labels[idx]}}</span>
+          </div>
+        `;
+      }}).join('') + `</div>`;
     }}
 
     function getPortfolioExitAdvice(st) {{
