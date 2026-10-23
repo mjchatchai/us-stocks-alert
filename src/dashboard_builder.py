@@ -507,10 +507,16 @@ def build_dashboard_html(
 
     function renderButtonStrip(st) {{
       const colors = st.dot_colors || ['W','W','W','W','W','W'];
-      const labels = ['KDJ', 'MACD', 'นับแท่ง', 'EMAตัด', 'ยืนยัน', 'สัญญาณ'];
+      const labels = ['KDJ', 'MACD', 'นับแท่ง', 'EMAตัด', 'ยืนยัน', 'สถานะ'];
+      const textMap = {{
+        'BUY_Rocket': '🚀',
+        'SELL_Siren': '🚨',
+        'HOLD_ChartUp': '📈',
+        'HOLD_ChartDown': '📉'
+      }};
       return `<div class="button-strip">` + colors.map((c, idx) => {{
-        const colorClass = (c === 'G' || c === 'BUY_Rocket') ? 'dot-green' : ((c === 'R' || c === 'SELL_Siren') ? 'dot-red' : '');
-        const text = c === 'BUY_Rocket' ? '🚀' : (c === 'SELL_Siren' ? '🚨' : (idx + 1));
+        const colorClass = (c === 'G' || c === 'BUY_Rocket' || c === 'HOLD_ChartUp') ? 'dot-green' : ((c === 'R' || c === 'SELL_Siren' || c === 'HOLD_ChartDown') ? 'dot-red' : '');
+        const text = textMap[c] || (idx + 1);
         return `
           <div class="btn-node">
             <div class="dot-circle ${{colorClass}}">${{text}}</div>
