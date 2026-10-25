@@ -372,12 +372,12 @@ def build_dashboard_html(
     </header>
 
     <div class="legend-box">
-      <div class="legend-step"><span class="legend-num">1</span> <strong>เม็ด 1:</strong> KDJ สีเขียว/แดง</div>
-      <div class="legend-step"><span class="legend-num">2</span> <strong>เม็ด 2:</strong> MACD จุดเขียว/แดง</div>
-      <div class="legend-step"><span class="legend-num">3</span> <strong>เม็ด 3:</strong> นับแท่งเทียน 1–9</div>
-      <div class="legend-step"><span class="legend-num">4</span> <strong>เม็ด 4:</strong> EMA9 ตัด EMA21 (ใน 9 แท่ง)</div>
-      <div class="legend-step"><span class="legend-num">5</span> <strong>เม็ด 5:</strong> แท่งถัดไปคอนเฟิร์ม EMA9 ยก/กดจริง</div>
-      <div class="legend-step"><span class="legend-num">6</span> <strong>เม็ด 6:</strong> แจ้งเตือนเข้าซื้อ (BUY) / ขายออก (SELL)</div>
+      <div class="legend-step"><span class="legend-num">1</span> <strong>เม็ด 1:</strong> KDJ เปลี่ยนสี</div>
+      <div class="legend-step"><span class="legend-num">2</span> <strong>เม็ด 2:</strong> จุดตัด MACD (เริ่มนับแท่ง 0–9)</div>
+      <div class="legend-step"><span class="legend-num">3</span> <strong>เม็ด 3:</strong> ภายในแท่ง 1–9 EMA9 ตัด EMA21</div>
+      <div class="legend-step"><span class="legend-num">4</span> <strong>เม็ด 4:</strong> EMA9 อยู่เหนือ/ต่ำกว่า EMA21</div>
+      <div class="legend-step"><span class="legend-num">5</span> <strong>เม็ด 5:</strong> แท่งเทียนปิดเหนือ/ต่ำกว่า EMA9 & 21</div>
+      <div class="legend-step"><span class="legend-num">6</span> <strong>เม็ด 6:</strong> สถานะ (🚀ซื้อ / 🚨ขาย / 📈📉รันเทรนด์ / 🟢🔴พักตัว)</div>
     </div>
 
     <div class="tg-cmd-bar">
@@ -507,7 +507,7 @@ def build_dashboard_html(
 
     function renderButtonStrip(st) {{
       const colors = st.dot_colors || ['W','W','W','W','W','W'];
-      const labels = ['KDJ', 'MACD', 'นับแท่ง', 'EMAตัด', 'ยืนยัน', 'สถานะ'];
+      const labels = ['KDJ', 'MACD(0-9)', 'EMAตัด', 'EMA>21', 'ปิด>EMA', 'สถานะ'];
       const textMap = {{
         'BUY_Rocket': '🚀',
         'SELL_Siren': '🚨',
