@@ -485,8 +485,7 @@ def format_daily_board_message(
         for item in buy_now_list:
             tk = item["ticker"]
             st = item["latest"]
-            tag = " <b>[พอร์ต]</b>" if tk in portfolio_tickers else ""
-            lines.append(f"  • <code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code>{tag}")
+            lines.append(f"<code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code>")
     else:
         lines.append("🚀 <b>เข้าซื้อวันนี้:</b> <i>(ไม่มี)</i>")
 
@@ -495,30 +494,23 @@ def format_daily_board_message(
         for item in sell_now_list:
             tk = item["ticker"]
             st = item["latest"]
-            tag = " <b>[พอร์ต!]</b>" if tk in portfolio_tickers else ""
-            lines.append(f"  • <code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code>{tag}")
+            lines.append(f"<code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code>")
     else:
         lines.append("🚨 <b>ขายออกวันนี้:</b> <i>(ไม่มี)</i>")
 
     if setup_buy_list:
-        lines.append(f"🟢 <b>จ่อซื้อ — ติดเม็ด 2–4 กำลังนับแท่ง ({len(setup_buy_list)}):</b>")
+        lines.append(f"🟢 <b>จ่อซื้อ ({len(setup_buy_list)}):</b>")
         for item in setup_buy_list:
             tk = item["ticker"]
             st = item["latest"]
-            tag = " [พอร์ต]" if tk in portfolio_tickers else ""
-            lines.append(
-                f"  • <code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code> (แท่ง {st['bar_count']}/{st['max_bars']}){tag}"
-            )
+            lines.append(f"<code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code>")
 
     if setup_sell_list:
-        lines.append(f"⚠️ <b>เฝ้าระวังย่อ/จ่อขาย — ติดเม็ดแดง 2–4 ({len(setup_sell_list)}):</b>")
+        lines.append(f"⚠️ <b>เฝ้าระวังย่อ/จ่อขาย ({len(setup_sell_list)}):</b>")
         for item in setup_sell_list:
             tk = item["ticker"]
             st = item["latest"]
-            tag = " <b>[พอร์ต]</b>" if tk in portfolio_tickers else ""
-            lines.append(
-                f"  • <code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code> (แท่ง {st['bar_count']}/{st['max_bars']}){tag}"
-            )
+            lines.append(f"<code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code>")
 
     lines.extend(
         [
