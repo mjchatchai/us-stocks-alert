@@ -692,10 +692,9 @@ def build_dashboard_html(
         if (!arr.length) return `<div style="color:var(--muted);font-size:0.82rem;font-style:italic;">${{emptyText}}</div>`;
         return arr.map(x => {{
           const st = x.latest;
-          const inPort = portfolioTickers.has(x.ticker) ? `<span style="color:#ffd740;font-weight:700;">[พอร์ต]</span>` : '';
           return `<div onclick="openStockModal('${{x.ticker}}')" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#11151f;padding:6px 10px;border-radius:8px;border:1px solid #2a2e39;margin-top:6px;font-size:0.85rem;">
-            <span><b>${{x.ticker}}</b> ${{st.buttons_compact || ''}} ${{inPort}}</span>
-            <span style="color:#b0bec5;">$${{st.close.toFixed(2)}} <small>(แท่ง ${{st.bar_count}}/${{st.max_bars}})</small></span>
+            <span><b>${{x.ticker}}</b> ${{st.buttons_compact || ''}}</span>
+            <span style="color:#b0bec5;">$${{st.close.toFixed(2)}}</span>
           </div>`;
         }}).join('');
       }};
