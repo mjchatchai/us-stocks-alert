@@ -1,13 +1,13 @@
 """
-6-Button Sequential Strategy Engine (6 Distinct Stages + Progressive Color Takeover)
+6-Button Sequential Strategy Engine (New 6-Button Specification - แบบ ก)
 
-ความหมายของเม็ดกระดุมทั้ง 6 เม็ด (แยกแต่ละจังหวะออกจากกันชัดเจน):
-  1 เม็ด (🟢🔴🔴🔴🔴🔴): KDJ เปลี่ยนเป็นสีเขียว (หรือแดง)
-  2 เม็ด (🟢🟢🔴🔴🔴🔴): วันแรกที่เกิดจุดกลมบน MACD (แท่งที่ 1)
-  3 เม็ด (🟢🟢🟢🔴🔴🔴): วันที่ 2–9 ของการนับแท่ง MACD (กำลังรอให้ EMA ตัดกัน)
-  4 เม็ด (🟢🟢🟢🟢🔴🔴): วันแรกที่ EMA 9 ตัด EMA 21 (ภายใน 9 แท่ง รอแท่งพรุ่งนี้คอนเฟิร์ม)
-  5 เม็ด (🟢🟢🟢🟢🟢🔴): วันคอนเฟิร์มวันแรก! (แท่งถัดมายืนยัน EMA 9 ยกตัว/กดลงจริง = จุดซื้อ/ขายวันนี้!)
-  6 เม็ด (🟢🟢🟢🟢🟢🟢): วันถัดๆ ไปหลังผ่านจุดซื้อ/ขายแล้ว (กำลังถือรันเทรนด์เต็มตัว)
+ความหมายของเม็ดกระดุมทั้ง 6 เม็ด:
+  เม็ดที่ 1 (🟢🔴🔴🔴🔴🔴): KDJ เปลี่ยนสี (%J > %D เขียว / %J <= %D แดง)
+  เม็ดที่ 2 (🟢🟢🔴🔴🔴🔴): เกิดจุดตัด MACD เริ่มนับเป็นแท่งที่ 0 (และนับแท่งที่ 1–9 รอ EMA9 ตัด EMA21)
+  เม็ดที่ 3 (🟢🟢🟢🔴🔴🔴): ภายในแท่งที่ 1–9 เปลี่ยนสีเมื่อ EMA9 ตัด EMA21 (รอแท่งถัดไปคอนเฟิร์ม)
+  เม็ดที่ 4 (🟢🟢🟢🟢🔴🔴): แท่งถัดมา EMA9 อยู่เหนือกว่า EMA21 (ขาขึ้น) หรือ EMA9 อยู่ต่ำกว่า EMA21 (ขาลง)
+  เม็ดที่ 5 (🟢🟢🟢🟢🟢🚀): แท่งเทียนวันนั้นปิดเหนือ EMA9 และ EMA21 (ขาขึ้น) หรือปิดต่ำกว่า EMA9 และ EMA21 (ขาลง)
+  เม็ดที่ 6 (🚀/🚨/📈/📉/🟢/🔴): แสดงผลการเข้าซื้อ (🚀) การขาย (🚨) การรันเทรนด์ (📈/📉) หรือการพักตัว (🟢/🔴)
 """
 
 from dataclasses import dataclass
@@ -87,7 +87,7 @@ def format_dots_compact(dot_colors: List[str]) -> str:
     return "".join(m.get(c, "⚪") for c in dot_colors)
 
 
-def format_dots_visual(dot_colors: List[str], b3: bool, bar_count: int, max_bars: int) -> str:
+def format_dots_visual(dot_colors: List[str], b2: bool, bar_count: int, max_bars: int) -> str:
     m = {
         "G": "🟢",
         "R": "🔴",
@@ -98,8 +98,8 @@ def format_dots_visual(dot_colors: List[str], b3: bool, bar_count: int, max_bars
         "HOLD_ChartDown": "📉",
     }
     parts = [m.get(c, "⚪") for c in dot_colors]
-    if b3 and bar_count > 0:
-        parts[2] = f"{parts[2]}({bar_count}/{max_bars})"
+    if b2:
+        parts[1] = f"{parts[1]}({bar_count}/{max_bars})"
     return " ".join(parts)
 
 
@@ -143,6 +143,8 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
         ema_bearish = bool(row["ema_bearish"])
         ema_fast_val = float(row["ema_fast"]) if pd.notna(row["ema_fast"]) else 0.0
         ema_slow_val = float(row["ema_slow"]) if pd.notna(row["ema_slow"]) else 0.0
+        close_above_emas = (close > ema_fast_val) and (close > ema_slow_val)
+        close_below_emas = (close < ema_fast_val) and (close < ema_slow_val)
 
         if trend_locked is None and pd.notna(row["ema_slow"]):
             if ema_bullish and macd_bullish and kdj_green:
@@ -158,7 +160,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
         # =====================================================================
         if kdj_green:
             if prev_side != "BUY":
-                # KDJ just flipped from RED to GREEN!
+                # KDJ just flipped from RED to GREEN! (เม็ดที่ 1)
                 side = "BUY"
                 b1 = True
                 b2 = False
@@ -173,7 +175,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                 just_confirmed_on_prev_bar = False
 
                 # If main trend was already locked as BUY and the Red pullback failed while EMA9 > EMA21:
-                # Snap back to full 6 Green (HOLD_BUY)
+                # Snap back to full 6 Green (HOLD_BUY -> 📈)
                 if trend_locked == "BUY" and ema_bullish:
                     b2 = True
                     b3 = True
@@ -184,11 +186,11 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                 else:
                     action_today = "WATCH_KDJ_GREEN"
 
-            # Check if a new MACD Green Dot occurs today (Bar 1 -> Button 2 lights up!)
+            # เม็ดที่ 2: เกิดจุดตัด MACD เริ่มนับเป็นแท่งที่ 0
             if macd_green_dot and not (trend_locked == "BUY" and (b5 or b6) and ema_bullish):
                 b2 = True
-                b3 = False  # Button 3 waits until Bar 2! (Unless EMA crosses today on Bar 1)
-                bar_count = 1
+                b3 = False
+                bar_count = 0  # เริ่มนับเป็นแท่งที่ 0!
                 macd_dot_date = date_str
                 b4 = False
                 b5 = False
@@ -198,22 +200,21 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                 just_confirmed_on_prev_bar = False
 
                 if ema_cross_up or ema_bullish:
-                    b3 = True
-                    b4 = True
+                    b3 = True  # เม็ดที่ 3: EMA9 ตัด EMA21
                     ema_cross_date = date_str
                     just_crossed_on_prev_bar = True
                     action_today = "WAIT_CONFIRM_BUY"
                 else:
-                    action_today = "MACD_DOT_BUY"  # 2 Green dots today!
+                    action_today = "MACD_DOT_BUY"  # 2 Green dots today (Bar 0)
 
             elif (b5 or b6) and trend_locked == "BUY":
-                # Yesterday was either 5 dots (BUY_NOW) or already 6 dots (HOLD_BUY)
+                # Yesterday was BUY_NOW (🚀) or already HOLD_BUY (📈)
                 if ema_bullish:
                     b2 = True
                     b3 = True
                     b4 = True
                     b5 = True
-                    b6 = True  # Today advances from 5 dots to 6 dots (or stays 6 dots)
+                    b6 = True
                     just_confirmed_on_prev_bar = False
                     action_today = "HOLD_BUY"
                 else:
@@ -227,7 +228,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                     action_today = "WATCH_KDJ_GREEN"
 
             elif b2:
-                # Active BUY sequence after MACD green dot (Bar 2..9)
+                # Active BUY sequence after MACD green dot (แท่งที่ 1..9)
                 if not macd_bullish:
                     b2 = False
                     b3 = False
@@ -240,27 +241,32 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                     just_crossed_on_prev_bar = False
                     action_today = "WATCH_KDJ_GREEN"
                 else:
-                    bar_count += 1
-                    b3 = True  # From Bar 2 onward, Button 3 (counting) is lit!
+                    bar_count += 1  # นับแท่งที่ 1..9
 
-                    if just_crossed_on_prev_bar and b4:
-                        # Confirmation bar right after EMA 9 crossed above EMA 21 -> 5 Dots (BUY_NOW)!
-                        ema_lifting = (prev_ema_fast is not None) and (ema_fast_val >= prev_ema_fast)
-                        if bar_count <= max_wait_bars + 1 and ema_bullish and ema_lifting:
+                    if just_crossed_on_prev_bar and b3:
+                        # แท่งถัดมาหลังเม็ดที่ 3: เช็คเม็ดที่ 4 (EMA9 > EMA21) และเม็ดที่ 5 (Close > EMA9 & EMA21)
+                        if bar_count <= max_wait_bars and ema_bullish and close_above_emas:
+                            b4 = True
                             b5 = True
-                            b6 = False  # Button 5 = BUY_NOW today! Button 6 lights up tomorrow (HOLD_BUY)
+                            b6 = True
                             trend_locked = "BUY"
                             signal_date = date_str
                             just_crossed_on_prev_bar = False
                             just_confirmed_on_prev_bar = True
                             action_today = "BUY_NOW"
+                        elif bar_count <= max_wait_bars and ema_bullish and (not close_above_emas):
+                            # เม็ดที่ 4 ติดแล้ว (EMA9 > EMA21) รอเม็ดที่ 5 (แท่งเทียนปิดเหนือ EMA9 & EMA21)
+                            b4 = True
+                            b5 = False
+                            b6 = False
+                            action_today = "WAIT_CONFIRM_BUY"
                         else:
+                            b3 = False
                             b4 = False
                             ema_cross_date = None
                             just_crossed_on_prev_bar = False
                             if bar_count > max_wait_bars:
                                 b2 = False
-                                b3 = False
                                 bar_count = 0
                                 macd_dot_date = None
                                 action_today = "WATCH_KDJ_GREEN"
@@ -269,7 +275,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                     else:
                         if bar_count <= max_wait_bars:
                             if ema_cross_up:
-                                b4 = True
+                                b3 = True  # เม็ดที่ 3: ภายในแท่งที่ 1–9 EMA9 ตัด EMA21
                                 ema_cross_date = date_str
                                 just_crossed_on_prev_bar = True
                                 action_today = "WAIT_CONFIRM_BUY"
@@ -318,11 +324,11 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                 else:
                     action_today = "WATCH_KDJ_RED"
 
-            # Check if a new MACD Red Dot occurs today (Bar 1 -> Button 2 lights up!)
+            # เม็ดที่ 2: เกิดจุดตัด MACD เริ่มนับเป็นแท่งที่ 0
             if macd_red_dot and not (trend_locked == "SELL" and (b5 or b6) and ema_bearish):
                 b2 = True
-                b3 = False  # Button 3 waits until Bar 2!
-                bar_count = 1
+                b3 = False
+                bar_count = 0  # เริ่มนับเป็นแท่งที่ 0!
                 macd_dot_date = date_str
                 b4 = False
                 b5 = False
@@ -332,13 +338,12 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                 just_confirmed_on_prev_bar = False
 
                 if ema_cross_down or ema_bearish:
-                    b3 = True
-                    b4 = True
+                    b3 = True  # เม็ดที่ 3: EMA9 ตัดลง EMA21
                     ema_cross_date = date_str
                     just_crossed_on_prev_bar = True
                     action_today = "WAIT_CONFIRM_SELL"
                 else:
-                    action_today = "MACD_DOT_SELL"  # 2 Red dots today!
+                    action_today = "MACD_DOT_SELL"  # 2 Red dots today (Bar 0)
 
             elif (b5 or b6) and trend_locked == "SELL":
                 if ema_bearish:
@@ -346,7 +351,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                     b3 = True
                     b4 = True
                     b5 = True
-                    b6 = True  # Today advances from 5 dots to 6 dots (or stays 6 dots)
+                    b6 = True
                     just_confirmed_on_prev_bar = False
                     action_today = "HOLD_SELL"
                 else:
@@ -372,26 +377,31 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                     just_crossed_on_prev_bar = False
                     action_today = "WATCH_KDJ_RED"
                 else:
-                    bar_count += 1
-                    b3 = True  # From Bar 2 onward, Button 3 (counting) is lit!
+                    bar_count += 1  # นับแท่งที่ 1..9
 
-                    if just_crossed_on_prev_bar and b4:
-                        ema_dropping = (prev_ema_fast is not None) and (ema_fast_val <= prev_ema_fast)
-                        if bar_count <= max_wait_bars + 1 and ema_bearish and ema_dropping:
+                    if just_crossed_on_prev_bar and b3:
+                        # แท่งถัดมาหลังเม็ดที่ 3: เช็คเม็ดที่ 4 (EMA9 < EMA21) และเม็ดที่ 5 (Close < EMA9 & EMA21)
+                        if bar_count <= max_wait_bars and ema_bearish and close_below_emas:
+                            b4 = True
                             b5 = True
-                            b6 = False  # Button 5 = SELL_NOW today! Button 6 lights up tomorrow (HOLD_SELL)
+                            b6 = True
                             trend_locked = "SELL"
                             signal_date = date_str
                             just_crossed_on_prev_bar = False
                             just_confirmed_on_prev_bar = True
                             action_today = "SELL_NOW"
+                        elif bar_count <= max_wait_bars and ema_bearish and (not close_below_emas):
+                            b4 = True
+                            b5 = False
+                            b6 = False
+                            action_today = "WAIT_CONFIRM_SELL"
                         else:
+                            b3 = False
                             b4 = False
                             ema_cross_date = None
                             just_crossed_on_prev_bar = False
                             if bar_count > max_wait_bars:
                                 b2 = False
-                                b3 = False
                                 bar_count = 0
                                 macd_dot_date = None
                                 action_today = "WATCH_KDJ_RED"
@@ -400,7 +410,7 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                     else:
                         if bar_count <= max_wait_bars:
                             if ema_cross_down:
-                                b4 = True
+                                b3 = True  # เม็ดที่ 3: ภายในแท่งที่ 1–9 EMA9 ตัดลง EMA21
                                 ema_cross_date = date_str
                                 just_crossed_on_prev_bar = True
                                 action_today = "WAIT_CONFIRM_SELL"
@@ -433,21 +443,21 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
             action_today=action_today,
         )
         buttons_compact = format_dots_compact(dot_colors)
-        buttons_visual = format_dots_visual(dot_colors, b3, bar_count, max_bars=max_wait_bars)
+        buttons_visual = format_dots_visual(dot_colors, b2, bar_count, max_bars=max_wait_bars)
 
         status_map = {
-            "BUY_NOW": f"🚀 เม็ดที่ 5 คอนเฟิร์มเข้าซื้อวันนี้! (แท่งที่ {bar_count}/{max_wait_bars})",
-            "SELL_NOW": f"🚨 เม็ดที่ 5 คอนเฟิร์มขายออกวันนี้! (แท่งที่ {bar_count}/{max_wait_bars})",
-            "WAIT_CONFIRM_BUY": f"👀 เม็ดที่ 4: EMA9 ตัดขึ้น EMA21 วันแรก (แท่ง {bar_count}/{max_wait_bars}) รอพรุ่งนี้ขึ้นเม็ด 5",
-            "WAIT_CONFIRM_SELL": f"⚠️ เม็ดที่ 4: EMA9 ตัดลง EMA21 วันแรก (แท่ง {bar_count}/{max_wait_bars}) รอพรุ่งนี้ขึ้นเม็ด 5",
-            "COUNTING_BUY": f"⏳ เม็ดที่ 3: นับแท่งที่ {bar_count}/{max_wait_bars} รอ EMA9 ตัดขึ้น EMA21",
-            "COUNTING_SELL": f"⏳ เม็ดที่ 3: นับแท่งที่ {bar_count}/{max_wait_bars} รอ EMA9 ตัดลง EMA21",
-            "MACD_DOT_BUY": "🟢 เม็ดที่ 2: เพิ่งเกิดจุดเขียว MACD วันแรก (แท่งที่ 1/9)",
-            "MACD_DOT_SELL": "🔴 เม็ดที่ 2: เพิ่งเกิดจุดแดง MACD วันแรก (แท่งที่ 1/9)",
-            "HOLD_BUY": "✅ เม็ดที่ 6: ขาขึ้นเต็มตัว 6 เม็ดเขียว (ถือรันเทรนด์)",
-            "HOLD_SELL": "🔻 เม็ดที่ 6: ขาลงเต็มตัว 6 เม็ดแดง (อยู่ในเทรนด์ขาลง)",
-            "WATCH_KDJ_GREEN": "🟢 เม็ดที่ 1: KDJ เขียว รอจุดเขียว MACD",
-            "WATCH_KDJ_RED": "🔴 เม็ดที่ 1: KDJ แดง รอจุดแดง MACD",
+            "BUY_NOW": f"🚀 ครบเงื่อนไขเข้าซื้อวันนี้! (EMA9>21 + แท่งเทียนปิดเหนือ EMA แท่งที่ {bar_count}/{max_wait_bars})",
+            "SELL_NOW": f"🚨 ครบเงื่อนไขขายออกวันนี้! (EMA9<21 + แท่งเทียนปิดต่ำกว่า EMA แท่งที่ {bar_count}/{max_wait_bars})",
+            "WAIT_CONFIRM_BUY": f"👀 เม็ดที่ 3–4: EMA9 ตัดขึ้น EMA21 แล้ว (แท่งที่ {bar_count}/{max_wait_bars}) รอแท่งถัดไปคอนเฟิร์มปิดเหนือ EMA",
+            "WAIT_CONFIRM_SELL": f"⚠️ เม็ดที่ 3–4: EMA9 ตัดลง EMA21 แล้ว (แท่งที่ {bar_count}/{max_wait_bars}) รอแท่งถัดไปคอนเฟิร์มปิดต่ำกว่า EMA",
+            "COUNTING_BUY": f"⏳ เม็ดที่ 2: จุดตัด MACD นับแท่งที่ {bar_count}/{max_wait_bars} รอ EMA9 ตัดขึ้น EMA21",
+            "COUNTING_SELL": f"⏳ เม็ดที่ 2: จุดตัด MACD นับแท่งที่ {bar_count}/{max_wait_bars} รอ EMA9 ตัดลง EMA21",
+            "MACD_DOT_BUY": "🟢 เม็ดที่ 2: เกิดจุดตัดเขียว MACD วันแรก (เริ่มนับแท่งที่ 0/9)",
+            "MACD_DOT_SELL": "🔴 เม็ดที่ 2: เกิดจุดตัดแดง MACD วันแรก (เริ่มนับแท่งที่ 0/9)",
+            "HOLD_BUY": "📈 เม็ดที่ 6: รันเทรนด์ขาขึ้นเต็มตัว",
+            "HOLD_SELL": "📉 เม็ดที่ 6: รันเทรนด์ขาลงเต็มตัว",
+            "WATCH_KDJ_GREEN": "🟢 เม็ดที่ 1: KDJ เปลี่ยนเป็นสีเขียว รอจุดตัด MACD",
+            "WATCH_KDJ_RED": "🔴 เม็ดที่ 1: KDJ เปลี่ยนเป็นสีแดง รอจุดตัด MACD",
         }
         status_text = status_map.get(action_today, "")
 
