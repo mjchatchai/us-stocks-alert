@@ -445,7 +445,7 @@ def format_daily_board_message(
 
     lines = [
         f"📊 <b>กระดานเม็ดกระดุม US (1D) — {scan_date}</b>",
-        "<code>1:KDJ | 2:จุดMACD | 3:นับ2-9 | 4:EMAตัด | 5:จุดซื้อ/ขาย | 6:รันเทรนด์</code>",
+        "<code>1:KDJ | 2:MACD(0-9) | 3:EMAตัด | 4:EMA>21 | 5:ปิด>EMA | 6:สถานะ</code>",
         "",
         f"💼 <b>โซน 1: หุ้นในพอร์ต ({len(zone1_portfolio)})</b>",
         "━━━━━━━━━━━━━━━━━━",
