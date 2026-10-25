@@ -141,14 +141,33 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
 
     print("\n⚡ ACTION ALERT — สัญญาณต้องจับตาวันนี้")
     print("─" * 35)
-    print(f"  🚀 เข้าซื้อวันนี้ (BUY NOW): {', '.join(x['ticker'] for x in buy_now_list) if buy_now_list else '(ไม่มี)'}")
-    print(f"  🚨 ขายออกวันนี้ (SELL NOW): {', '.join(x['ticker'] for x in sell_now_list) if sell_now_list else '(ไม่มี)'}")
+    if buy_now_list:
+        print(f"🚀 เข้าซื้อวันนี้ ({len(buy_now_list)}):")
+        for item in buy_now_list:
+            st = item["latest"]
+            print(f"  {item['ticker']:<5} {_compact_buttons(st)} ${st['close']:.2f}")
+    else:
+        print("🚀 เข้าซื้อวันนี้: (ไม่มี)")
+
+    if sell_now_list:
+        print(f"🚨 ขายออกวันนี้ ({len(sell_now_list)}):")
+        for item in sell_now_list:
+            st = item["latest"]
+            print(f"  {item['ticker']:<5} {_compact_buttons(st)} ${st['close']:.2f}")
+    else:
+        print("🚨 ขายออกวันนี้: (ไม่มี)")
+
     if setup_buy_list:
-        s_buy_str = ", ".join(f"{x['ticker']}({_compact_buttons(x['latest'])})" for x in setup_buy_list)
-        print(f"  🟢 จ่อซื้อ (เม็ด 2–4): {s_buy_str}")
+        print(f"🟢 จ่อซื้อ ({len(setup_buy_list)}):")
+        for item in setup_buy_list:
+            st = item["latest"]
+            print(f"  {item['ticker']:<5} {_compact_buttons(st)} ${st['close']:.2f}")
+
     if setup_sell_list:
-        s_sell_str = ", ".join(f"{x['ticker']}({_compact_buttons(x['latest'])})" for x in setup_sell_list)
-        print(f"  ⚠️ เฝ้าระวังย่อ/จ่อขาย (เม็ดแดง 2–4): {s_sell_str}")
+        print(f"⚠️ เฝ้าระวังย่อ/จ่อขาย ({len(setup_sell_list)}):")
+        for item in setup_sell_list:
+            st = item["latest"]
+            print(f"  {item['ticker']:<5} {_compact_buttons(st)} ${st['close']:.2f}")
 
     print(f"\n💼 โซน 1: หุ้นในพอร์ต ({len(zone1_portfolio)})")
     print("─" * 35)
