@@ -447,9 +447,86 @@ def format_daily_board_message(
         f"📊 <b>กระดานเม็ดกระดุม US (1D) — {scan_date}</b>",
         "<code>1:KDJ | 2:MACD(0-9) | 3:EMAตัด | 4:EMA>21 | 5:ปิด>EMA | 6:สถานะ</code>",
         "",
-        f"💼 <b>โซน 1: หุ้นในพอร์ต ({len(zone1_portfolio)})</b>",
-        "━━━━━━━━━━━━━━━━━━",
     ]
+
+    # Build ⚡ ACTION ALERT box at the very top
+    buy_now_list = [x for x in scan_results if x["latest"]["action_today"] == "BUY_NOW"]
+    sell_now_list = [x for x in scan_results if x["latest"]["action_today"] == "SELL_NOW"]
+    setup_buy_list = sorted(
+        [
+            x
+            for x in scan_results
+            if x["latest"]["action_today"] in ("WAIT_CONFIRM_BUY", "MACD_DOT_BUY", "COUNTING_BUY")
+        ],
+        key=lambda x: (-_count_green_red(x["latest"].get("dot_colors", []))[0], x["ticker"]),
+    )
+    setup_sell_list = sorted(
+        [
+            x
+            for x in scan_results
+            if x["latest"]["action_today"] in ("WAIT_CONFIRM_SELL", "MACD_DOT_SELL", "COUNTING_SELL")
+        ],
+        key=lambda x: (
+            0 if x["ticker"] in portfolio_tickers else 1,
+            -_count_green_red(x["latest"].get("dot_colors", []))[1],
+            x["ticker"],
+        ),
+    )
+
+    lines.extend(
+        [
+            "⚡ <b>ACTION ALERT — สัญญาณต้องจับตาวันนี้</b>",
+            "━━━━━━━━━━━━━━━━━━",
+        ]
+    )
+
+    if buy_now_list:
+        lines.append(f"🚀 <b>เข้าซื้อวันนี้ ({len(buy_now_list)}):</b>")
+        for item in buy_now_list:
+            tk = item["ticker"]
+            st = item["latest"]
+            tag = " <b>[พอร์ต]</b>" if tk in portfolio_tickers else ""
+            lines.append(f"  • <code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code>{tag}")
+    else:
+        lines.append("🚀 <b>เข้าซื้อวันนี้:</b> <i>(ไม่มี)</i>")
+
+    if sell_now_list:
+        lines.append(f"🚨 <b>ขายออกวันนี้ ({len(sell_now_list)}):</b>")
+        for item in sell_now_list:
+            tk = item["ticker"]
+            st = item["latest"]
+            tag = " <b>[พอร์ต!]</b>" if tk in portfolio_tickers else ""
+            lines.append(f"  • <code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code>{tag}")
+    else:
+        lines.append("🚨 <b>ขายออกวันนี้:</b> <i>(ไม่มี)</i>")
+
+    if setup_buy_list:
+        lines.append(f"🟢 <b>จ่อซื้อ — ติดเม็ด 2–4 กำลังนับแท่ง ({len(setup_buy_list)}):</b>")
+        for item in setup_buy_list:
+            tk = item["ticker"]
+            st = item["latest"]
+            tag = " [พอร์ต]" if tk in portfolio_tickers else ""
+            lines.append(
+                f"  • <code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code> (แท่ง {st['bar_count']}/{st['max_bars']}){tag}"
+            )
+
+    if setup_sell_list:
+        lines.append(f"⚠️ <b>เฝ้าระวังย่อ/จ่อขาย — ติดเม็ดแดง 2–4 ({len(setup_sell_list)}):</b>")
+        for item in setup_sell_list:
+            tk = item["ticker"]
+            st = item["latest"]
+            tag = " <b>[พอร์ต]</b>" if tk in portfolio_tickers else ""
+            lines.append(
+                f"  • <code>{tk:<5}</code> {_compact_buttons(st)} <code>${st['close']:.2f}</code> (แท่ง {st['bar_count']}/{st['max_bars']}){tag}"
+            )
+
+    lines.extend(
+        [
+            "",
+            f"💼 <b>โซน 1: หุ้นในพอร์ต ({len(zone1_portfolio)})</b>",
+            "━━━━━━━━━━━━━━━━━━",
+        ]
+    )
 
     if zone1_portfolio:
         for item in zone1_portfolio:
