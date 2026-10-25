@@ -127,6 +127,19 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
     prev_close = None
     prev_ema_fast = None
 
+    # Persistent MACD window memory (prevents 1-day KDJ flicker from wiping active MACD 0..9 bar count)
+    bull_macd_active = False
+    bull_macd_bars = 0
+    bull_macd_date: Optional[str] = None
+    bull_ema_crossed = False
+    bull_ema_date: Optional[str] = None
+
+    bear_macd_active = False
+    bear_macd_bars = 0
+    bear_macd_date: Optional[str] = None
+    bear_ema_crossed = False
+    bear_ema_date: Optional[str] = None
+
     for idx, row in df.iterrows():
         date_str = idx.strftime("%Y-%m-%d") if hasattr(idx, "strftime") else str(idx)
         close = float(row["Close"])
@@ -145,6 +158,42 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
         ema_slow_val = float(row["ema_slow"]) if pd.notna(row["ema_slow"]) else 0.0
         close_above_emas = (close > ema_fast_val) and (close > ema_slow_val)
         close_below_emas = (close < ema_fast_val) and (close < ema_slow_val)
+
+        # Update persistent Bullish MACD window (0..max_wait_bars)
+        if macd_green_dot:
+            bull_macd_active = True
+            bull_macd_bars = 0
+            bull_macd_date = date_str
+            bull_ema_crossed = bool(ema_cross_up or ema_bullish)
+            bull_ema_date = date_str if bull_ema_crossed else None
+        elif bull_macd_active:
+            if not macd_bullish:
+                bull_macd_active = False
+            else:
+                bull_macd_bars += 1
+                if bull_macd_bars > max_wait_bars:
+                    bull_macd_active = False
+                elif ema_cross_up and not bull_ema_crossed:
+                    bull_ema_crossed = True
+                    bull_ema_date = date_str
+
+        # Update persistent Bearish MACD window (0..max_wait_bars)
+        if macd_red_dot:
+            bear_macd_active = True
+            bear_macd_bars = 0
+            bear_macd_date = date_str
+            bear_ema_crossed = bool(ema_cross_down or ema_bearish)
+            bear_ema_date = date_str if bear_ema_crossed else None
+        elif bear_macd_active:
+            if not macd_bearish:
+                bear_macd_active = False
+            else:
+                bear_macd_bars += 1
+                if bear_macd_bars > max_wait_bars:
+                    bear_macd_active = False
+                elif ema_cross_down and not bear_ema_crossed:
+                    bear_ema_crossed = True
+                    bear_ema_date = date_str
 
         if trend_locked is None and pd.notna(row["ema_slow"]):
             if ema_bullish and macd_bullish and kdj_green:
@@ -183,6 +232,15 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                     b5 = True
                     b6 = True
                     action_today = "HOLD_BUY"
+                elif bull_macd_active and not macd_green_dot:
+                    # Restore active MACD window if KDJ flickered or lagged MACD
+                    b2 = True
+                    bar_count = bull_macd_bars - 1
+                    macd_dot_date = bull_macd_date
+                    if bull_ema_crossed and bull_ema_date != date_str:
+                        b3 = True
+                        ema_cross_date = bull_ema_date
+                        just_crossed_on_prev_bar = True
                 else:
                     action_today = "WATCH_KDJ_GREEN"
 
@@ -321,6 +379,15 @@ def evaluate_strategy_timeline(df: pd.DataFrame, max_wait_bars: int = 9) -> List
                     b5 = True
                     b6 = True
                     action_today = "HOLD_SELL"
+                elif bear_macd_active and not macd_red_dot:
+                    # Restore active MACD window if KDJ flickered or lagged MACD
+                    b2 = True
+                    bar_count = bear_macd_bars - 1
+                    macd_dot_date = bear_macd_date
+                    if bear_ema_crossed and bear_ema_date != date_str:
+                        b3 = True
+                        ema_cross_date = bear_ema_date
+                        just_crossed_on_prev_bar = True
                 else:
                     action_today = "WATCH_KDJ_RED"
 
