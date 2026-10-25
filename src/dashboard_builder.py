@@ -397,6 +397,15 @@ def build_dashboard_html(
       <input type="text" id="searchInput" class="search-input" placeholder="ค้นหาชื่อหุ้น เช่น TQQQ, NVDA..." oninput="renderZones()" />
     </div>
 
+    <!-- ⚡ ACTION ALERT BOX -->
+    <div id="actionAlertBox" style="background: linear-gradient(135deg, #161d2f 0%, #1c182c 100%); border: 1px solid #ffd740; border-radius: 14px; padding: 18px 22px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(255, 215, 64, 0.12);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(255,215,64,0.25); padding-bottom:8px;">
+        <h2 style="font-size:1.1rem; color:#ffd740; font-weight:700;">⚡ ACTION ALERT — สัญญาณเด่นต้องจับตาวันนี้ (คลิกที่ชื่อหุ้นเพื่อดูกราฟ)</h2>
+        <span id="actionAlertCount" style="font-size:0.82rem; background:#2b2512; color:#ffd740; padding:3px 10px; border-radius:20px; border:1px solid #ffd740;">0 สัญญาณ</span>
+      </div>
+      <div id="actionAlertBody" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:12px;"></div>
+    </div>
+
     <!-- 💼 ZONE 1: MY PORTFOLIO (สั่งซื้อแล้ว รอจังหวะขายออกเมื่อครบ 6 เม็ดแดง) -->
     <div id="portfolioZoneSection" class="zone-section zone-portfolio">
       <div class="zone-header">
@@ -670,6 +679,45 @@ def build_dashboard_html(
       document.getElementById('portfolioBoardBody').innerHTML = buildPortfolioRowsHtml(zone1Portfolio);
       document.getElementById('buyBoardBody').innerHTML = buildRowsHtml(zone2Buy);
       document.getElementById('sellBoardBody').innerHTML = buildRowsHtml(zone3Sell);
+
+      // Render Action Alert Box
+      const buyNow = baseFiltered.filter(x => x.latest.action_today === 'BUY_NOW');
+      const sellNow = baseFiltered.filter(x => x.latest.action_today === 'SELL_NOW');
+      const setupBuy = baseFiltered.filter(x => ['WAIT_CONFIRM_BUY', 'MACD_DOT_BUY', 'COUNTING_BUY'].includes(x.latest.action_today));
+      const setupSell = baseFiltered.filter(x => ['WAIT_CONFIRM_SELL', 'MACD_DOT_SELL', 'COUNTING_SELL'].includes(x.latest.action_today));
+      const totalAlerts = buyNow.length + sellNow.length + setupBuy.length + setupSell.length;
+      document.getElementById('actionAlertCount').innerText = `${{totalAlerts}} สัญญาณวันนี้`;
+
+      const renderPillList = (arr, emptyText) => {{
+        if (!arr.length) return `<div style="color:var(--muted);font-size:0.82rem;font-style:italic;">${{emptyText}}</div>`;
+        return arr.map(x => {{
+          const st = x.latest;
+          const inPort = portfolioTickers.has(x.ticker) ? `<span style="color:#ffd740;font-weight:700;">[พอร์ต]</span>` : '';
+          return `<div onclick="openStockModal('${{x.ticker}}')" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#11151f;padding:6px 10px;border-radius:8px;border:1px solid #2a2e39;margin-top:6px;font-size:0.85rem;">
+            <span><b>${{x.ticker}}</b> ${{st.buttons_compact || ''}} ${{inPort}}</span>
+            <span style="color:#b0bec5;">$${{st.close.toFixed(2)}} <small>(แท่ง ${{st.bar_count}}/${{st.max_bars}})</small></span>
+          </div>`;
+        }}).join('');
+      }};
+
+      document.getElementById('actionAlertBody').innerHTML = `
+        <div style="background:#0d1a14;border:1px solid rgba(0,230,118,0.4);border-radius:10px;padding:12px;">
+          <div style="color:#00e676;font-weight:700;font-size:0.9rem;margin-bottom:4px;">🚀 เข้าซื้อวันนี้ (BUY NOW: ${{buyNow.length}})</div>
+          ${{renderPillList(buyNow, '(ไม่มีสัญญาณซื้อวันแรก)')}}
+        </div>
+        <div style="background:#1f0f14;border:1px solid rgba(255,23,68,0.4);border-radius:10px;padding:12px;">
+          <div style="color:#ff5252;font-weight:700;font-size:0.9rem;margin-bottom:4px;">🚨 ขายออกวันนี้ (SELL NOW: ${{sellNow.length}})</div>
+          ${{renderPillList(sellNow, '(ไม่มีสัญญาณขายวันแรก)')}}
+        </div>
+        <div style="background:#111c18;border:1px solid rgba(0,230,118,0.25);border-radius:10px;padding:12px;">
+          <div style="color:#69f0ae;font-weight:700;font-size:0.9rem;margin-bottom:4px;">🟢 จ่อซื้อ — ติดเม็ด 2–4 (${{setupBuy.length}})</div>
+          ${{renderPillList(setupBuy, '(ไม่มีหุ้นกำลังนับแท่งซื้อ)')}}
+        </div>
+        <div style="background:#1c1412;border:1px solid rgba(255,171,0,0.3);border-radius:10px;padding:12px;">
+          <div style="color:#ffd740;font-weight:700;font-size:0.9rem;margin-bottom:4px;">⚠️ เฝ้าระวังย่อ/จ่อขาย — เม็ดแดง 2–4 (${{setupSell.length}})</div>
+          ${{renderPillList(setupSell, '(ไม่มีหุ้นกำลังนับแท่งขาย)')}}
+        </div>
+      `;
     }}
 
     function openStockModal(ticker) {{
