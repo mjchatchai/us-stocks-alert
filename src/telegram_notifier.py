@@ -177,15 +177,16 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
                 )
             continue
 
-        # 2. Handle Text Commands (/buy, /sell, /add, /remove)
+        # 2. Handle Text Commands (/buy, /sell, /add, /remove, /scan — with or without leading '/')
         msg = upd.get("message", {})
         text = (msg.get("text") or "").strip()
         msg_chat_id = str(msg.get("chat", {}).get("id", cid))
-        if not text.startswith("/"):
+        if not text:
             continue
 
         tokens = text.split()
-        cmd = tokens[0].lower().split("@")[0]
+        raw_cmd = tokens[0].lower().split("@")[0]
+        cmd = raw_cmd if raw_cmd.startswith("/") else f"/{raw_cmd}"
 
         if cmd == "/buy" and len(tokens) >= 2:
             tk = tokens[1].upper()
@@ -244,7 +245,7 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
         elif cmd in ("/help", "/start"):
             send_telegram_message(
                 "🤖 <b>คำสั่งควบคุมพอร์ตและ Watchlist ผ่าน Telegram</b>\n"
-                "• <code>/scan</code> — สั่งสแกนกราฟและส่งกระดาน 3 โซนให้ดูทันที\n"
+                "• <code>/scan</code> หรือ <code>scan</code> — สั่งสแกนกราฟและส่งกระดาน 3 โซนให้ดูทันที\n"
                 "• <code>/buy AAPL</code> — บันทึกว่าซื้อหุ้นแล้ว (ย้ายเข้าโซนที่ 1 รอจุดขายออก)\n"
                 "• <code>/sell RXRX</code> — บันทึกว่าขายหุ้นแล้ว (ย้ายกลับเข้า Watchlist)\n"
                 "• <code>/add NVDA AMD</code> — เพิ่มหุ้นเข้า Watchlist\n"
