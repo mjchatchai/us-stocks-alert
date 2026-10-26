@@ -2,8 +2,8 @@ name: Telegram Command Listener (/buy, /sell, /scan)
 
 on:
   schedule:
-    # เช็คคำสั่งในแชท Telegram ทุกๆ 15 นาที (ใช้เวลาแค่ 2 วินาทีถ้าไม่มีคำสั่งใหม่)
-    - cron: "*/15 * * * *"
+    # เช็คคำสั่งในแชท Telegram ถี่สุดเท่าที่ GitHub Actions อนุญาต (ทุกๆ 5 นาที)
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 permissions:
