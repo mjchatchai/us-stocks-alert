@@ -2,9 +2,9 @@ name: US Stocks 6-Button Daily Scanner
 
 on:
   schedule:
-    # รันอัตโนมัติเวลา 10:00 น. เวลาไทย (03:00 UTC อังคาร-เสาร์ หลังตลาดหุ้น US ปิดของคืนจันทร์-ศุกร์)
-    - cron: "0 3 * * 2-6"
-  workflow_dispatch: # กดสั่งรันเองได้ทุกเมื่อจากหน้าเว็บหรือแอป GitHub บนมือถือ
+    # รันอัตโนมัติเวลา 08:42 น. เวลาไทย (01:42 UTC จันทร์-เสาร์ ช่วงทราฟฟิกต่ำและหลบนาที :00)
+    - cron: "42 1 * * 1-6"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -35,6 +35,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add config/watchlist.json docs/
-          git diff --staged --quiet || git commit -m "Auto-update 3-zone dashboard & portfolio state [skip ci]"
-          git push
+          git add config/watchlist.json
+          if [ -d "docs" ]; then git add docs/; fi
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update 3-zone dashboard & portfolio state [skip ci]"
+            git pull --rebase origin main || true
+            git push
+          fi
