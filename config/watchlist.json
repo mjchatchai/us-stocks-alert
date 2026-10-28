@@ -9,7 +9,12 @@
   "kdj_period": 9,
   "kdj_signal": 3,
   "last_telegram_update_id": 169916611,
-  "portfolio": {},
+  "portfolio": {
+    "CRWD": {
+      "buy_price": 268.02,
+      "buy_date": "2026-10-28"
+    }
+  },
   "trade_history": [],
   "tickers": [
     "ASTS",
