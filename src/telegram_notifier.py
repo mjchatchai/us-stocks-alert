@@ -321,7 +321,28 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
 
         tokens = text.split()
         raw_cmd = tokens[0].lower().split("@")[0]
-        cmd = raw_cmd if raw_cmd.startswith("/") else f"/{raw_cmd}"
+        known_cmds = {"/buy", "/sell", "/stat", "/stats", "/add", "/remove", "/scan", "/report", "/help", "/start"}
+        candidate_cmd = raw_cmd if raw_cmd.startswith("/") else f"/{raw_cmd}"
+
+        if candidate_cmd not in known_cmds and cfg.get("pending_command"):
+            pending = cfg.pop("pending_command")
+            tokens = [pending] + tokens
+            cmd = pending
+        else:
+            cmd = candidate_cmd
+            if cmd in known_cmds:
+                cfg.pop("pending_command", None)
+
+        if cmd in ("/buy", "/sell", "/add", "/remove") and len(tokens) == 1:
+            cfg["pending_command"] = cmd
+            prompts = {
+                "/buy": "✍️ <b>พิมพ์ชื่อหุ้น (และราคาทุนถ้ามี)</b> ที่ต้องการซื้อเข้าโซน 1 ส่งมาได้เลยครับ\nเช่น: <code>AAPL</code> หรือ <code>AAPL 230.50</code>",
+                "/sell": "✍️ <b>พิมพ์ชื่อหุ้น (และราคาขายถ้ามี)</b> ที่ต้องการขายปิดรอบจากโซน 1 ส่งมาได้เลยครับ\nเช่น: <code>AAPL</code> หรือ <code>AAPL 245.00</code>",
+                "/add": "✍️ <b>พิมพ์ชื่อหุ้นที่ต้องการเพิ่มเข้า Watchlist</b> ส่งมาได้เลยครับ (พิมพ์หลายตัวเว้นวรรคได้)\nเช่น: <code>NVDA AMD TSLA</code>",
+                "/remove": "✍️ <b>พิมพ์ชื่อหุ้นที่ต้องการลบออกจาก Watchlist</b> ส่งมาได้เลยครับ\nเช่น: <code>NVDA</code>",
+            }
+            send_telegram_message(prompts[cmd], chat_id=msg_chat_id)
+            continue
 
         if cmd == "/buy" and len(tokens) >= 2:
             tk = tokens[1].upper()
@@ -378,13 +399,23 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
 
         elif cmd == "/add" and len(tokens) >= 2:
             added = []
+            already = []
             for raw_tk in tokens[1:]:
                 tk = raw_tk.strip(", ").upper()
-                if tk and tk not in tickers:
+                if not tk:
+                    continue
+                if tk not in tickers:
                     tickers.append(tk)
                     added.append(tk)
+                else:
+                    already.append(tk)
+            msg_parts = []
             if added:
-                send_telegram_message(f"➕ เพิ่มหุ้นเข้า Watchlist แล้ว: <b>{', '.join(added)}</b>", chat_id=msg_chat_id)
+                msg_parts.append(f"➕ เพิ่มหุ้นเข้า Watchlist แล้ว: <b>{', '.join(added)}</b>")
+            if already:
+                msg_parts.append(f"ℹ️ มีอยู่ใน Watchlist แล้ว: <b>{', '.join(already)}</b>")
+            if msg_parts:
+                send_telegram_message("\n".join(msg_parts), chat_id=msg_chat_id)
 
         elif cmd == "/remove" and len(tokens) >= 2:
             tk = tokens[1].upper()
