@@ -2,12 +2,13 @@
 Telegram Bot Notifier & Command Handler for US Stock 6-Button Strategy
 
 Supports:
-1. Reading user commands from Telegram (/buy, /sell, /add, /remove, /portfolio) and inline button clicks
-2. Sending the 3-Zone daily 6-Button report:
-   - 💼 โซนที่ 1: หุ้นในพอร์ต (สั่งซื้อแล้ว — รอจังหวะขายออกเมื่อครบ 6 เม็ดแดง)
+1. Reading user commands from Telegram (/buy, /sell, /stat, /add, /remove, /scan) and inline button clicks
+2. Recording completed 6-Button trades into backend statistics (trade_history) for /stat review
+3. Sending the 3-Zone daily 6-Button report:
+   - 💼 โซนที่ 1: หุ้นในพอร์ตกระดุม 6 เม็ด (สั่งซื้อแล้ว — โชว์ % กำไร/ขาดทุน และรอจังหวะขายออกเมื่อครบ 6 เม็ดแดง)
    - 🟢 โซนที่ 2: Watchlist ขาขึ้น (KDJ เขียว — รอจังหวะเข้าซื้อเมื่อครบ 6 เม็ดเขียว)
    - 🔴 โซนที่ 3: Watchlist ขาลง (KDJ แดง — พักตัว/ขาลง)
-3. Sending individual stock chart images with inline action buttons
+4. Sending individual stock chart images with inline action buttons
 """
 
 import json
@@ -30,6 +31,92 @@ def _load_dotenv_if_present() -> None:
 
 
 _load_dotenv_if_present()
+
+
+def _fetch_latest_price_us(ticker: str) -> float:
+    try:
+        import yfinance as yf
+        df = yf.Ticker(ticker.strip().upper()).history(period="5d", interval="1d", auto_adjust=False)
+        if df is not None and not df.empty:
+            return round(float(df["Close"].iloc[-1]), 2)
+    except Exception as exc:
+        print(f"[PriceFetch] ไม่สามารถดึงราคาล่าสุดของ {ticker}: {exc}")
+    return 0.0
+
+
+def _calc_days_held(buy_date_str: str, sell_date_str: str) -> int:
+    try:
+        d1 = datetime.strptime(buy_date_str, "%Y-%m-%d").date()
+        d2 = datetime.strptime(sell_date_str, "%Y-%m-%d").date()
+        return max(0, (d2 - d1).days)
+    except Exception:
+        return 0
+
+
+def format_stat_message(cfg: Dict[str, Any]) -> str:
+    history: List[Dict[str, Any]] = cfg.get("trade_history", [])
+    portfolio: Dict[str, Dict[str, Any]] = cfg.get("portfolio", {})
+
+    lines = [
+        "📊 <b>สถิติผลการเทรดด้วยกระดุม 6 เม็ด (US Stocks)</b>",
+        "━━━━━━━━━━━━━━━━━━",
+    ]
+
+    if not history:
+        lines.append("📁 <b>ประวัติที่ปิดรอบแล้ว (Closed Trades):</b> <i>(ยังไม่มีประวัติการขายปิดรอบ)</i>")
+    else:
+        total = len(history)
+        wins = [t for t in history if float(t.get("pnl_pct", 0.0)) > 0]
+        losses = [t for t in history if float(t.get("pnl_pct", 0.0)) <= 0]
+        win_rate = (len(wins) / total) * 100.0 if total > 0 else 0.0
+        avg_pnl = sum(float(t.get("pnl_pct", 0.0)) for t in history) / total
+        avg_win = sum(float(t.get("pnl_pct", 0.0)) for t in wins) / len(wins) if wins else 0.0
+        avg_loss = sum(float(t.get("pnl_pct", 0.0)) for t in losses) / len(losses) if losses else 0.0
+
+        compounded = 1.0
+        for t in history:
+            compounded *= (1.0 + float(t.get("pnl_pct", 0.0)) / 100.0)
+        compounded_pct = (compounded - 1.0) * 100.0
+
+        best_trade = max(history, key=lambda t: float(t.get("pnl_pct", 0.0)))
+        worst_trade = min(history, key=lambda t: float(t.get("pnl_pct", 0.0)))
+
+        lines.extend(
+            [
+                f"🏆 <b>สรุปผลงานที่ปิดรอบแล้ว ({total} รอบ)</b>",
+                f"• <b>Win Rate:</b> <code>{win_rate:.1f}%</code> (ชนะ {len(wins)} / แพ้ {len(losses)})",
+                f"• <b>ค่าเฉลี่ยต่อไม้:</b> <code>{avg_pnl:+.2f}%</code> (ชนะเฉลี่ย <code>{avg_win:+.2f}%</code> | แพ้เฉลี่ย <code>{avg_loss:+.2f}%</code>)",
+                f"• <b>ผลตอบแทนสะสม (Compounded):</b> <code>{compounded_pct:+.2f}%</code>",
+                f"• <b>ไม้ที่ดีที่สุด:</b> <b>{best_trade['ticker']}</b> (<code>{float(best_trade['pnl_pct']):+.2f}%</code>)",
+                f"• <b>ไม้ที่แย่ที่สุด:</b> <b>{worst_trade['ticker']}</b> (<code>{float(worst_trade['pnl_pct']):+.2f}%</code>)",
+                "",
+                "📜 <b>ประวัติการปิดรอบล่าสุด (สูงสุด 10 รายการ):</b>",
+            ]
+        )
+        for t in reversed(history[-10:]):
+            tk = t.get("ticker", "?")
+            bp = float(t.get("buy_price", 0.0))
+            sp = float(t.get("sell_price", 0.0))
+            pnl = float(t.get("pnl_pct", 0.0))
+            days = int(t.get("days_held", 0))
+            s_date = t.get("sell_date", "-")
+            icon = "🟢" if pnl > 0 else "🔴"
+            lines.append(
+                f"{icon} <code>{tk:<5}</code> ${bp:.2f} ➔ ${sp:.2f} (<b>{pnl:+.2f}%</b>) <i>[{days} วัน | {s_date}]</i>"
+            )
+
+    lines.append("")
+    lines.append(f"💼 <b>หุ้นที่กำลังถือในโซน 1 ปัจจุบัน ({len(portfolio)} ตัว):</b>")
+    if portfolio:
+        for tk, info in sorted(portfolio.items()):
+            bp = float(info.get("buy_price", 0.0))
+            bdate = info.get("buy_date", "-")
+            bp_str = f"ทุน ${bp:.2f}" if bp > 0 else "ไม่ระบุทุน"
+            lines.append(f"• <code>{tk:<5}</code> ({bp_str} | ซื้อเมื่อ {bdate})")
+    else:
+        lines.append("<i>(ไม่มีหุ้นที่กำลังถือในโซน 1)</i>")
+
+    return "\n".join(lines)
 
 
 def send_telegram_message(
@@ -108,14 +195,45 @@ def send_telegram_photo(
         return False
 
 
+def _record_closed_trade(
+    cfg: Dict[str, Any],
+    tk: str,
+    pos: Dict[str, Any],
+    sell_price: float,
+    sell_date: str,
+) -> Optional[Dict[str, Any]]:
+    buy_price = float(pos.get("buy_price", 0.0))
+    buy_date = str(pos.get("buy_date", sell_date))
+    if sell_price <= 0:
+        sell_price = _fetch_latest_price_us(tk)
+    if buy_price <= 0 or sell_price <= 0:
+        return None
+
+    pnl_pct = round(((sell_price - buy_price) / buy_price) * 100.0, 2)
+    days_held = _calc_days_held(buy_date, sell_date)
+    record = {
+        "ticker": tk,
+        "buy_price": round(buy_price, 2),
+        "sell_price": round(sell_price, 2),
+        "pnl_pct": pnl_pct,
+        "buy_date": buy_date,
+        "sell_date": sell_date,
+        "days_held": days_held,
+    }
+    history = cfg.setdefault("trade_history", [])
+    history.append(record)
+    return record
+
+
 def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, Any]:
     """
     Polls Telegram getUpdates for any queued commands sent by the user:
-      /buy TICKER [PRICE]   -> ย้ายหุ้นเข้าโซนที่ 1 (พอร์ตของฉัน รอจังหวะขายออก)
-      /sell TICKER          -> เอาหุ้นออกจากโซนที่ 1 กลับไปอยู่ Watchlist
+      /buy TICKER [PRICE]   -> ย้ายหุ้นเข้าโซนที่ 1 (บันทึกทุนเพื่อวัดผลกระดุม 6 เม็ด)
+      /sell TICKER [PRICE]  -> ขายหุ้นออกจากโซนที่ 1 และบันทึกสถิติลง trade_history
+      /stat                 -> ดูสถิติผลการเทรดย้อนหลังและอัตราชนะ (Win Rate)
       /add TICKER           -> เพิ่มหุ้นเข้า Watchlist
       /remove TICKER        -> ลบหุ้นออกจาก Watchlist
-    Also handles inline button clicks (callback_query: BUY:TICKER:PRICE or SELL:TICKER).
+    Also handles inline button clicks (callback_query: BUY:TICKER:PRICE or SELL:TICKER[:PRICE]).
     """
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     cid = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
@@ -138,6 +256,7 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
         return cfg
 
     portfolio: Dict[str, Dict[str, Any]] = cfg.setdefault("portfolio", {})
+    cfg.setdefault("trade_history", [])
     tickers: List[str] = [t.upper() for t in cfg.get("tickers", [])]
     changed = False
     today_str = datetime.now().strftime("%Y-%m-%d")
@@ -158,26 +277,42 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
                 parts = cb_data.split(":")
                 tk = parts[1].upper()
                 price = float(parts[2]) if len(parts) > 2 else 0.0
+                if price <= 0:
+                    price = _fetch_latest_price_us(tk)
                 portfolio[tk] = {"buy_price": price, "buy_date": today_str}
                 if tk not in tickers:
                     tickers.append(tk)
                 send_telegram_message(
-                    f"✅ <b>บันทึกเข้าพอร์ตสำเร็จ!</b>\n"
-                    f"ย้าย <b>{tk}</b> (ทุน ${price:.2f}) เข้าสู่ <b>💼 โซนที่ 1: หุ้นในพอร์ต (รอสัญญาณขายออกครบ 6 เม็ดแดง)</b> เรียบร้อยแล้วครับ",
+                    f"✅ <b>บันทึกเข้าพอร์ตกระดุม 6 เม็ดสำเร็จ!</b>\n"
+                    f"ย้าย <b>{tk}</b> (ทุน <code>${price:.2f}</code>) เข้าสู่ <b>💼 โซนที่ 1</b> เพื่อวัดผลและรอสัญญาณขายเมื่อครบ 6 เม็ดแดงครับ",
                     chat_id=cb_chat_id,
                 )
             elif cb_data.startswith("SELL:"):
                 parts = cb_data.split(":")
                 tk = parts[1].upper()
-                portfolio.pop(tk, None)
-                send_telegram_message(
-                    f"💰 <b>บันทึกการขายออกสำเร็จ!</b>\n"
-                    f"นำ <b>{tk}</b> ออกจากพอร์ต และย้ายกลับไปเฝ้าดูใน <b>Watchlist</b> เรียบร้อยแล้วครับ",
-                    chat_id=cb_chat_id,
-                )
+                sell_price = float(parts[2]) if len(parts) > 2 else 0.0
+                pos = portfolio.pop(tk, None)
+                if pos is not None:
+                    rec = _record_closed_trade(cfg, tk, pos, sell_price, today_str)
+                    if rec:
+                        icon = "🟢 กำไร" if rec["pnl_pct"] > 0 else "🔴 ขาดทุน"
+                        send_telegram_message(
+                            f"💰 <b>ปิดรอบการเทรด {tk} สำเร็จ! ({icon} {rec['pnl_pct']:+.2f}%)</b>\n"
+                            f"• ทุนซื้อ: <code>${rec['buy_price']:.2f}</code> ({rec['buy_date']})\n"
+                            f"• ราคาขาย: <code>${rec['sell_price']:.2f}</code> ({rec['sell_date']} | ถือ {rec['days_held']} วัน)\n"
+                            f"📊 <i>บันทึกผลเข้าสู่ระบบสถิติหลังบ้านแล้ว พิมพ์ <code>/stat</code> เพื่อดูสรุปผลงานทั้งหมดได้ทันทีครับ</i>",
+                            chat_id=cb_chat_id,
+                        )
+                    else:
+                        send_telegram_message(
+                            f"💰 <b>นำ {tk} ออกจากโซน 1 เรียบร้อยแล้วครับ</b>",
+                            chat_id=cb_chat_id,
+                        )
+                else:
+                    send_telegram_message(f"ℹ️ ไม่พบ {tk} ในโซนที่ 1 ปัจจุบันครับ", chat_id=cb_chat_id)
             continue
 
-        # 2. Handle Text Commands (/buy, /sell, /add, /remove, /scan — with or without leading '/')
+        # 2. Handle Text Commands (/buy, /sell, /stat, /add, /remove, /scan — with or without leading '/')
         msg = upd.get("message", {})
         text = (msg.get("text") or "").strip()
         msg_chat_id = str(msg.get("chat", {}).get("id", cid))
@@ -196,27 +331,50 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
                     price = float(tokens[2])
                 except ValueError:
                     price = 0.0
+            if price <= 0:
+                price = _fetch_latest_price_us(tk)
             portfolio[tk] = {"buy_price": price, "buy_date": today_str}
             if tk not in tickers:
                 tickers.append(tk)
-            price_txt = f"ที่ราคา ${price:.2f}" if price > 0 else ""
+            price_txt = f"ที่ราคาทุน <code>${price:.2f}</code>" if price > 0 else ""
             send_telegram_message(
-                f"✅ <b>บันทึก {tk} เข้าพอร์ตแล้ว {price_txt}</b>\n"
-                f"ระบบจะนำ <b>{tk}</b> ไปแสดงใน <b>💼 โซนที่ 1 (เฝ้าระวังกระดุมแดง 1–6 เพื่อเตือนจุดขายออก)</b> ครับ",
+                f"✅ <b>บันทึก {tk} เข้าสู่โซน 1 (พอร์ตกระดุม 6 เม็ด) แล้ว {price_txt}</b>\n"
+                f"ระบบจะคำนวณ % กำไร/ขาดทุนให้ทุกวัน และแจ้งเตือนเมื่อเกิดสัญญาณขายครับ",
                 chat_id=msg_chat_id,
             )
 
         elif cmd == "/sell" and len(tokens) >= 2:
             tk = tokens[1].upper()
+            sell_price = 0.0
+            if len(tokens) >= 3:
+                try:
+                    sell_price = float(tokens[2])
+                except ValueError:
+                    sell_price = 0.0
             if tk in portfolio:
-                portfolio.pop(tk, None)
-                send_telegram_message(
-                    f"💰 <b>นำ {tk} ออกจากพอร์ตเรียบร้อยแล้ว</b>\n"
-                    f"ย้ายกลับไปอยู่ใน Watchlist เพื่อรอจังหวะเข้าซื้อรอบใหม่ครับ",
-                    chat_id=msg_chat_id,
-                )
+                pos = portfolio.pop(tk, None)
+                rec = _record_closed_trade(cfg, tk, pos or {}, sell_price, today_str)
+                if rec:
+                    icon = "🟢 กำไร" if rec["pnl_pct"] > 0 else "🔴 ขาดทุน"
+                    send_telegram_message(
+                        f"💰 <b>ปิดรอบการเทรด {tk} สำเร็จ! ({icon} {rec['pnl_pct']:+.2f}%)</b>\n"
+                        f"• ทุนซื้อ: <code>${rec['buy_price']:.2f}</code> ({rec['buy_date']})\n"
+                        f"• ราคาขาย: <code>${rec['sell_price']:.2f}</code> ({rec['sell_date']} | ถือ {rec['days_held']} วัน)\n"
+                        f"📊 <i>บันทึกเข้าสถิติหลังบ้านเรียบร้อย พิมพ์ <code>/stat</code> เพื่อดู Win Rate และผลตอบแทนรวมได้เลยครับ</i>",
+                        chat_id=msg_chat_id,
+                    )
+                else:
+                    send_telegram_message(
+                        f"💰 <b>นำ {tk} ออกจากโซน 1 เรียบร้อยแล้ว</b>\n"
+                        f"ย้ายกลับไปอยู่ใน Watchlist เพื่อรอจังหวะเข้าซื้อรอบใหม่ครับ",
+                        chat_id=msg_chat_id,
+                    )
             else:
-                send_telegram_message(f"ℹ️ ไม่พบ {tk} ในรายการพอร์ตปัจจุบันครับ", chat_id=msg_chat_id)
+                send_telegram_message(f"ℹ️ ไม่พบ {tk} ในโซนที่ 1 ปัจจุบันครับ", chat_id=msg_chat_id)
+
+        elif cmd in ("/stat", "/stats"):
+            stat_msg = format_stat_message(cfg)
+            send_telegram_message(stat_msg, chat_id=msg_chat_id)
 
         elif cmd == "/add" and len(tokens) >= 2:
             added = []
@@ -244,10 +402,11 @@ def sync_telegram_commands(cfg: Dict[str, Any], config_path: str) -> Dict[str, A
 
         elif cmd in ("/help", "/start"):
             send_telegram_message(
-                "🤖 <b>คำสั่งควบคุมพอร์ตและ Watchlist ผ่าน Telegram</b>\n"
-                "• <code>/scan</code> หรือ <code>scan</code> — สั่งสแกนกราฟและส่งกระดาน 3 โซนให้ดูทันที\n"
-                "• <code>/buy AAPL</code> — บันทึกว่าซื้อหุ้นแล้ว (ย้ายเข้าโซนที่ 1 รอจุดขายออก)\n"
-                "• <code>/sell RXRX</code> — บันทึกว่าขายหุ้นแล้ว (ย้ายกลับเข้า Watchlist)\n"
+                "🤖 <b>คำสั่งควบคุมพอร์ตกระดุม 6 เม็ด & Watchlist (US)</b>\n"
+                "• <code>/scan</code> — สั่งสแกนกราฟและส่งกระดาน 3 โซนให้ดูทันที\n"
+                "• <code>/buy AAPL</code> หรือ <code>/buy AAPL 230.5</code> — บันทึกซื้อเข้าโซน 1 (ดึงราคาปิดให้อัตโนมัติถ้าไม่ระบุราคา)\n"
+                "• <code>/sell AAPL</code> หรือ <code>/sell AAPL 245.0</code> — ขายปิดรอบจากโซน 1 และบันทึกสถิติหลังบ้าน\n"
+                "• <code>/stat</code> — ดูสถิติผลการเทรด (Win Rate, กำไรสะสม, ประวัติการซื้อขาย)\n"
                 "• <code>/add NVDA AMD</code> — เพิ่มหุ้นเข้า Watchlist\n"
                 "• <code>/remove NVDA</code> — ลบหุ้นออกจาก Watchlist",
                 chat_id=msg_chat_id,
@@ -270,15 +429,6 @@ def _count_green_red(colors: List[str]) -> tuple:
 
 
 def _score_zone2_uptrend(item: Dict[str, Any]) -> tuple:
-    """
-    Sorts Zone 2 (Uptrend Watchlist - trend_locked == 'BUY'):
-    1. 🟢🟢🟢🟢🟢🚀 (BUY_NOW - เพิ่งเลื่อนชั้นขึ้นมาเป็นขาขึ้นวันนี้วันแรก!)
-    2. 🟢🟢🟢🟢🟢📈 (HOLD_BUY - ขาขึ้นเต็มตัว รันเทรนด์)
-    3. 🔴🟢🟢🟢🟢🟢 (1 Red, 5 Green - ย่อเม็ดที่ 1)
-    4. 🔴🔴🟢🟢🟢🟢 (2 Red, 4 Green - จุดแดง MACD วันแรก)
-    5. 🔴🔴🔴🟢🟢🟢 (3 Red, 3 Green - พักตัวนับแท่ง)
-    6. 🔴🔴🔴🔴🟢🟢 (4 Red, 2 Green - EMA9 ตัดลง EMA21 วันแรก)
-    """
     st = item["latest"]
     act = st["action_today"]
     colors = st.get("dot_colors", [])
@@ -289,22 +439,11 @@ def _score_zone2_uptrend(item: Dict[str, Any]) -> tuple:
     elif r_cnt == 0:
         rank = 2
     else:
-        rank = 2 + r_cnt  # r_cnt=1 -> 3, r_cnt=2 -> 4, r_cnt=3 -> 5, r_cnt=4 -> 6
+        rank = 2 + r_cnt
     return (rank, item["ticker"])
 
 
 def _score_zone3_downtrend(item: Dict[str, Any]) -> tuple:
-    """
-    Sorts Zone 3 (Downtrend Watchlist - trend_locked != 'BUY'):
-    Puts stocks climbing the Green ladder at the top (4 Green -> 3 Green -> 2 Green -> 1 Green),
-    followed by stocks that just turned SELL_NOW (🚨), and full 6 Red (📉) at the bottom:
-    1. 🟢🟢🟢🟢🔴🔴 (4 Green - EMA9 ตัดขึ้นแล้ว รอพรุ่งนี้คอนเฟิร์ม 🚀 เพื่อเลื่อนชั้นขึ้นโซน 2!)
-    2. 🟢🟢🟢🔴🔴🔴 (3 Green - กำลังนับแท่งรอ EMA ตัดขึ้น)
-    3. 🟢🟢🔴🔴🔴🔴 (2 Green - เพิ่งเกิดจุดเขียว MACD วันแรก)
-    4. 🟢🔴🔴🔴🔴🔴 (1 Green - KDJ เริ่มเขียวเม็ดแรก)
-    5. 🔴🔴🔴🔴🔴🚨 (SELL_NOW - เพิ่งหลุดเป็นขาลงวันนี้วันแรก)
-    6. 🔴🔴🔴🔴🔴📉 (HOLD_SELL - ขาลงเต็มตัว รันเทรนด์ขาลง)
-    """
     st = item["latest"]
     act = st["action_today"]
     colors = st.get("dot_colors", [])
@@ -340,16 +479,6 @@ def _score_stock_progress(item: Dict[str, Any]) -> tuple:
 
 
 def _score_portfolio_exit_urgency(item: Dict[str, Any]) -> tuple:
-    """
-    For Zone 1 (Portfolio stocks waiting for exit):
-    1. SELL_NOW (🔴🔴🔴🔴🔴🚨) - เพิ่งคอนเฟิร์มจุดขายออกวันนี้วันแรก!
-    2. HOLD_SELL (🔴🔴🔴🔴🔴📉) - ขาลงเต็มตัว 6 เม็ดแดง
-    3. 4 Red (🔴🔴🔴🔴🟢🟢) - EMA ตัดลงวันแรก รอพรุ่งนี้คอนเฟิร์ม
-    4. 3 Red (🔴🔴🔴🟢🟢🟢) - นับแท่งแดงวันที่ 2..9
-    5. 2 Red (🔴🔴🟢🟢🟢🟢) - เพิ่งเกิดจุดแดง MACD วันแรก (แท่งที่ 1)
-    6. 1 Red (🔴🟢🟢🟢🟢🟢) - KDJ เริ่มย่อแดงเม็ดแรก
-    7. BUY_NOW / HOLD_BUY / Green (🟢...) - ฝั่งขาขึ้น ถือรันกำไร
-    """
     st = item["latest"]
     act = st["action_today"]
     colors = st.get("dot_colors", [])
@@ -372,12 +501,8 @@ def _score_portfolio_exit_urgency(item: Dict[str, Any]) -> tuple:
 
 
 def format_portfolio_exit_status(st: Dict[str, Any]) -> str:
-    """
-    Describes the exit/sell watch status for a stock that the user already holds in Zone 1.
-    """
     if st["side"] == "BUY":
         return "✅ กราฟยังเป็นขาขึ้น (KDJ เขียว) — ถือรันกำไรต่อ ยังไม่มีเม็ดแดงเตือนขาย"
-    # When side == "SELL", show how many red buttons have formed toward the 6-button exit!
     act = st["action_today"]
     bc = st["bar_count"]
     mb = st["max_bars"]
@@ -393,10 +518,6 @@ def format_portfolio_exit_status(st: Dict[str, Any]) -> str:
 
 
 def _compact_buttons(st: Dict[str, Any]) -> str:
-    """
-    Pure 6-button strip using progressive takeover colors (G=🟢, R=🔴, W=⚪, 🚀/🚨, 📈/📉).
-    Example: 🟢🟢🟢🟢🟢📈 or 🔴🔴🟢🟢🟢🟢 or 🟢🟢🟢🟢🟢🚀
-    """
     if "buttons_compact" in st and st["buttons_compact"]:
         return st["buttons_compact"]
     if "dot_colors" in st and st["dot_colors"]:
@@ -425,11 +546,8 @@ def format_daily_board_message(
     portfolio: Dict[str, Dict[str, Any]],
     scan_date: str,
 ) -> str:
-    """
-    Formats the 6-button daily report into 3 distinct zones using Format 2:
-    1 stock = 1 compact line: Ticker + 6 pure dots + Closing Price.
-    """
-    portfolio_tickers = {k.upper() for k in portfolio.keys()}
+    portfolio_upper = {k.upper(): v for k, v in portfolio.items()}
+    portfolio_tickers = set(portfolio_upper.keys())
 
     zone1_portfolio = sorted(
         [x for x in scan_results if x["ticker"] in portfolio_tickers],
@@ -516,7 +634,7 @@ def format_daily_board_message(
     lines.extend(
         [
             "",
-            f"💼 <b>โซน 1: หุ้นในพอร์ต ({len(zone1_portfolio)})</b>",
+            f"💼 <b>โซน 1: พอร์ตกระดุม 6 เม็ด ({len(zone1_portfolio)})</b>",
             "━━━━━━━━━━━━━━━━━━",
         ]
     )
@@ -526,9 +644,14 @@ def format_daily_board_message(
             tk = item["ticker"]
             st = item["latest"]
             btns = _compact_buttons(st)
-            lines.append(f"<code>{tk:<5}</code> {btns} <code>${st['close']:.2f}</code>")
+            bp = float(portfolio_upper.get(tk, {}).get("buy_price", 0.0))
+            if bp > 0:
+                pnl_pct = ((st["close"] - bp) / bp) * 100.0
+                lines.append(f"<code>{tk:<5}</code> {btns} <code>${st['close']:.2f} ({pnl_pct:+.1f}%)</code>")
+            else:
+                lines.append(f"<code>{tk:<5}</code> {btns} <code>${st['close']:.2f}</code>")
     else:
-        lines.append("<i>(ไม่มีหุ้นในพอร์ต)</i>")
+        lines.append("<i>(ยังไม่มีหุ้นที่ซื้อด้วยกระดุม 6 เม็ด — พิมพ์ /buy ชื่อหุ้น เพื่อเริ่มวัดผล)</i>")
 
     lines.extend(
         [
