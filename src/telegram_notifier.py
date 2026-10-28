@@ -531,8 +531,34 @@ def _score_portfolio_exit_urgency(item: Dict[str, Any]) -> tuple:
         return (buy_rank_map.get(g_cnt, 14), -g_cnt, item["ticker"])
 
 
+def format_ema21_extension_info(st: Dict[str, Any]) -> str:
+    """
+    Calculates % distance between Close and EMA 21 to warn against chasing overextended breakouts (>5%).
+    """
+    close_p = float(st.get("close", 0.0))
+    ema21 = float(st.get("ema_slow", 0.0))
+    if close_p <= 0 or ema21 <= 0:
+        return ""
+    dist_pct = ((close_p - ema21) / ema21) * 100.0
+    if dist_pct <= 5.0:
+        return f"✅ ระยะห่างฐาน EMA21: <b>{dist_pct:+.1f}%</b> <i>(ใกล้ฐานแนวรับ จุดคัทตื้น ปลอดภัย)</i>"
+    elif dist_pct <= 8.0:
+        return f"⚠️ ระยะห่างฐาน EMA21: <b>{dist_pct:+.1f}%</b> <i>(เริ่มห่างฐานเกิน 5% แนะนำแบ่งไม้เข้า 50%)</i>"
+    else:
+        return f"🔥 ระยะห่างฐาน EMA21: <b>{dist_pct:+.1f}%</b> <i>(ราคาพุ่งตึงมาก! ระวังการไล่ราคา/รอย่อใกล้ EMA9)</i>"
+
+
 def format_portfolio_exit_status(st: Dict[str, Any]) -> str:
+    close_p = float(st.get("close", 0.0))
+    ema9 = float(st.get("ema_fast", 0.0))
+    ema21 = float(st.get("ema_slow", 0.0))
+    below_ema9_txt = " (⚠️ ราคาเริ่มหลุดเส้นฟ้า EMA9 แบ่งล็อกกำไรได้)" if (close_p > 0 and ema9 > 0 and close_p < ema9) else ""
+
     if st["side"] == "BUY":
+        if close_p > 0 and ema21 > 0:
+            dist_pct = ((close_p - ema21) / ema21) * 100.0
+            if dist_pct > 8.0:
+                return f"🔥 กราฟขาขึ้นเต็มตัว แต่ราคาฉีกห่าง EMA21 ถึง {dist_pct:+.1f}% — ถือรันเทรนด์และระวังแรงเทขายทำกำไร"
         return "✅ กราฟยังเป็นขาขึ้น (KDJ เขียว) — ถือรันกำไรต่อ ยังไม่มีเม็ดแดงเตือนขาย"
     act = st["action_today"]
     bc = st["bar_count"]
@@ -542,10 +568,10 @@ def format_portfolio_exit_status(st: Dict[str, Any]) -> str:
     if act == "HOLD_SELL":
         return "🚨 กระดุมแดงครบ 6 เม็ดแล้ว — แนะนำขายออก / ระวังขาลงเต็มตัว!"
     if act == "WAIT_CONFIRM_SELL":
-        return f"⚠️ เตรียมขายพรุ่งนี้! EMA9 ตัดลง EMA21 แล้ว (เม็ดแดงที่ 4 แท่ง {bc}/{mb}) รอแท่งถัดไปคอนเฟิร์ม"
-    if act == "COUNTING_SELL":
-        return f"⏳ เฝ้าระวังย่อตัว! เกิดจุดแดง MACD นับแท่งที่ {bc}/{mb} (รอดูว่า EMA9 จะตัดลง EMA21 หรือไม่)"
-    return "👀 KDJ เริ่มย่อเป็นสีแดง (เม็ดแดงที่ 1) — ยังถือต่อ รอเช็คจุดแดง MACD"
+        return f"⚠️ เตรียมขายพรุ่งนี้! EMA9 ตัดลง EMA21 แล้ว (เม็ดแดงที่ 3 แท่ง {bc}/{mb}) รอแท่งถัดไปคอนเฟิร์ม"
+    if act in ("COUNTING_SELL", "MACD_DOT_SELL"):
+        return f"⏳ เฝ้าระวังย่อตัว! เกิดจุดแดง MACD นับแท่งที่ {bc}/{mb}{below_ema9_txt}"
+    return f"👀 KDJ เริ่มย่อเป็นสีแดง (เม็ดแดงที่ 1){below_ema9_txt} — ยังถือต่อ รอเช็คจุดแดง MACD"
 
 
 def _compact_buttons(st: Dict[str, Any]) -> str:
