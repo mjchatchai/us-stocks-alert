@@ -38,6 +38,7 @@ from src.telegram_notifier import (
     _score_portfolio_exit_urgency,
     _score_stock_progress,
     format_daily_board_message,
+    format_ema21_extension_info,
     format_portfolio_exit_status,
     send_telegram_message,
     send_telegram_photo,
@@ -209,17 +210,24 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
                 tk = item["ticker"]
                 st = item["latest"]
                 in_port = tk in portfolio_tickers
+                ext_info = format_ema21_extension_info(st)
+                ext_line = f"\n{ext_info}" if ext_info else ""
 
-                if in_port and st["action_today"] in ("SELL_NOW", "WAIT_CONFIRM_SELL"):
+                if in_port and (
+                    st["action_today"] in ("SELL_NOW", "WAIT_CONFIRM_SELL", "MACD_DOT_SELL")
+                    or (st["side"] == "SELL" and st.get("ema_fast", 0) > 0 and st["close"] < st["ema_fast"])
+                ):
+                    bp = float(portfolio.get(tk, {}).get("buy_price", 0.0))
+                    pnl_str = f" | ทุน ${bp:.2f} ({((st['close'] - bp) / bp) * 100.0:+.1f}%)" if bp > 0 else ""
                     reply_markup = {
                         "inline_keyboard": [
                             [{"text": f"💰 บันทึกว่าขาย {tk} ออกแล้ว (${st['close']:.2f})", "callback_data": f"SELL:{tk}:{st['close']:.2f}"}]
                         ]
                     }
                     caption = (
-                        f"🚨 <b>เตือนขายหุ้นในพอร์ต: {tk}</b> (${st['close']:.2f})\n"
+                        f"🚨 <b>เตือนหุ้นในโซน 1 (พอร์ตกระดุม 6 เม็ด): {tk}</b> (${st['close']:.2f}{pnl_str})\n"
                         f"กระดุม: {st['buttons_visual']}\n"
-                        f"สถานะ: <b>{format_portfolio_exit_status(st)}</b>"
+                        f"สถานะ: <b>{format_portfolio_exit_status(st)}</b>{ext_line}"
                     )
                     send_telegram_photo(item["chart_path"], caption, reply_markup=reply_markup)
 
@@ -232,7 +240,7 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
                     caption = (
                         f"🚀 <b>สัญญาณฝั่งซื้อ Watchlist: {tk}</b> (${st['close']:.2f})\n"
                         f"กระดุม: {st['buttons_visual']}\n"
-                        f"สถานะ: <b>{st['status_text']}</b>"
+                        f"สถานะ: <b>{st['status_text']}</b>{ext_line}"
                     )
                     send_telegram_photo(item["chart_path"], caption, reply_markup=reply_markup)
 
