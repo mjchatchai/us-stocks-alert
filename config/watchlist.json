@@ -9,76 +9,8 @@
   "kdj_period": 9,
   "kdj_signal": 3,
   "last_telegram_update_id": 169916611,
-  "portfolio": {
-    "ASTS": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "AVGO": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "BMNR": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "BULL": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "CLPT": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "FICO": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "GLD": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "HIMS": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "IONQ": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "NVO": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "PONY": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "PRCT": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "RR": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "RXRX": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "STRL": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "TTD": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    },
-    "ZETA": {
-      "buy_price": 0.0,
-      "buy_date": "-"
-    }
-  },
+  "portfolio": {},
+  "trade_history": [],
   "tickers": [
     "ASTS",
     "AVGO",
