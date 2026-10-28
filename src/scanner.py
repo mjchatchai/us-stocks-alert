@@ -198,6 +198,13 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
         board_msg = format_daily_board_message(scan_results, portfolio, scan_date)
         sent = send_telegram_message(board_msg)
         if sent:
+            from datetime import datetime, timezone, timedelta
+            today_th = datetime.now(timezone(timedelta(hours=7))).strftime("%Y-%m-%d")
+            cfg["last_daily_scan_date"] = today_th
+            save_copy = {k: v for k, v in cfg.items() if not k.startswith("_")}
+            with open(full_config_path, "w", encoding="utf-8") as f:
+                json.dump(save_copy, f, indent=2, ensure_ascii=False)
+
             for item in scan_results:
                 tk = item["ticker"]
                 st = item["latest"]
