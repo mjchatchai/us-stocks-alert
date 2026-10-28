@@ -213,7 +213,7 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
                 if in_port and st["action_today"] in ("SELL_NOW", "WAIT_CONFIRM_SELL"):
                     reply_markup = {
                         "inline_keyboard": [
-                            [{"text": f"💰 บันทึกว่าขาย {tk} ออกแล้ว", "callback_data": f"SELL:{tk}"}]
+                            [{"text": f"💰 บันทึกว่าขาย {tk} ออกแล้ว (${st['close']:.2f})", "callback_data": f"SELL:{tk}:{st['close']:.2f}"}]
                         ]
                     }
                     caption = (
