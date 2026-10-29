@@ -17,6 +17,10 @@
     "RXRX": {
       "buy_price": 4.35,
       "buy_date": "2026-10-29"
+    },
+    "PANW": {
+      "buy_price": 394.49,
+      "buy_date": "2026-10-29"
     }
   },
   "trade_history": [],
