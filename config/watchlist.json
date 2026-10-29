@@ -13,6 +13,10 @@
     "CRWD": {
       "buy_price": 268.02,
       "buy_date": "2026-10-28"
+    },
+    "RXRX": {
+      "buy_price": 4.35,
+      "buy_date": "2026-10-29"
     }
   },
   "trade_history": [],
