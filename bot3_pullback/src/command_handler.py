@@ -184,14 +184,14 @@ class Bot3CommandHandler:
                 if text in ("/start", "/help"):
                     help_msg = (
                         "🚀 <b>ยินดีต้อนรับสู่ US Trend Leader Pullback Bot (@US2_Pullback_bot)</b>\n"
-                        "━━━━━━━━━━━━━━━━━━━\n"
+                        "━━━━━━━━━━━━━━━━\n"
                         "คำสั่งที่สามารถใช้ได้:\n"
                         "• <code>/scan</code> - สั่งสแกนหุ้นตามกลยุทธ์ 4 ข้อทันที\n"
                         "• <code>/positions</code> - ดูหุ้นที่กำลังถืออยู่ในพอร์ต\n"
                         "• <code>/stat</code> - ดูผลตอบแทนและสถิติ Win Rate\n"
                         "• <code>/buy TICKER SHARES PRICE</code> - บันทึกเข้าพอร์ตแบบแมนนวล\n"
                         "• <code>/sell TICKER PRICE</code> - บันทึกปิดทำกำไร/ขายหุ้น\n"
-                        "━━━━━━━━━━━━━━━━━━━\n"
+                        "━━━━━━━━━━━━━━━━\n"
                         "📊 <i>ระบบจะสแกนหาจังหวะ Pullback และส่งสัญญาณพร้อมภาพกราฟและคำนวณขนาดไม้ให้ทุกเช้าครับ</i>"
                     )
                     self.send_message(chat_id, help_msg)
@@ -206,7 +206,7 @@ class Bot3CommandHandler:
                     if not active_pos:
                         self.send_message(chat_id, "💼 ขณะนี้ยังไม่มีหุ้นที่ถืออยู่ในพอร์ต Bot 3 ครับ")
                     else:
-                        pos_text = "💼 <b>รายการหุ้นที่ถืออยู่ในพอร์ต Bot 3:</b>\n━━━━━━━━━━━━━━━━━━━\n"
+                        pos_text = "💼 <b>รายการหุ้นที่ถืออยู่ในพอร์ต Bot 3:</b>\n━━━━━━━━━━━━━━━━\n"
                         for tk, p in active_pos.items():
                             pos_text += (
                                 f"• <b>${tk}</b>: {p['current_shares']} หุ้น (ทุน ${p['entry_price']:.2f})\n"
