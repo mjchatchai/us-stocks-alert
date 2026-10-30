@@ -1,3 +1,33 @@
+
+def send_weekly_summary(notifier, config, is_thai=True, bot_label="TH PULLBACK (Bot 4)"):
+    from datetime import datetime
+    history = config.get("trade_history", [])
+    active = config.get("active_positions", {})
+    total = len(history)
+    wins = sum(1 for h in history if float(h.get("realized_pnl", 0)) > 0)
+    win_rate = (wins / total * 100.0) if total > 0 else 0.0
+    total_r = sum(float(h.get("r_multiple", 0)) for h in history)
+    
+    win_rs = [float(h.get("r_multiple", 0)) for h in history if float(h.get("r_multiple", 0)) > 0]
+    loss_rs = [float(h.get("r_multiple", 0)) for h in history if float(h.get("r_multiple", 0)) < 0]
+    avg_win_r = (sum(win_rs) / len(win_rs)) if win_rs else 0.0
+    avg_loss_r = (sum(loss_rs) / len(loss_rs)) if loss_rs else 0.0
+    
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    lines = [
+        f"📊 <b>WEEKLY FORWARD TEST REPORT</b> • <code>{today_str}</code>",
+        f"<b>{bot_label}</b>",
+        "━━━━━━━━━━━━━━━━",
+        f"• หุ้นในพอร์ตปัจจุบัน: <code>{len(active)} ตัว</code>",
+        f"• ไม้ปิดรอบสะสม: <code>{total} ไม้</code>",
+        f"• Win Rate: <code>{win_rate:.1f}%</code> (ชนะ {wins} / แพ้ {total - wins})",
+        f"• กำไรสะสมสุทธิ: <code>{total_r:+.2f}R</code>",
+    ]
+    if win_rs or loss_rs:
+        lines.append(f"• ชนะเฉลี่ย: <code>+{avg_win_r:.2f}R</code> | SL เฉลี่ย: <code>{avg_loss_r:.2f}R</code>")
+    
+    notifier.send_message("\n".join(lines))
+
 """
 Main Pipeline for Bot 4 (Thai Stocks Pullback & R-Multiple Strategy)
 Portfolio: 1,000,000 Baht | Risk: 0.5% (5,000 Baht) | Board Lot: 100 shares
@@ -147,6 +177,31 @@ def run_bot4_pipeline():
             trade_plan=None,
         )
 
+    # Auto-Paper Trade Entry (ทุกตัวที่มีสัญญาณซื้อ)
+    auto_bought_pb = []
+    for s in buy_signals:
+        tk = s["ticker"]
+        plan = s["plan"]
+        if tk not in updated_active:
+            r_per_sh = round(plan.entry_price - plan.stop_loss, 2)
+            updated_active[tk] = {
+                "ticker": tk,
+                "entry_price": plan.entry_price,
+                "current_sl": plan.stop_loss,
+                "stop_loss": plan.stop_loss,
+                "risk_per_share": r_per_sh,
+                "shares": plan.shares,
+                "current_shares": plan.shares,
+                "target_3r": plan.target_3r,
+                "target_5r": getattr(plan, "target_5r", round(plan.entry_price + 5.0 * r_per_sh, 2)),
+                "entry_date": today_str,
+                "auto_paper_trade": True
+            }
+            auto_bought_pb.append(tk)
+            print(f"Auto-Paper Trade Entry: {tk} @ {plan.entry_price:.2f} B")
+
+    config["active_positions"] = updated_active
+
     # 5. Build Dashboard & Send Summary
     print(f"\n[Phase 5] Building HTML Dashboard...")
     dashboard_path = build_dashboard_html(
@@ -176,6 +231,11 @@ def run_bot4_pipeline():
 
     config["last_scan_date"] = today_str
     save_config(config)
+
+    # Weekly Summary Report (Friday for TH)
+    from datetime import datetime
+    if datetime.now().weekday() == 4:
+        send_weekly_summary(notifier, config, is_thai=True, bot_label="TH PULLBACK (Bot 4)")
 
     print("\n" + "=" * 60)
     print(f"✅ BOT 4 SCAN COMPLETED! Found {len(buy_signals)} Buy Signals, {len(pullback_candidates)} Pullback Setups.")
