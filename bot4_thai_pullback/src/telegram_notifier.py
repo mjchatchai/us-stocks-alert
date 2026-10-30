@@ -62,7 +62,7 @@ class ThaiTelegramNotifier:
 
         lines = [
             f"🎯 <b>THAI PULLBACK REPORT</b> • <code>{date_str}</code>",
-            "━━━━━━━━━━━━━━━━━━━━"
+            "━━━━━━━━━━━━━━━━"
         ]
 
         buttons = []
