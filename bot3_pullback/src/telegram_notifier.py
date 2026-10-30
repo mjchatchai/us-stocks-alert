@@ -8,9 +8,11 @@ Handles:
 import os
 from typing import Dict, List, Optional
 import requests
-from dotenv import load_dotenv
-
-load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
+except ImportError:
+    pass
 
 
 class TelegramNotifier:
