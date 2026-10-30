@@ -185,7 +185,9 @@ def run_pipeline():
                 "risk_per_share": r_per_sh,
                 "shares": p.shares,
                 "current_shares": p.shares,
+                "initial_shares": p.shares,
                 "target_3r": p.target_3r,
+                "target_5r": getattr(p, "target_5r", round(p.entry_price + 5.0 * r_per_sh, 2)),
                 "entry_date": today_str,
                 "auto_paper_trade": True
             }
