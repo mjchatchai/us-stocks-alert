@@ -142,7 +142,7 @@ def run_pipeline():
     # 3. Send Telegram Alerts
     lines = [
         f"🎯 <b>US HYBRID SCAN</b> • <code>{today_str}</code>",
-        "━━━━━━━━━━━━━━━━━━━━"
+        "━━━━━━━━━━━━━━"
     ]
     buttons = []
     if new_signals:
