@@ -487,8 +487,8 @@
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-title">💼 หุ้นที่ถืออยู่ในพอร์ตทั้งหมด</div>
-                <div class="kpi-value text-green">22 <span style="font-size: 14px; color: var(--text-muted);">ตัว</span></div>
-                <div class="kpi-sub">🇹🇭 หุ้นไทย: <b>11</b> | 🇺🇸 หุ้น US: <b>11</b></div>
+                <div class="kpi-value text-green">23 <span style="font-size: 14px; color: var(--text-muted);">ตัว</span></div>
+                <div class="kpi-sub">🇹🇭 หุ้นไทย: <b>12</b> | 🇺🇸 หุ้น US: <b>11</b></div>
             </div>
 
             <div class="kpi-card">
@@ -516,7 +516,7 @@
 
         <!-- Navigation Tabs -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('tab-portfolio')">💼 พอร์ตหุ้นรวม (22)</button>
+            <button class="tab-btn active" onclick="switchTab('tab-portfolio')">💼 พอร์ตหุ้นรวม (23)</button>
             <button class="tab-btn" onclick="switchTab('tab-leaderboard')">📊 ตารางเปรียบเทียบ 6 บอท</button>
             <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการปิดออเดอร์ (2)</button>
             <button class="tab-btn" onclick="switchTab('tab-launchers')">🔗 เข้าหน้ารายละเอียดแยกบอท</button>
@@ -526,8 +526,8 @@
         <div id="tab-portfolio" class="tab-section">
             <div class="filter-bar">
                 <div class="filter-pills">
-                    <button class="pill-btn active" onclick="filterPositions('all', this)">ทั้งหมด (22)</button>
-                    <button class="pill-btn" onclick="filterPositions('th', this)">🇹🇭 หุ้นไทย (11)</button>
+                    <button class="pill-btn active" onclick="filterPositions('all', this)">ทั้งหมด (23)</button>
+                    <button class="pill-btn" onclick="filterPositions('th', this)">🇹🇭 หุ้นไทย (12)</button>
                     <button class="pill-btn" onclick="filterPositions('us', this)">🇺🇸 สหรัฐฯ (11)</button>
                     <button class="pill-btn" onclick="filterPositions('bot1', this)">Bot 1 (US 6-Btn)</button>
                     <button class="pill-btn" onclick="filterPositions('bot2', this)">Bot 2 (TH 6-Btn)</button>
@@ -811,6 +811,29 @@
             <td><span class="badge badge-blue">รันเทรนด์</span></td>
             <td>
                 <button class="btn-action" onclick="openTradingViewModal('SET:BH')">📈 กราฟ</button>
+            </td>
+        </tr>
+        
+        <tr class="bot-row bot4 mkt-th">
+            <td>
+                <div class="ticker-badge" onclick="openTradingViewModal('SET:PTTEP')">
+                    <span>🇹🇭</span>
+                    <b>PTTEP</b>
+                </div>
+            </td>
+            <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
+            <td><code>2026-10-30</code></td>
+            <td>165.00 ฿</td>
+            <td><b>165.00 ฿</b></td>
+            <td><b class="text-green">+0.00%</b></td>
+            <td><b class="text-green">+0.00R</b></td>
+            <td class="text-red">161.50 ฿</td>
+            <td class="text-gold">175.50 ฿</td>
+            <td class="text-green">182.50 ฿</td>
+            <td>1,200</td>
+            <td><span class="badge badge-blue">รันเทรนด์</span></td>
+            <td>
+                <button class="btn-action" onclick="openTradingViewModal('SET:PTTEP')">📈 กราฟ</button>
             </td>
         </tr>
         
@@ -1147,7 +1170,7 @@
                 <div style="font-size: 11px; color: var(--text-muted);">SET Confluence Support & Retest</div>
             </td>
             <td><span class="badge badge-blue">TH</span></td>
-            <td><b>1 ไม้</b></td>
+            <td><b>2 ไม้</b></td>
             <td>0 ไม้</td>
             <td><b>0.0%</b></td>
             <td><b class="text-green">+0.00R</b></td>
@@ -1330,7 +1353,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>6-Bot Forward Testing Engine • Data as of <code>2026-10-30 11:07:23</code> • Auto-refreshes on GitHub Actions schedule</p>
+            <p>6-Bot Forward Testing Engine • Data as of <code>2026-10-30 11:07:52</code> • Auto-refreshes on GitHub Actions schedule</p>
         </footer>
     </div>
 
