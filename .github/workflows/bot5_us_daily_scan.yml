@@ -27,8 +27,8 @@ jobs:
 
       - name: Run Bot 5 US Hybrid Scanner
         env:
-          TELEGRAM_BOT_TOKEN: "9021576257:AAGt-5V7oMo9Ov8JqpZMlbMRPZiu1JAlGUw"
-          TELEGRAM_CHAT_ID: "8964251574"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.BOT5_US_TELEGRAM_TOKEN || secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python -m bot5_us_hybrid.src.main
 
       - name: Commit Dashboard & Config State
