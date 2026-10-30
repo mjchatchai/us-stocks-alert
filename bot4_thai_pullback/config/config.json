@@ -79,6 +79,25 @@
       "target_3r": 220.5,
       "target_5r": 233.5,
       "entry_date": "2026-10-30",
+      "auto_paper_trade": true,
+      "current_price": 203.0,
+      "current_r": 0.31,
+      "unrealized_pnl": 1400.0,
+      "unrealized_pct": 1.0,
+      "dist_ema9_pct": 2.6
+    },
+    "PTTEP": {
+      "ticker": "PTTEP",
+      "entry_price": 165.0,
+      "current_sl": 161.5,
+      "stop_loss": 161.5,
+      "risk_per_share": 3.5,
+      "shares": 1200,
+      "current_shares": 1200,
+      "initial_shares": 1200,
+      "target_3r": 175.5,
+      "target_5r": 182.5,
+      "entry_date": "2026-10-30",
       "auto_paper_trade": true
     }
   },
