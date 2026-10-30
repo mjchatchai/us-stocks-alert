@@ -61,7 +61,7 @@ class ThaiTelegramNotifier:
         pullback_list = summary.get("pullback_tickers", [])
 
         lines = [
-            f"🎯 <b>THAI PULLBACK REPORT</b> • <code>{date_str}</code>",
+            f"🎯 <b>TH PULLBACK REPORT</b> • <code>{date_str}</code>",
             "━━━━━━━━━━━━━━━━"
         ]
 
