@@ -224,7 +224,7 @@
         </div>
         <div class="metric-card">
             <div class="label">📦 ออเดอร์ที่ถืออยู่ (Active)</div>
-            <div class="value">0</div>
+            <div class="value">4</div>
         </div>
         <div class="metric-card">
             <div class="label">💵 กำไรที่รับรู้แล้ว (Realized)</div>
@@ -239,7 +239,7 @@
     <!-- Tabs -->
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (4)</button>
-        <button class="tab-btn" onclick="switchTab('tab-active')">💼 ออเดอร์ที่ถืออยู่ (0)</button>
+        <button class="tab-btn" onclick="switchTab('tab-active')">💼 ออเดอร์ที่ถืออยู่ (4)</button>
         <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (8)</button>
         <button class="tab-btn" onclick="switchTab('tab-screener')">⭐ หุ้นแกร่ง VCP [1/4] (45)</button>
         <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการเทรด (0)</button>
@@ -342,7 +342,63 @@
                     </tr>
                 </thead>
                 <tbody>
-<tr><td colspan="11" style="text-align: center; color: var(--text-muted); padding: 30px;">ยังไม่มีสถานะที่เปิดอยู่</td></tr>
+
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('MSFT')">$MSFT</a></td>
+                        <td>$530.14</td>
+                        <td><b>$530.14</b></td>
+                        <td><b>4</b> / 4</td>
+                        <td class="text-red">$519.54</td>
+                        <td class="text-gold">561.94</td>
+                        <td class="text-green">$583.14</td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">$+0.00</b></td>
+                        <td><span class="badge badge-blue">รันเทรนด์</span></td>
+                        <td><button class="btn-action" onclick="openChartModal('MSFT')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('AAPL')">$AAPL</a></td>
+                        <td>$348.91</td>
+                        <td><b>$348.91</b></td>
+                        <td><b>7</b> / 7</td>
+                        <td class="text-red">$343.50</td>
+                        <td class="text-gold">365.14</td>
+                        <td class="text-green">$375.96</td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">$+0.00</b></td>
+                        <td><span class="badge badge-blue">รันเทรนด์</span></td>
+                        <td><button class="btn-action" onclick="openChartModal('AAPL')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('HIMS')">$HIMS</a></td>
+                        <td>$29.67</td>
+                        <td><b>$29.67</b></td>
+                        <td><b>23</b> / 23</td>
+                        <td class="text-red">$27.58</td>
+                        <td class="text-gold">35.94</td>
+                        <td class="text-green">$40.12</td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">$+0.00</b></td>
+                        <td><span class="badge badge-blue">รันเทรนด์</span></td>
+                        <td><button class="btn-action" onclick="openChartModal('HIMS')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('JPM')">$JPM</a></td>
+                        <td>$343.58</td>
+                        <td><b>$343.58</b></td>
+                        <td><b>5</b> / 5</td>
+                        <td class="text-red">$335.15</td>
+                        <td class="text-gold">368.87</td>
+                        <td class="text-green">$385.73</td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">$+0.00</b></td>
+                        <td><span class="badge badge-blue">รันเทรนด์</span></td>
+                        <td><button class="btn-action" onclick="openChartModal('JPM')">📊 กราฟ</button></td>
+                    </tr>
+            
                 </tbody>
             </table>
         </div>
