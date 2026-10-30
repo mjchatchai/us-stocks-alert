@@ -143,48 +143,27 @@ def run_pipeline():
     # 3. Send Telegram Alerts
     if new_signals:
         lines = [
-            "🚀 <b>BOT 5: THAI HYBRID MASTER ALERT</b>",
-            f"📅 <i>สแกนประจำวัน: {today_str}</i>",
-            "━━━━━━━━━━━━━━━━━━━"
+            f"🎯 <b>THAI HYBRID SCAN</b> • <code>{today_str}</code>",
+            "━━━━━━━━━━━━━━━━━━━━"
         ]
+        buttons = []
         for item in new_signals[:3]:
             s = item["signal"]
             p = item["plan"]
             r_pct = (((p.entry_price - p.stop_loss) / p.entry_price) * 100.0)
-            tp3_pct = (((p.target_3r - p.entry_price) / p.entry_price) * 100.0)
 
-            lines.append(f"🟢 <b>{s.ticker}</b> (โครงสร้างเทรนด์ใหญ่: กระดุมเขียวคุมรอบ 📈)")
-            lines.append(f"• จุดซุ่มยิง: {s.support_type} ({s.support_level:.2f} ฿) + {s.reversal_type}")
-            lines.append("• แผนการเทรด & คุมความเสี่ยง (งบ 5,000 ฿):")
-            lines.append(f"  ├ <b>ราคาเข้า (Entry):</b> <code>{p.entry_price:.2f} ฿</code>")
-            lines.append(f"  ├ <b>Stop Loss:</b> <code>{p.stop_loss:.2f} ฿</code> (-{r_pct:.2f}%)")
-            lines.append(f"  ├ <b>จำนวนซื้อ:</b> <b>{p.shares:,} หุ้น</b> (เงินลงทุน {p.capital_allocated:,.0f} ฿)")
-            lines.append(f"  ├ <b>เป้า 1 (3R):</b> <code>{p.target_3r:.2f} ฿</code> (+{tp3_pct:.2f}% ➔ <b>ขาย 50% + SL บังทุน</b>)")
-            lines.append("  └ <b>เป้า 2 (Mega Trend):</b> ปล่อยรันเทรนด์ยาวจนเกิด 6 เม็ดแดง (🚨 SELL)")
+            lines.append(f"🟢 <b>{s.ticker}</b>")
+            lines.append(f"├ เข้า: <code>{p.entry_price:.2f} ฿</code> | SL: <code>{p.stop_loss:.2f} ฿</code> (-{r_pct:.1f}%)")
+            lines.append(f"├ ซื้อ: <b>{p.shares:,} หุ้น</b> ({p.capital_allocated:,.0f} ฿)")
+            lines.append(f"└ เป้า 3R: <code>{p.target_3r:.2f} ฿</code>")
             lines.append("")
 
-        lines.append("━━━━━━━━━━━━━━━━━━━")
-        lines.append("💡 <i>วินัย: ซื้อแล้วให้ตั้งคำสั่ง Stop Loss ล่วงหน้าใน Streaming ทันทีครับ</i>")
+            buttons.append([
+                {"text": f"✅ ซื้อ {s.ticker} ({p.shares:,} หุ้น)", "callback_data": f"bot5_buy_{s.ticker}_{p.shares}_{p.entry_price:.2f}"},
+                {"text": f"📈 กราฟ {s.ticker}", "url": f"https://www.tradingview.com/chart/?symbol={s.ticker}"}
+            ])
 
-        first_item = new_signals[0]
-        f_tk = first_item["signal"].ticker
-        f_sh = first_item["plan"].shares
-        f_ep = first_item["plan"].entry_price
-
-        markup = {
-            "inline_keyboard": [
-                [
-                    {
-                        "text": f"✅ ซื้อ {f_tk} ({f_sh:,} หุ้น)",
-                        "callback_data": f"bot5_buy_{f_tk}_{f_sh}_{f_ep:.2f}"
-                    },
-                    {
-                        "text": f"📈 ดูกราฟ {f_tk}",
-                        "url": f"https://www.tradingview.com/chart/?symbol={f_tk}"
-                    }
-                ]
-            ]
-        }
+        markup = {"inline_keyboard": buttons} if buttons else None
         notifier.send_message("\n".join(lines), reply_markup=markup)
 
     config["last_scan_date"] = today_str
