@@ -1,6 +1,6 @@
+from datetime import datetime
 
 def send_weekly_summary(notifier, config, is_thai=False, bot_label="US PULLBACK (Bot 3)"):
-    from datetime import datetime
     history = config.get("trade_history", [])
     active = config.get("active_positions", {})
     total = len(history)
@@ -42,7 +42,6 @@ Workflow:
 7. Web Dashboard Generation
 """
 
-from datetime import datetime
 import json
 import os
 import sys
@@ -262,7 +261,6 @@ def run_bot3_pipeline():
     save_config(config)
 
     # Weekly Summary Report (Saturday for US)
-    from datetime import datetime
     if datetime.now().weekday() == 5:
         send_weekly_summary(notifier, config, is_thai=False, bot_label="US PULLBACK (Bot 3)")
 
