@@ -1,0 +1,44 @@
+name: BOT 5 US Hybrid Master Scanner
+
+on:
+  schedule:
+    # รันอัตโนมัติเวลา 08:45 น. เวลาไทย (01:45 UTC จันทร์-เสาร์)
+    - cron: "45 1 * * 1-6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scan_and_notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Bot 5 US Hybrid Scanner
+        env:
+          TELEGRAM_BOT_TOKEN: "9021576257:AAGt-5V7oMo9Ov8JqpZMlbMRPZiu1JAlGUw"
+          TELEGRAM_CHAT_ID: "8964251574"
+        run: python -m bot5_us_hybrid.src.main
+
+      - name: Commit Dashboard & Config State
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bot5_us_hybrid/config/
+          git add bot5_us_hybrid/docs/
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update Bot 5 US dashboard & state [skip ci]"
+            git pull --rebase origin main || true
+            git push
+          fi
