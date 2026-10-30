@@ -21,6 +21,10 @@
     "PANW": {
       "buy_price": 394.49,
       "buy_date": "2026-10-29"
+    },
+    "WHA": {
+      "buy_price": 4.98,
+      "buy_date": "2026-10-30"
     }
   },
   "trade_history": [],
@@ -86,7 +90,8 @@
     "JPM",
     "HOOD",
     "ISRG",
-    "CAT"
+    "CAT",
+    "WHA"
   ],
   "last_daily_scan_date": "2026-10-30"
 }
