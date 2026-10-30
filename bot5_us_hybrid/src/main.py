@@ -1,3 +1,4 @@
+from dataclasses import asdict
 """
 Main Execution Pipeline for Bot 5 (US Hybrid Master Bot)
 """
@@ -107,9 +108,33 @@ def run_pipeline():
                 curr_low=sig.curr_low,
                 prior_low=sig.prior_low
             )
+            s_dict = asdict(sig)
+            s_dict["curr_close"] = sig.entry_price
+            s_dict["curr_high"] = sig.entry_price * 1.01
+            s_dict["zone_bottom"] = sig.support_level * 0.99
+            s_dict["zone_top"] = sig.support_level * 1.01
+            s_dict["ema9"] = sig.entry_price
+            s_dict["ema21"] = sig.support_level
+            s_dict["avwap"] = sig.support_level
+            s_dict["prior_high"] = sig.entry_price
+            s_dict["is_first_retest"] = True
+            s_dict["reversal_confirmed"] = True
+            s_dict["in_pullback_zone"] = True
+            s_dict["stage"] = "Stage 2 (Pullback Retest)"
             new_signals.append({
+                "ticker": sig.ticker,
                 "signal": sig,
-                "plan": plan
+                "setup": s_dict,
+                "plan": plan,
+                "close": sig.entry_price,
+                "rs_percentile": 85,
+                "ret_1m": sig.perf_3m / 3.0,
+                "ret_3m": sig.perf_3m,
+                "ret_6m": sig.perf_6m,
+                "vol_20": getattr(sig, 'volume_20d', getattr(sig, 'turnover_20d', 1000000)),
+                "higher_low_ok": True,
+                "vcp_ok": True,
+                "ema_flattening_or_up": True
             })
 
     print(f"Found {len(new_signals)} valid Hybrid setups!")
@@ -167,8 +192,17 @@ def run_pipeline():
 
     # 4. Build Web Dashboard
     os.makedirs("bot5_us_hybrid/docs", exist_ok=True)
-    build_dashboard_html(config, new_signals, "bot5_us_hybrid/docs/index.html")
-    print("Bot 5 US Pipeline completed successfully!")
+    build_dashboard_html(
+        config=config,
+        buy_signals=new_signals,
+        pullback_candidates=new_signals,
+        all_screened=new_signals,
+        active_positions=config.get("active_positions", {}),
+        trade_history=config.get("trade_history", []),
+        last_scan_date=today_str,
+        output_path="bot5_us_hybrid/docs/index.html"
+    )
+    print("Bot 5 Pipeline completed successfully!")
 
 if __name__ == "__main__":
     run_pipeline()
