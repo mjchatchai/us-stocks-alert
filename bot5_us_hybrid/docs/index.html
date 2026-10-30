@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOT 3: US Trend Pullback & R-Multiple Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0b0e14;
+            --card-bg: #151922;
+            --card-border: #232936;
+            --accent-green: #00e676;
+            --accent-blue: #00bcd4;
+            --accent-red: #ff5252;
+            --accent-gold: #ffd700;
+            --text-main: #f0f3f8;
+            --text-muted: #8b949e;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, sans-serif;
+            padding: 24px;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .title-group h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .title-group p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-green { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .badge-blue { background: rgba(0, 188, 212, 0.15); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+        .badge-gold { background: rgba(255, 215, 0, 0.15); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .metric-card .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .metric-card .value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .text-green { color: var(--accent-green) !important; }
+        .text-red { color: var(--accent-red) !important; }
+        .text-gold { color: var(--accent-gold) !important; }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { color: #fff; }
+        .tab-btn.active {
+            color: var(--accent-green);
+            border-bottom-color: var(--accent-green);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .data-table-container {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+            text-align: left;
+        }
+        th {
+            background: #1a202c;
+            color: var(--text-muted);
+            padding: 12px 16px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--card-border);
+            text-transform: uppercase;
+            font-size: 11.5px;
+            letter-spacing: 0.5px;
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--card-border);
+            color: var(--text-main);
+        }
+        tr:hover td { background: rgba(255, 255, 255, 0.02); }
+        .ticker-link {
+            color: var(--accent-blue);
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .ticker-link:hover { text-decoration: underline; }
+
+        .btn-action {
+            background: #232936;
+            color: #fff;
+            border: 1px solid #384252;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-action:hover { background: var(--accent-green); color: #000; border-color: var(--accent-green); }
+
+        /* Modal for charts */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            max-width: 900px;
+            width: 92%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            right: 16px; top: 12px;
+            font-size: 24px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .modal img {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title-group">
+            <h1>🚀 BOT 3: US Trend Leader Pullback <span class="badge badge-green">R-Multiple Engine</span></h1>
+            <p>กลยุทธ์คัดหุ้นผู้นำสร้างฐาน (VCP) + ย่อทดสอบแนวรับแรก (First Retest) + ล็อคกำไร 3R/5R & Trailing EMA 9</p>
+        </div>
+        <div>
+            <span class="badge badge-blue">Last Scan: 2026-10-30</span>
+        </div>
+    </div>
+
+    <!-- Metrics Overview -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="label">💼 พอร์ตโฟลิโอเริ่มต้น</div>
+            <div class="value">$10,000.00</div>
+        </div>
+        <div class="metric-card">
+            <div class="label">🎯 งบความเสี่ยงต่อไม้ (0.5%)</div>
+            <div class="value text-gold">$50.00</div>
+        </div>
+        <div class="metric-card">
+            <div class="label">🚀 สัญญาณซื้อวันนี้</div>
+            <div class="value text-green">4</div>
+        </div>
+        <div class="metric-card">
+            <div class="label">📦 ออเดอร์ที่ถืออยู่ (Active)</div>
+            <div class="value">0</div>
+        </div>
+        <div class="metric-card">
+            <div class="label">💵 กำไรที่รับรู้แล้ว (Realized)</div>
+            <div class="value text-green">$+0.00</div>
+        </div>
+        <div class="metric-card">
+            <div class="label">🏆 Win Rate</div>
+            <div class="value">0.0%</div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (4)</button>
+        <button class="tab-btn" onclick="switchTab('tab-active')">💼 ออเดอร์ที่ถืออยู่ (0)</button>
+        <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (4)</button>
+        <button class="tab-btn" onclick="switchTab('tab-screener')">⭐ หุ้นแกร่ง VCP [1/4] (4)</button>
+        <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการเทรด (0)</button>
+    </div>
+
+    <!-- Tab 1: Buy Signals Today -->
+    <div id="tab-signals" class="tab-content active">
+        <div class="data-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>ราคาปัจจุบัน</th>
+                        <th>🛑 Stop Loss (SL)</th>
+                        <th>1R Risk</th>
+                        <th>🎯 เป้า 3R</th>
+                        <th>🎯 เป้า 5R</th>
+                        <th>📦 แนะนำซื้อ</th>
+                        <th>💵 เงินลงทุน</th>
+                        <th>% พอร์ต</th>
+                        <th>แผนผัง & กราฟ</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PLTR')">$PLTR</a></td>
+                        <td><b>$196.42</b></td>
+                        <td class="text-red"><b>$190.21</b> (-3.2%)</td>
+                        <td>$6.21</td>
+                        <td class="text-gold"><b>$215.05</b></td>
+                        <td class="text-green"><b>$227.47</b></td>
+                        <td><b class="text-green">8 หุ้น</b></td>
+                        <td>$1,571.36</td>
+                        <td>15.7%</td>
+                        <td><button class="btn-action" onclick="openChartModal('PLTR')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('AAPL')">$AAPL</a></td>
+                        <td><b>$348.91</b></td>
+                        <td class="text-red"><b>$343.37</b> (-1.6%)</td>
+                        <td>$5.54</td>
+                        <td class="text-gold"><b>$365.53</b></td>
+                        <td class="text-green"><b>$376.61</b></td>
+                        <td><b class="text-green">5 หุ้น</b></td>
+                        <td>$1,744.55</td>
+                        <td>17.4%</td>
+                        <td><button class="btn-action" onclick="openChartModal('AAPL')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('CRWD')">$CRWD</a></td>
+                        <td><b>$261.15</b></td>
+                        <td class="text-red"><b>$249.95</b> (-4.3%)</td>
+                        <td>$11.20</td>
+                        <td class="text-gold"><b>$294.75</b></td>
+                        <td class="text-green"><b>$317.15</b></td>
+                        <td><b class="text-green">4 หุ้น</b></td>
+                        <td>$1,044.60</td>
+                        <td>10.4%</td>
+                        <td><button class="btn-action" onclick="openChartModal('CRWD')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PANW')">$PANW</a></td>
+                        <td><b>$380.57</b></td>
+                        <td class="text-red"><b>$367.35</b> (-3.5%)</td>
+                        <td>$13.22</td>
+                        <td class="text-gold"><b>$420.23</b></td>
+                        <td class="text-green"><b>$446.67</b></td>
+                        <td><b class="text-green">3 หุ้น</b></td>
+                        <td>$1,141.71</td>
+                        <td>11.4%</td>
+                        <td><button class="btn-action" onclick="openChartModal('PANW')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tab 2: Active Positions -->
+    <div id="tab-active" class="tab-content">
+        <div class="data-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>ทุนเฉลี่ย</th>
+                        <th>ราคาล่าสุด</th>
+                        <th>หุ้นที่เหลือ</th>
+                        <th>Stop Loss ล่าสุด</th>
+                        <th>เป้า 3R (ขาย 50%)</th>
+                        <th>เป้า 5R (ก้อนสอง)</th>
+                        <th>R-Multiple ปัจจุบัน</th>
+                        <th>Unrealized P/L</th>
+                        <th>สถานะ</th>
+                        <th>กราฟ</th>
+                    </tr>
+                </thead>
+                <tbody>
+<tr><td colspan="11" style="text-align: center; color: var(--text-muted); padding: 30px;">ยังไม่มีสถานะที่เปิดอยู่</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tab 3: Pullback & Support Setups -->
+    <div id="tab-pullback" class="tab-content">
+        <div class="data-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>ราคาปิด</th>
+                        <th>RS Rank</th>
+                        <th>โซนแนวรับ Confluence</th>
+                        <th>EMA 9</th>
+                        <th>EMA 21</th>
+                        <th>AVWAP</th>
+                        <th>First Retest?</th>
+                        <th>จุด Trigger เบรกซื้อ</th>
+                        <th>กราฟ</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PLTR')">$PLTR</a></td>
+                        <td><b>$196.42</b></td>
+                        <td><b>85%</b></td>
+                        <td class="text-green">$193.48 - $197.38</td>
+                        <td>$196.42</td>
+                        <td>$195.43</td>
+                        <td>$195.43</td>
+                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
+                        <td><b class="text-gold">$196.42</b> (ทะลุ High แท่งก่อน)</td>
+                        <td><button class="btn-action" onclick="openChartModal('PLTR')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('AAPL')">$AAPL</a></td>
+                        <td><b>$348.91</b></td>
+                        <td><b>85%</b></td>
+                        <td class="text-green">$338.57 - $345.41</td>
+                        <td>$348.91</td>
+                        <td>$341.99</td>
+                        <td>$341.99</td>
+                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
+                        <td><b class="text-gold">$348.91</b> (ทะลุ High แท่งก่อน)</td>
+                        <td><button class="btn-action" onclick="openChartModal('AAPL')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('CRWD')">$CRWD</a></td>
+                        <td><b>$261.15</b></td>
+                        <td><b>85%</b></td>
+                        <td class="text-green">$250.50 - $255.56</td>
+                        <td>$261.15</td>
+                        <td>$253.03</td>
+                        <td>$253.03</td>
+                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
+                        <td><b class="text-gold">$261.15</b> (ทะลุ High แท่งก่อน)</td>
+                        <td><button class="btn-action" onclick="openChartModal('CRWD')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PANW')">$PANW</a></td>
+                        <td><b>$380.57</b></td>
+                        <td><b>85%</b></td>
+                        <td class="text-green">$375.32 - $382.90</td>
+                        <td>$380.57</td>
+                        <td>$379.11</td>
+                        <td>$379.11</td>
+                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
+                        <td><b class="text-gold">$380.57</b> (ทะลุ High แท่งก่อน)</td>
+                        <td><button class="btn-action" onclick="openChartModal('PANW')">📊 กราฟ</button></td>
+                    </tr>
+            
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tab 4: VCP Screener [1/4] -->
+    <div id="tab-screener" class="tab-content">
+        <div class="data-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>ราคา</th>
+                        <th>RS Percentile</th>
+                        <th>ผลตอบแทน 1M</th>
+                        <th>ผลตอบแทน 3M</th>
+                        <th>ผลตอบแทน 6M</th>
+                        <th>วอลุ่มเฉลี่ย 20D</th>
+                        <th>ยก Low?</th>
+                        <th>VCP บีบแคบ?</th>
+                        <th>EMA9/21 ชี้ขึ้น?</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PLTR')">$PLTR</a></td>
+                        <td>$196.42</td>
+                        <td><b>85%</b></td>
+                        <td class="text-green">+19.9%</td>
+                        <td class="text-green"><b>+59.6%</b></td>
+                        <td class="text-green"><b>+41.2%</b></td>
+                        <td>22,594,375</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (1.0x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('AAPL')">$AAPL</a></td>
+                        <td>$348.91</td>
+                        <td><b>85%</b></td>
+                        <td class="text-green">+4.3%</td>
+                        <td class="text-green"><b>+13.0%</b></td>
+                        <td class="text-green"><b>+28.8%</b></td>
+                        <td>38,672,585</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (1.0x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('CRWD')">$CRWD</a></td>
+                        <td>$261.15</td>
+                        <td><b>85%</b></td>
+                        <td class="text-green">+12.3%</td>
+                        <td class="text-green"><b>+36.8%</b></td>
+                        <td class="text-green"><b>+134.3%</b></td>
+                        <td>8,662,120</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (1.0x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PANW')">$PANW</a></td>
+                        <td>$380.57</td>
+                        <td><b>85%</b></td>
+                        <td class="text-green">+4.9%</td>
+                        <td class="text-green"><b>+14.7%</b></td>
+                        <td class="text-green"><b>+112.2%</b></td>
+                        <td>5,324,915</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (1.0x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tab 5: Trade History -->
+    <div id="tab-history" class="tab-content">
+        <div class="data-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>วันที่เข้า</th>
+                        <th>วันที่ออก</th>
+                        <th>ราคาซื้อ</th>
+                        <th>ราคาขาย</th>
+                        <th>เหตุผลที่ปิด</th>
+                        <th>กำไร/ขาดทุน ($)</th>
+                        <th>R-Multiple</th>
+                    </tr>
+                </thead>
+                <tbody>
+<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 30px;">ยังไม่มีประวัติการปิดออเดอร์</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Chart Modal -->
+    <div id="chartModal" class="modal" onclick="closeChartModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeChartModal()">&times;</span>
+            <h2 id="modalTickerTitle" style="font-size: 18px; margin-bottom: 8px;">Chart Preview</h2>
+            <img id="modalChartImg" src="" alt="Chart Preview">
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function openChartModal(ticker) {
+            document.getElementById('modalTickerTitle').innerText = 'Chart: $' + ticker + ' (US Pullback & Support Setup)';
+            document.getElementById('modalChartImg').src = 'charts/' + ticker + '.png?' + new Date().getTime();
+            document.getElementById('chartModal').style.display = 'flex';
+        }
+
+        function closeChartModal() {
+            document.getElementById('chartModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
