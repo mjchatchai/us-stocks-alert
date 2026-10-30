@@ -1,3 +1,33 @@
+
+def send_weekly_summary(notifier, config, is_thai=True, bot_label="TH HYBRID (Bot 6)"):
+    from datetime import datetime
+    history = config.get("trade_history", [])
+    active = config.get("active_positions", {})
+    total = len(history)
+    wins = sum(1 for h in history if float(h.get("realized_pnl", 0)) > 0)
+    win_rate = (wins / total * 100.0) if total > 0 else 0.0
+    total_r = sum(float(h.get("r_multiple", 0)) for h in history)
+    
+    win_rs = [float(h.get("r_multiple", 0)) for h in history if float(h.get("r_multiple", 0)) > 0]
+    loss_rs = [float(h.get("r_multiple", 0)) for h in history if float(h.get("r_multiple", 0)) < 0]
+    avg_win_r = (sum(win_rs) / len(win_rs)) if win_rs else 0.0
+    avg_loss_r = (sum(loss_rs) / len(loss_rs)) if loss_rs else 0.0
+    
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    lines = [
+        f"📊 <b>WEEKLY FORWARD TEST REPORT</b> • <code>{today_str}</code>",
+        f"<b>{bot_label}</b>",
+        "━━━━━━━━━━━━━━━━",
+        f"• หุ้นในพอร์ตปัจจุบัน: <code>{len(active)} ตัว</code>",
+        f"• ไม้ปิดรอบสะสม: <code>{total} ไม้</code>",
+        f"• Win Rate: <code>{win_rate:.1f}%</code> (ชนะ {wins} / แพ้ {total - wins})",
+        f"• กำไรสะสมสุทธิ: <code>{total_r:+.2f}R</code>",
+    ]
+    if win_rs or loss_rs:
+        lines.append(f"• ชนะเฉลี่ย: <code>+{avg_win_r:.2f}R</code> | SL เฉลี่ย: <code>{avg_loss_r:.2f}R</code>")
+    
+    notifier.send_message("\n".join(lines))
+
 from dataclasses import asdict
 """
 Main Execution Pipeline for Bot 5 (Thai Hybrid Master Bot)
@@ -140,6 +170,31 @@ def run_pipeline():
 
     print(f"Found {len(new_signals)} valid Thai Hybrid setups!")
 
+    # 2.5 Auto-Paper Trade Entry (ทุกตัวที่มีสัญญาณซื้อ)
+    auto_bought = []
+    for item in new_signals:
+        s = item["signal"]
+        p = item["plan"]
+        tk = s.ticker
+        if tk not in updated_active:
+            r_per_sh = round(p.entry_price - p.stop_loss, 2)
+            updated_active[tk] = {
+                "ticker": tk,
+                "entry_price": p.entry_price,
+                "current_sl": p.stop_loss,
+                "stop_loss": p.stop_loss,
+                "risk_per_share": r_per_sh,
+                "shares": p.shares,
+                "current_shares": p.shares,
+                "target_3r": p.target_3r,
+                "entry_date": today_str,
+                "auto_paper_trade": True
+            }
+            auto_bought.append(tk)
+            print(f"Auto-Paper Trade Entry: {tk} @ {p.entry_price:.2f} B")
+
+    config["active_positions"] = updated_active
+
     # 3. Send Telegram Alerts
     lines = [
         f"🎯 <b>TH HYBRID SCAN</b> • <code>{today_str}</code>",
@@ -156,6 +211,9 @@ def run_pipeline():
             lines.append(f"├ เข้า: <code>{p.entry_price:.2f} ฿</code> | SL: <code>{p.stop_loss:.2f} ฿</code> (-{r_pct:.1f}%)")
             lines.append(f"├ ซื้อ: <b>{p.shares:,} หุ้น</b> ({p.capital_allocated:,.0f} ฿)")
             lines.append(f"└ เป้า 3R: <code>{p.target_3r:.2f} ฿</code>")
+            lines.append("")
+        if auto_bought:
+            lines.append(f"🤖 <b>[Auto-Paper Trade]</b> บันทึกเข้าพอร์ต {len(auto_bought)} ตัวแล้ว")
             lines.append("")
 
             buttons.append([
@@ -182,6 +240,11 @@ def run_pipeline():
         last_scan_date=today_str,
         output_path="bot5_thai_hybrid/docs/index.html"
     )
+        # Weekly Summary Report (Friday for TH)
+    from datetime import datetime
+    if datetime.now().weekday() == 4:
+        send_weekly_summary(notifier, config, is_thai=True, bot_label="TH HYBRID (Bot 6)")
+
     print("Bot 5 Thai Pipeline completed successfully!")
 
 if __name__ == "__main__":
