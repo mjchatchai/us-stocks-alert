@@ -1,0 +1,44 @@
+name: BOT 3 US Trend Pullback Scanner
+
+on:
+  schedule:
+    # รันอัตโนมัติเวลา 08:45 น. เวลาไทย (01:45 UTC จันทร์-เสาร์)
+    - cron: "45 1 * * 1-6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scan_and_notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Bot 3 Scanner & Risk Manager
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.BOT3_TELEGRAM_TOKEN || secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.BOT3_TELEGRAM_CHAT_ID || secrets.TELEGRAM_CHAT_ID }}
+        run: python -m bot3_pullback.src.main
+
+      - name: Commit Dashboard & Config State
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bot3_pullback/config/
+          git add bot3_pullback/docs/
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update Bot 3 pullback dashboard & state [skip ci]"
+            git pull --rebase origin main || true
+            git push
+          fi
