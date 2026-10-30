@@ -66,7 +66,22 @@
     "MALEE",
     "KAMART"
   ],
-  "active_positions": {},
+  "active_positions": {
+    "BH": {
+      "ticker": "BH",
+      "entry_price": 201.0,
+      "current_sl": 194.5,
+      "stop_loss": 194.5,
+      "risk_per_share": 6.5,
+      "shares": 700,
+      "current_shares": 700,
+      "initial_shares": 700,
+      "target_3r": 220.5,
+      "target_5r": 233.5,
+      "entry_date": "2026-10-30",
+      "auto_paper_trade": true
+    }
+  },
   "trade_history": [],
   "last_scan_date": "2026-10-30"
 }
