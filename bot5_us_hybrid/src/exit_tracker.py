@@ -16,6 +16,7 @@ class USHybridExitTracker:
     def evaluate_position(self, position: Dict, df: pd.DataFrame) -> Tuple[Dict, List[Dict]]:
         actions = []
         pos = dict(position)
+        tk = pos["ticker"]
 
         close = df["Close"]
         high = df["High"]
@@ -54,11 +55,14 @@ class USHybridExitTracker:
             pos["total_realized_pnl"] = round(pos.get("total_realized_pnl", 0.0) + pnl, 2)
             actions.append({
                 "type": "STOP_LOSS",
-                "ticker": pos["ticker"],
+                "ticker": tk,
                 "shares_sold": curr_shares,
                 "price": exit_price,
                 "pnl": pnl,
-                "message": f"🛑 <b>${pos[\'ticker\']} แตะ SL (<code>${exit_price:.2f}</code>)</b>\n└ ปิดสถานะ {curr_shares} sh ({pnl:+,.2f})"
+                "message": (
+                    f"🛑 <b>${tk} แตะ SL (<code>${exit_price:.2f}</code>)</b>\n"
+                    f"└ ปิดสถานะ {curr_shares} sh ({pnl:+,.2f})"
+                )
             })
             return pos, actions
 
@@ -74,14 +78,14 @@ class USHybridExitTracker:
 
             actions.append({
                 "type": "TP1_3R",
-                "ticker": pos["ticker"],
+                "ticker": tk,
                 "shares_sold": sell_qty,
                 "price": target_3r,
                 "pnl": pnl,
                 "message": (
-                    f"🎯 ${pos['ticker']} แตะเป้าหมาย 3R ที่ ${target_3r:.2f}!\n"
-                    f"• ขายทำกำไร 50% ({sell_qty} shares) ล็อคกำไร +${pnl:,.2f}\n"
-                    f"• เลื่อน Stop Loss บังทุนมาที่ ${pos['current_sl']:.2f} (ไม้นี้ไร้ความเสี่ยงแล้ว 100%!)"
+                    f"🎯 <b>${tk} ถึงเป้า 3R @ <code>${target_3r:.2f}</code></b>\n"
+                    f"├ ขายล็อคกำไร 50% ({sell_qty} sh): <code>+${pnl:,.2f}</code>\n"
+                    f"└ ยก SL บังทุน: <code>${pos['current_sl']:.2f}</code>"
                 )
             })
 
@@ -97,13 +101,13 @@ class USHybridExitTracker:
 
             actions.append({
                 "type": "MACRO_EXIT",
-                "ticker": pos["ticker"],
+                "ticker": tk,
                 "shares_sold": curr_shares,
                 "price": curr_close,
                 "pnl": pnl,
                 "message": (
-                    f"🚨 ${pos['ticker']} เกิดสัญญาณจบรอบใหญ่ (หลุด EMA 50 ที่ ${curr_close:.2f})\n"
-                    f"• ปิดรอบขายทำกำไรหุ้นส่วนที่เหลือ {curr_shares} shares (+${pnl:,.2f})"
+                    f"🚨 <b>${tk} หลุดเทรนด์ EMA 50 @ <code>${curr_close:.2f}</code></b>\n"
+                    f"└ ปิดรอบไม้ที่เหลือ {curr_shares} sh: <code>{pnl:+,.2f}</code>"
                 )
             })
 
