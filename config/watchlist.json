@@ -23,17 +23,7 @@
       "buy_date": "2026-10-29"
     }
   },
-  "trade_history": [
-    {
-      "ticker": "WHA",
-      "buy_price": 4.98,
-      "sell_price": 5000,
-      "pnl_pct": 100301.61,
-      "buy_date": "2026-10-30",
-      "sell_date": "2026-10-30",
-      "days_held": 0
-    }
-  ],
+  "trade_history": [],
   "tickers": [
     "ASTS",
     "AVGO",
@@ -96,8 +86,7 @@
     "JPM",
     "HOOD",
     "ISRG",
-    "CAT",
-    "WHA"
+    "CAT"
   ],
   "last_daily_scan_date": "2026-10-30"
 }
