@@ -191,6 +191,7 @@ def run_bot4_pipeline():
                 "risk_per_share": r_per_sh,
                 "shares": plan.shares,
                 "current_shares": plan.shares,
+                "initial_shares": plan.shares,
                 "target_3r": plan.target_3r,
                 "target_5r": getattr(plan, "target_5r", round(plan.entry_price + 5.0 * r_per_sh, 2)),
                 "entry_date": today_str,
