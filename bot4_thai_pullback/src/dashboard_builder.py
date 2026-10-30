@@ -364,12 +364,12 @@ def build_dashboard_html(
             html_content += f"""
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('{tk}')"><b>{tk}</b></a></td>
-                        <td>{p['entry_price']:.2f} ฿</td>
-                        <td><b>{p.get('current_price', p['entry_price']):.2f} ฿</b></td>
-                        <td><b>{p['current_shares']:,}</b> / {p.get('initial_shares', p['current_shares']):,}</td>
-                        <td class="text-red">{p['current_sl']:.2f} ฿</td>
-                        <td class="text-gold">{p['target_3r']:.2f} ฿</td>
-                        <td class="text-green">{p['target_5r']:.2f} ฿</td>
+                        <td>{p.get('entry_price', 0.0):.2f} ฿</td>
+                        <td><b>{p.get('current_price', p.get('entry_price', 0.0)):.2f} ฿</b></td>
+                        <td><b>{p.get('current_shares', p.get('shares', 0)):,}</b> / {p.get('initial_shares', p.get('current_shares', p.get('shares', 0))):,}</td>
+                        <td class="text-red">{p.get('current_sl', p.get('stop_loss', 0.0)):.2f} ฿</td>
+                        <td class="text-gold">{p.get('target_3r', 0.0):.2f} ฿</td>
+                        <td class="text-green">{p.get('target_5r', 0.0):.2f} ฿</td>
                         <td><b class="{'text-green' if r_val >= 0 else 'text-red'}">{r_val:+.2f}R</b></td>
                         <td><b class="{'text-green' if u_pnl >= 0 else 'text-red'}">{u_pnl:+,.0f} ฿</b></td>
                         <td>{status_badge}</td>
