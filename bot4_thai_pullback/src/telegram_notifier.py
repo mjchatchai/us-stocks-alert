@@ -88,13 +88,11 @@ class ThaiTelegramNotifier:
                     {"text": f"📈 กราฟ {t}", "url": tv_link}
                 ])
         else:
-            lines.append("⚪ <b>ไม่มีสัญญาณซื้อใหม่</b>
-")
+            lines.append("⚪ <b>ไม่มีสัญญาณซื้อใหม่</b>")
 
         if pullback_list:
             top_pb = [f"<code>{tk}</code>" for tk in pullback_list[:6]]
             lines.append(f"👀 <b>จ่อแนวรับ:</b> {' • '.join(top_pb)}")
 
         reply_markup = {"inline_keyboard": buttons} if buttons else None
-        return self.send_message("
-".join(lines).strip(), reply_markup=reply_markup)
+        return self.send_message("\n".join(lines).strip(), reply_markup=reply_markup)
