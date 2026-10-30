@@ -148,6 +148,8 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
             print(f"[Error] {ticker}: {exc}")
 
     # Auto-Paper Trade Entry & Exit for Bot 1
+    buy_now_list = [x for x in scan_results if x["latest"]["action_today"] == "BUY_NOW"]
+    sell_now_list = [x for x in scan_results if x["latest"]["action_today"] == "SELL_NOW"]
     scan_date_val = scan_results[0]["latest"]["date"] if scan_results else ""
     for item in buy_now_list:
         tk = item["ticker"]
@@ -185,8 +187,6 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
         key=_score_stock_progress,
     )
 
-    buy_now_list = [x for x in scan_results if x["latest"]["action_today"] == "BUY_NOW"]
-    sell_now_list = [x for x in scan_results if x["latest"]["action_today"] == "SELL_NOW"]
     setup_buy_list = [
         x for x in scan_results if x["latest"]["action_today"] in ("WAIT_CONFIRM_BUY", "MACD_DOT_BUY", "COUNTING_BUY")
     ]
