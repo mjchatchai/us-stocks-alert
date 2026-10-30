@@ -141,12 +141,12 @@ def run_pipeline():
     print(f"Found {len(new_signals)} valid Thai Hybrid setups!")
 
     # 3. Send Telegram Alerts
+    lines = [
+        f"🎯 <b>THAI HYBRID SCAN</b> • <code>{today_str}</code>",
+        "━━━━━━━━━━━━━━━━━━━━"
+    ]
+    buttons = []
     if new_signals:
-        lines = [
-            f"🎯 <b>THAI HYBRID SCAN</b> • <code>{today_str}</code>",
-            "━━━━━━━━━━━━━━━━━━━━"
-        ]
-        buttons = []
         for item in new_signals[:3]:
             s = item["signal"]
             p = item["plan"]
@@ -162,9 +162,11 @@ def run_pipeline():
                 {"text": f"✅ ซื้อ {s.ticker} ({p.shares:,} หุ้น)", "callback_data": f"bot5_buy_{s.ticker}_{p.shares}_{p.entry_price:.2f}"},
                 {"text": f"📈 กราฟ {s.ticker}", "url": f"https://www.tradingview.com/chart/?symbol={s.ticker}"}
             ])
+    else:
+        lines.append("⚪ <b>ไม่มีสัญญาณซื้อใหม่</b>")
 
-        markup = {"inline_keyboard": buttons} if buttons else None
-        notifier.send_message("\n".join(lines), reply_markup=markup)
+    markup = {"inline_keyboard": buttons} if buttons else None
+    notifier.send_message("\n".join(lines), reply_markup=markup)
 
     config["last_scan_date"] = today_str
     save_config(config)
