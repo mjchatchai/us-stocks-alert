@@ -26,7 +26,8 @@ def send_weekly_summary_6button(cfg, is_thai=False, bot_label="US 6-Button (Bot 
     if win_pcts or loss_pcts:
         lines.append(f"• ชนะเฉลี่ย: <code>+{avg_win:.2f}%</code> | SL เฉลี่ย: <code>{avg_loss:.2f}%</code>")
     
-    send_telegram_message("\n".join(lines))
+    res = send_telegram_message("\n".join(lines))
+    print(f"[Telegram] Weekly Forward Test Report sent: {res}")
 
 """
 Main Scanner Script for US Stock 6-Button Strategy (3-Zone Edition)
@@ -298,8 +299,8 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
                     )
                     send_telegram_photo(item["chart_path"], caption, reply_markup=reply_markup)
 
-    # Weekly Summary Report (Saturday for US)
-    if datetime.now().weekday() == 5:
+    # Weekly Summary Report (Friday / Saturday for US)
+    if datetime.now().weekday() in (4, 5):
         send_weekly_summary_6button(cfg, is_thai=False, bot_label="US 6-Button (Bot 1)")
 
     return scan_results
