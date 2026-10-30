@@ -1,6 +1,6 @@
+from datetime import datetime
 
 def send_weekly_summary(notifier, config, is_thai=False, bot_label="US HYBRID (Bot 5)"):
-    from datetime import datetime
     history = config.get("trade_history", [])
     active = config.get("active_positions", {})
     total = len(history)
@@ -35,7 +35,6 @@ Main Execution Pipeline for Bot 5 (US Hybrid Master Bot)
 import os
 import sys
 import json
-from datetime import datetime
 import yfinance as yf
 import pandas as pd
 
@@ -241,7 +240,6 @@ def run_pipeline():
         output_path="bot5_us_hybrid/docs/index.html"
     )
         # Weekly Summary Report (Saturday for US)
-    from datetime import datetime
     if datetime.now().weekday() == 5:
         send_weekly_summary(notifier, config, is_thai=False, bot_label="US HYBRID (Bot 5)")
 
