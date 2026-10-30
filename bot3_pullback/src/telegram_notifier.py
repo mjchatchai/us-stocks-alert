@@ -61,7 +61,7 @@ class TelegramNotifier:
 
         lines = [
             f"🎯 <b>US PULLBACK REPORT</b> • <code>{date_str}</code>",
-            "━━━━━━━━━━━━━━━━━━━━"
+            "━━━━━━━━━━━━━━━━"
         ]
 
         buttons = []
