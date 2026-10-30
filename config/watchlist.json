@@ -21,13 +21,19 @@
     "PANW": {
       "buy_price": 394.49,
       "buy_date": "2026-10-29"
-    },
-    "WHA": {
-      "buy_price": 4.98,
-      "buy_date": "2026-10-30"
     }
   },
-  "trade_history": [],
+  "trade_history": [
+    {
+      "ticker": "WHA",
+      "buy_price": 4.98,
+      "sell_price": 5000,
+      "pnl_pct": 100301.61,
+      "buy_date": "2026-10-30",
+      "sell_date": "2026-10-30",
+      "days_held": 0
+    }
+  ],
   "tickers": [
     "ASTS",
     "AVGO",
