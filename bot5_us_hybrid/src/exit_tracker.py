@@ -58,7 +58,7 @@ class USHybridExitTracker:
                 "shares_sold": curr_shares,
                 "price": exit_price,
                 "pnl": pnl,
-                "message": f"🛑 ${pos['ticker']} แตะจุด Stop Loss ที่ ${exit_price:.2f} ({pnl:+,.2f})"
+                "message": f"🛑 <b>${pos[\'ticker\']} แตะ SL (<code>${exit_price:.2f}</code>)</b>\n└ ปิดสถานะ {curr_shares} sh ({pnl:+,.2f})"
             })
             return pos, actions
 
