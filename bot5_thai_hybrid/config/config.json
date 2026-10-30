@@ -63,7 +63,92 @@
     "MALEE",
     "KAMART"
   ],
-  "active_positions": {},
+  "active_positions": {
+    "KTB": {
+      "ticker": "KTB",
+      "entry_price": 44.0,
+      "current_sl": 43.25,
+      "stop_loss": 43.25,
+      "risk_per_share": 0.75,
+      "shares": 4500,
+      "current_shares": 4500,
+      "initial_shares": 4500,
+      "target_3r": 46.25,
+      "target_5r": 47.75,
+      "entry_date": "2026-10-30",
+      "auto_paper_trade": true
+    },
+    "SCB": {
+      "ticker": "SCB",
+      "entry_price": 153.5,
+      "current_sl": 152.0,
+      "stop_loss": 152.0,
+      "risk_per_share": 1.5,
+      "shares": 1300,
+      "current_shares": 1300,
+      "initial_shares": 1300,
+      "target_3r": 158.0,
+      "target_5r": 161.0,
+      "entry_date": "2026-10-30",
+      "auto_paper_trade": true
+    },
+    "ITC": {
+      "ticker": "ITC",
+      "entry_price": 17.0,
+      "current_sl": 16.6,
+      "stop_loss": 16.6,
+      "risk_per_share": 0.4,
+      "shares": 11700,
+      "current_shares": 11700,
+      "initial_shares": 11700,
+      "target_3r": 18.2,
+      "target_5r": 19.0,
+      "entry_date": "2026-10-30",
+      "auto_paper_trade": true
+    },
+    "KCE": {
+      "ticker": "KCE",
+      "entry_price": 67.0,
+      "current_sl": 65.25,
+      "stop_loss": 65.25,
+      "risk_per_share": 1.75,
+      "shares": 2800,
+      "current_shares": 2800,
+      "initial_shares": 2800,
+      "target_3r": 72.25,
+      "target_5r": 75.75,
+      "entry_date": "2026-10-30",
+      "auto_paper_trade": true
+    },
+    "TU": {
+      "ticker": "TU",
+      "entry_price": 12.9,
+      "current_sl": 12.6,
+      "stop_loss": 12.6,
+      "risk_per_share": 0.3,
+      "shares": 15500,
+      "current_shares": 15500,
+      "initial_shares": 15500,
+      "target_3r": 13.8,
+      "target_5r": 14.4,
+      "entry_date": "2026-10-30",
+      "auto_paper_trade": true
+    },
+    "BH": {
+      "ticker": "BH",
+      "entry_price": 201.0,
+      "current_sl": 194.5,
+      "stop_loss": 194.5,
+      "risk_per_share": 6.5,
+      "shares": 700,
+      "current_shares": 700,
+      "initial_shares": 700,
+      "target_3r": 220.5,
+      "target_5r": 233.5,
+      "entry_date": "2026-10-30",
+      "auto_paper_trade": true
+    }
+  },
   "trade_history": [],
   "last_scan_date": "2026-10-30"
 }
