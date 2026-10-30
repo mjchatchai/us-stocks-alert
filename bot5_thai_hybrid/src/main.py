@@ -1,6 +1,6 @@
+from datetime import datetime
 
 def send_weekly_summary(notifier, config, is_thai=True, bot_label="TH HYBRID (Bot 6)"):
-    from datetime import datetime
     history = config.get("trade_history", [])
     active = config.get("active_positions", {})
     total = len(history)
@@ -36,7 +36,6 @@ Portfolio: 1,000,000 Baht | Risk: 0.5% (5,000 Baht) | Board Lot: 100 shares
 import os
 import sys
 import json
-from datetime import datetime
 import yfinance as yf
 import pandas as pd
 
@@ -241,7 +240,6 @@ def run_pipeline():
         output_path="bot5_thai_hybrid/docs/index.html"
     )
         # Weekly Summary Report (Friday for TH)
-    from datetime import datetime
     if datetime.now().weekday() == 4:
         send_weekly_summary(notifier, config, is_thai=True, bot_label="TH HYBRID (Bot 6)")
 
