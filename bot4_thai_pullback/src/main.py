@@ -1,6 +1,6 @@
+from datetime import datetime
 
 def send_weekly_summary(notifier, config, is_thai=True, bot_label="TH PULLBACK (Bot 4)"):
-    from datetime import datetime
     history = config.get("trade_history", [])
     active = config.get("active_positions", {})
     total = len(history)
@@ -33,7 +33,6 @@ Main Pipeline for Bot 4 (Thai Stocks Pullback & R-Multiple Strategy)
 Portfolio: 1,000,000 Baht | Risk: 0.5% (5,000 Baht) | Board Lot: 100 shares
 """
 
-from datetime import datetime
 import json
 import os
 import sys
@@ -233,7 +232,6 @@ def run_bot4_pipeline():
     save_config(config)
 
     # Weekly Summary Report (Friday for TH)
-    from datetime import datetime
     if datetime.now().weekday() == 4:
         send_weekly_summary(notifier, config, is_thai=True, bot_label="TH PULLBACK (Bot 4)")
 
