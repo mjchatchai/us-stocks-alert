@@ -58,7 +58,7 @@ def format_stat_message(cfg: Dict[str, Any]) -> str:
     portfolio: Dict[str, Dict[str, Any]] = cfg.get("portfolio", {})
 
     lines = [
-        "📊 <b>สถิติผลการเทรดด้วยกระดุม 6 เม็ด (US Stocks)</b>",
+        "📊 <b>สถิติผลการเทรดด้วยกระดุม 6 เม็ด (US Stocks - Bot 1)</b>",
         "━━━━━━━━━━━━━━━━━━",
     ]
 
@@ -66,53 +66,64 @@ def format_stat_message(cfg: Dict[str, Any]) -> str:
         lines.append("📁 <b>ประวัติที่ปิดรอบแล้ว (Closed Trades):</b> <i>(ยังไม่มีประวัติการขายปิดรอบ)</i>")
     else:
         total = len(history)
-        wins = [t for t in history if float(t.get("pnl_pct", 0.0)) > 0]
-        losses = [t for t in history if float(t.get("pnl_pct", 0.0)) <= 0]
+        wins = [t for t in history if float(t.get("pnl_r", t.get("pnl_pct", 0.0))) > 0]
+        losses = [t for t in history if float(t.get("pnl_r", t.get("pnl_pct", 0.0))) <= 0]
         win_rate = (len(wins) / total) * 100.0 if total > 0 else 0.0
-        avg_pnl = sum(float(t.get("pnl_pct", 0.0)) for t in history) / total
-        avg_win = sum(float(t.get("pnl_pct", 0.0)) for t in wins) / len(wins) if wins else 0.0
-        avg_loss = sum(float(t.get("pnl_pct", 0.0)) for t in losses) / len(losses) if losses else 0.0
 
-        compounded = 1.0
-        for t in history:
-            compounded *= (1.0 + float(t.get("pnl_pct", 0.0)) / 100.0)
-        compounded_pct = (compounded - 1.0) * 100.0
+        total_r = sum(float(t.get("pnl_r", t.get("r_multiple", 0.0))) for t in history)
+        win_rs = [float(t.get("pnl_r", t.get("r_multiple", 0.0))) for t in wins]
+        loss_rs = [float(t.get("pnl_r", t.get("r_multiple", 0.0))) for t in losses]
+        avg_win_r = sum(win_rs) / len(win_rs) if win_rs else 0.0
+        avg_loss_r = sum(loss_rs) / len(loss_rs) if loss_rs else 0.0
 
-        best_trade = max(history, key=lambda t: float(t.get("pnl_pct", 0.0)))
-        worst_trade = min(history, key=lambda t: float(t.get("pnl_pct", 0.0)))
+        # Capital-Weighted Return (Sum of Realized PnL / Account Size $10,000)
+        tot_realized_dollar = sum(float(t.get("realized_pnl", 0.0)) for t in history)
+        capital_weighted_pct = (tot_realized_dollar / 10000.0) * 100.0
+
+        best_trade = max(history, key=lambda t: float(t.get("pnl_r", t.get("pnl_pct", 0.0))))
+        worst_trade = min(history, key=lambda t: float(t.get("pnl_r", t.get("pnl_pct", 0.0))))
 
         lines.extend(
             [
                 f"🏆 <b>สรุปผลงานที่ปิดรอบแล้ว ({total} รอบ)</b>",
                 f"• <b>Win Rate:</b> <code>{win_rate:.1f}%</code> (ชนะ {len(wins)} / แพ้ {len(losses)})",
-                f"• <b>ค่าเฉลี่ยต่อไม้:</b> <code>{avg_pnl:+.2f}%</code> (ชนะเฉลี่ย <code>{avg_win:+.2f}%</code> | แพ้เฉลี่ย <code>{avg_loss:+.2f}%</code>)",
-                f"• <b>ผลตอบแทนสะสม (Compounded):</b> <code>{compounded_pct:+.2f}%</code>",
-                f"• <b>ไม้ที่ดีที่สุด:</b> <b>{best_trade['ticker']}</b> (<code>{float(best_trade['pnl_pct']):+.2f}%</code>)",
-                f"• <b>ไม้ที่แย่ที่สุด:</b> <b>{worst_trade['ticker']}</b> (<code>{float(worst_trade['pnl_pct']):+.2f}%</code>)",
+                f"• <b>กำไรสะสมสุทธิ (R):</b> <code>{total_r:+.2f}R</code>",
+                f"• <b>R เฉลี่ย:</b> ชนะเฉลี่ย <code>+{avg_win_r:.2f}R</code> | แพ้เฉลี่ย <code>{avg_loss_r:.2f}R</code>",
+                f"• <b>ผลตอบแทนถ่วงน้ำหนักพอร์ต:</b> <code>{capital_weighted_pct:+.2f}%</code> (${tot_realized_dollar:+,.2f})",
+                f"• <b>ไม้ที่ดีที่สุด:</b> <b>{best_trade.get('ticker', '?')}</b> (<code>{float(best_trade.get('pnl_r', best_trade.get('pnl_pct', 0.0))):+.2f}R</code>)",
+                f"• <b>ไม้ที่แย่ที่สุด:</b> <b>{worst_trade.get('ticker', '?')}</b> (<code>{float(worst_trade.get('pnl_r', worst_trade.get('pnl_pct', 0.0))):+.2f}R</code>)",
                 "",
                 "📜 <b>ประวัติการปิดรอบล่าสุด (สูงสุด 10 รายการ):</b>",
             ]
         )
         for t in reversed(history[-10:]):
             tk = t.get("ticker", "?")
-            bp = float(t.get("buy_price", 0.0))
-            sp = float(t.get("sell_price", 0.0))
+            bp = float(t.get("entry_price", t.get("buy_price", 0.0)))
+            sp = float(t.get("exit_price", t.get("sell_price", 0.0)))
+            r_val = float(t.get("pnl_r", t.get("r_multiple", 0.0)))
             pnl = float(t.get("pnl_pct", 0.0))
             days = int(t.get("days_held", 0))
-            s_date = t.get("sell_date", "-")
-            icon = "🟢" if pnl > 0 else "🔴"
+            s_date = t.get("exit_date", t.get("sell_date", "-"))
+            reason = t.get("exit_reason", "")
+            icon = "🟢" if r_val > 0 else "🔴"
+            reason_str = f" • {reason}" if reason else ""
             lines.append(
-                f"{icon} <code>{tk:<5}</code> ${bp:.2f} ➔ ${sp:.2f} (<b>{pnl:+.2f}%</b>) <i>[{days} วัน | {s_date}]</i>"
+                f"{icon} <code>{tk:<5}</code> ${bp:.2f} ➔ ${sp:.2f} (<b>{r_val:+.2f}R</b> / {pnl:+.1f}%) <i>[{days} วัน{reason_str}]</i>"
             )
 
     lines.append("")
     lines.append(f"💼 <b>หุ้นที่กำลังถือในโซน 1 ปัจจุบัน ({len(portfolio)} ตัว):</b>")
     if portfolio:
         for tk, info in sorted(portfolio.items()):
-            bp = float(info.get("buy_price", 0.0))
-            bdate = info.get("buy_date", "-")
-            bp_str = f"ทุน ${bp:.2f}" if bp > 0 else "ไม่ระบุทุน"
-            lines.append(f"• <code>{tk:<5}</code> ({bp_str} | ซื้อเมื่อ {bdate})")
+            bp = float(info.get("entry_price", info.get("buy_price", 0.0)))
+            sl = float(info.get("current_sl", info.get("stop_loss", 0.0)))
+            t3 = float(info.get("target_3r", 0.0))
+            sh = int(info.get("current_shares", info.get("shares", 0)))
+            bdate = info.get("entry_date", info.get("buy_date", "-"))
+            sh_str = f"{sh} sh @ " if sh > 0 else ""
+            sl_str = f" | SL ${sl:.2f}" if sl > 0 else ""
+            tp_str = f" | 3R ${t3:.2f}" if t3 > 0 else ""
+            lines.append(f"• <code>{tk:<5}</code> ({sh_str}${bp:.2f}{sl_str}{tp_str})")
     else:
         lines.append("<i>(ไม่มีหุ้นที่กำลังถือในโซน 1)</i>")
 
@@ -161,6 +172,9 @@ def send_telegram_message(
 
         try:
             resp = requests.post(url, json=payload, timeout=15)
+            if resp.status_code == 400 and "can't parse entities" in resp.text:
+                payload.pop("parse_mode", None)
+                resp = requests.post(url, json=payload, timeout=15)
             resp.raise_for_status()
         except Exception as exc:
             print(f"[Telegram] Error sending message chunk {i+1}: {exc}")
@@ -201,24 +215,45 @@ def _record_closed_trade(
     pos: Dict[str, Any],
     sell_price: float,
     sell_date: str,
+    exit_reason: str = "SELL Signal",
+    realized_pnl: Optional[float] = None,
+    r_multiple: Optional[float] = None,
 ) -> Optional[Dict[str, Any]]:
-    buy_price = float(pos.get("buy_price", 0.0))
-    buy_date = str(pos.get("buy_date", sell_date))
+    buy_price = float(pos.get("entry_price", pos.get("buy_price", 0.0)))
+    buy_date = str(pos.get("entry_date", pos.get("buy_date", sell_date)))
     if sell_price <= 0:
         sell_price = _fetch_latest_price_us(tk)
     if buy_price <= 0 or sell_price <= 0:
         return None
 
+    shares = int(pos.get("current_shares", pos.get("shares", 1)))
+    sl = float(pos.get("current_sl", pos.get("stop_loss", round(buy_price * 0.95, 2))))
+    risk_per_sh = float(pos.get("risk_per_share", round(buy_price - sl, 2)))
+    if risk_per_sh <= 0:
+        risk_per_sh = round(buy_price * 0.05, 2)
+
     pnl_pct = round(((sell_price - buy_price) / buy_price) * 100.0, 2)
+    tot_pnl = realized_pnl if realized_pnl is not None else round((sell_price - buy_price) * shares, 2)
+    r_mult = r_multiple if r_multiple is not None else round((sell_price - buy_price) / risk_per_sh, 2)
     days_held = _calc_days_held(buy_date, sell_date)
+
     record = {
         "ticker": tk,
+        "entry_price": round(buy_price, 2),
+        "exit_price": round(sell_price, 2),
         "buy_price": round(buy_price, 2),
         "sell_price": round(sell_price, 2),
+        "shares": shares,
+        "realized_pnl": tot_pnl,
+        "r_multiple": r_mult,
+        "pnl_r": r_mult,
         "pnl_pct": pnl_pct,
         "buy_date": buy_date,
         "sell_date": sell_date,
+        "entry_date": buy_date,
+        "exit_date": sell_date,
         "days_held": days_held,
+        "exit_reason": exit_reason,
     }
     history = cfg.setdefault("trade_history", [])
     history.append(record)
@@ -621,7 +656,7 @@ def format_daily_board_message(
 
     lines = [
         f"📊 <b>กระดานเม็ดกระดุม US (1D) — {scan_date}</b>",
-        "<code>1:KDJ | 2:MACD(0-9) | 3:EMAตัด | 4:EMA>21 | 5:ปิด>EMA | 6:สถานะ</code>",
+        "<code>1:KDJ | 2:MACD(0-9) | 3:EMAตัด | 4:EMA&gt;21 | 5:ปิด&gt;EMA | 6:สถานะ</code>",
         "",
     ]
 
