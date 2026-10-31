@@ -43,3 +43,18 @@ jobs:
               git pull --rebase origin main && git push && break || sleep $((RANDOM % 5 + 2))
             done
           fi
+
+      - name: Notify Failure Alert
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.BOT3_TELEGRAM_TOKEN || secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.BOT3_TELEGRAM_CHAT_ID || secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python -c "
+          import os, requests
+          token = os.getenv('TELEGRAM_BOT_TOKEN')
+          chat_id = os.getenv('TELEGRAM_CHAT_ID')
+          if token and chat_id:
+              msg = '🚨 <b>BOT 3 PIPELINE FAILURE ALERT</b>\nGitHub Actions workflow failed.\nPlease inspect the run logs.'
+              requests.post(f'https://api.telegram.org/bot{token}/sendMessage', json={'chat_id': chat_id, 'text': msg, 'parse_mode': 'HTML'}, timeout=10)
+          "
