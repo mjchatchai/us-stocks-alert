@@ -4,7 +4,7 @@
   "currency": "$",
   "portfolio_equity": 10000.0,
   "risk_per_trade_pct": 0.5,
-  "max_allocation_per_trade_pct": 25.0,
+  "max_allocation_per_trade_pct": 20.0,
   "tp1_r_multiple": 3.0,
   "tp1_sell_ratio": 0.5,
   "tp2_r_multiple": 5.0,
@@ -62,69 +62,8 @@
     "CBRS",
     "PRCT"
   ],
-  "active_positions": {
-    "COST": {
-      "ticker": "COST",
-      "entry_price": 1012.28,
-      "current_sl": 983.08,
-      "stop_loss": 983.08,
-      "risk_per_share": 29.2,
-      "shares": 1,
-      "current_shares": 1,
-      "initial_shares": 1,
-      "target_3r": 1099.88,
-      "target_5r": 1158.28,
-      "entry_date": "2026-10-31",
-      "auto_paper_trade": true,
-      "current_price": 1012.28,
-      "current_r": 0.0,
-      "unrealized_pnl": 0.0,
-      "unrealized_pct": 0.0,
-      "dist_ema9_pct": 1.8
-    }
-  },
-  "trade_history": [
-    {
-      "ticker": "MSFT",
-      "entry_date": "2026-10-30",
-      "exit_date": "2026-10-30",
-      "entry_price": 530.14,
-      "exit_price": 519.54,
-      "exit_reason": "Stop Loss Hit",
-      "realized_pnl": -42.4,
-      "r_multiple": -0.78
-    },
-    {
-      "ticker": "AAPL",
-      "entry_date": "2026-10-30",
-      "exit_date": "2026-10-30",
-      "entry_price": 348.91,
-      "exit_price": 343.5,
-      "exit_reason": "Stop Loss Hit",
-      "realized_pnl": -37.87,
-      "r_multiple": -0.79
-    },
-    {
-      "ticker": "HIMS",
-      "entry_date": "2026-10-30",
-      "exit_date": "2026-10-30",
-      "entry_price": 29.67,
-      "exit_price": 27.58,
-      "exit_reason": "Stop Loss Hit",
-      "realized_pnl": -48.07,
-      "r_multiple": -0.95
-    },
-    {
-      "ticker": "JPM",
-      "entry_date": "2026-10-30",
-      "exit_date": "2026-10-30",
-      "entry_price": 343.58,
-      "exit_price": 335.15,
-      "exit_reason": "Stop Loss Hit",
-      "realized_pnl": -42.15,
-      "r_multiple": -0.78
-    }
-  ],
-  "last_scan_date": "2026-10-31",
+  "active_positions": {},
+  "trade_history": [],
+  "last_scan_date": "2026-10-30",
   "last_telegram_update_id": 876479913
 }
