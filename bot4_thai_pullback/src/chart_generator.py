@@ -15,7 +15,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from .indicators import compute_ema, compute_avwap
+try:
+    from .indicators import compute_ema, compute_avwap
+except ImportError:
+    from indicators import compute_ema, compute_avwap
+
 
 
 def generate_pullback_chart(
