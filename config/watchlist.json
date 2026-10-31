@@ -21,6 +21,11 @@
     "PANW": {
       "buy_price": 394.49,
       "buy_date": "2026-10-29"
+    },
+    "TEM": {
+      "buy_price": 72.22,
+      "buy_date": "2026-10-30",
+      "auto_paper_trade": true
     }
   },
   "trade_history": [],
@@ -88,5 +93,5 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-10-30"
+  "last_daily_scan_date": "2026-10-31"
 }
