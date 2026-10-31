@@ -150,9 +150,22 @@ class ConfluenceEngine:
         tested_support = (curr_low <= zone_top * 1.015) and (curr_close >= zone_bottom * 0.98)
         in_pullback_zone = tested_support or (abs(curr_close - zone_top) / zone_top <= 0.02)
 
+        # Candlestick anatomy analysis
+        curr_open = float(df["Open"].iloc[-1]) if "Open" in df.columns else curr_close
+        body = abs(curr_close - curr_open)
+        upper_wick = curr_high - max(curr_close, curr_open)
+        lower_wick = min(curr_close, curr_open) - curr_low
+
+        is_green = curr_close > curr_open
+        hammer = (lower_wick >= 2.0 * max(body, 0.01)) and (upper_wick <= 0.5 * lower_wick)
+        is_shooting_star = (upper_wick > 2.0 * max(body, 0.01)) and (lower_wick <= 0.5 * upper_wick)
+
+        # Bullish confirmation: green candle or hammer rejection, strictly excluding shooting stars
+        has_candle_confirmation = (is_green or hammer) and not is_shooting_star
+
         # Trigger condition:
-        # Price bounced and breaks above Prior Candle High
-        trigger_fired = (curr_high > prior_high) or (curr_close > prior_high)
+        # Price bounced, breaks above Prior Candle High, and has candlestick confirmation
+        trigger_fired = ((curr_high > prior_high) or (curr_close > prior_high)) and has_candle_confirmation
 
         # Setup status classification
         if in_pullback_zone and trigger_fired:
@@ -174,6 +187,9 @@ class ConfluenceEngine:
             "bars_since_high": bars_since_high,
             "in_pullback_zone": in_pullback_zone,
             "trigger_fired": trigger_fired,
+            "has_candle_confirmation": has_candle_confirmation,
+            "is_shooting_star": is_shooting_star,
+            "is_hammer": hammer,
             "status": status,
             "action": action,
             "trigger_price": prior_high,
