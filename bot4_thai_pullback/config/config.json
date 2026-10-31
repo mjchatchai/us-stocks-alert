@@ -98,9 +98,28 @@
       "target_3r": 175.5,
       "target_5r": 182.5,
       "entry_date": "2026-10-30",
+      "auto_paper_trade": true,
+      "current_price": 165.0,
+      "current_r": 0.0,
+      "unrealized_pnl": 0.0,
+      "unrealized_pct": 0.0,
+      "dist_ema9_pct": 2.3
+    },
+    "TFG": {
+      "ticker": "TFG",
+      "entry_price": 9.7,
+      "current_sl": 9.35,
+      "stop_loss": 9.35,
+      "risk_per_share": 0.35,
+      "shares": 14200,
+      "current_shares": 14200,
+      "initial_shares": 14200,
+      "target_3r": 10.75,
+      "target_5r": 11.45,
+      "entry_date": "2026-10-31",
       "auto_paper_trade": true
     }
   },
   "trade_history": [],
-  "last_scan_date": "2026-10-30"
+  "last_scan_date": "2026-10-31"
 }
