@@ -21,6 +21,13 @@ for path in [PROJECT_ROOT, BOT3_SRC, BOT4_SRC, SRC_DIR]:
         sys.path.insert(0, path)
 
 
+@pytest.fixture(autouse=True)
+def block_telegram_network(monkeypatch):
+    """Ensure test suite never dispatches real network calls to Telegram."""
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "MOCK_TOKEN_NEVER_SEND")
+    monkeypatch.setenv("TELEGRAM_CHAT_ID", "MOCK_CHAT_ID_NEVER_SEND")
+
+
 @pytest.fixture
 def bot3_default_config():
     """Default configuration for Bot 3 (US Pullback)."""
