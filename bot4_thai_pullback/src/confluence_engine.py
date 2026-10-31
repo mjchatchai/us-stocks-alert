@@ -13,12 +13,21 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
-from .indicators import (
-    compute_ema,
-    compute_avwap,
-    detect_swing_pivots,
-    detect_recent_gaps,
-)
+try:
+    from .indicators import (
+        compute_ema,
+        compute_avwap,
+        detect_swing_pivots,
+        detect_recent_gaps,
+    )
+except ImportError:
+    from indicators import (
+        compute_ema,
+        compute_avwap,
+        detect_swing_pivots,
+        detect_recent_gaps,
+    )
+
 
 
 class ThaiConfluenceEngine:
@@ -104,9 +113,26 @@ class ThaiConfluenceEngine:
         zone_top = support_info["zone_top"]
         zone_bottom = support_info["zone_bottom"]
 
-        tested_support = (curr_low <= zone_top * 1.015) and (curr_close >= zone_bottom * 0.98)
-        in_pullback_zone = tested_support or (abs(curr_close - zone_top) / zone_top <= 0.02)
-        trigger_fired = (curr_high > prior_high) or (curr_close > prior_high)
+        # Support zone test: price must actively hold support, not slice down through it
+        tested_support = (curr_low <= zone_top * 1.015) and (curr_close >= zone_bottom * 0.995)
+        in_pullback_zone = tested_support or (abs(curr_close - zone_top) / zone_top <= 0.02 and curr_close >= zone_bottom * 0.995)
+
+        # Candlestick anatomy analysis
+        curr_open = float(df["Open"].iloc[-1]) if "Open" in df.columns else curr_close
+        body = abs(curr_close - curr_open)
+        upper_wick = curr_high - max(curr_close, curr_open)
+        lower_wick = min(curr_close, curr_open) - curr_low
+
+        is_green = curr_close > curr_open
+        hammer = (lower_wick >= 2.0 * max(body, 0.02)) or (
+            (lower_wick >= 1.5 * max(body, 0.02)) and (upper_wick <= 1.0 * max(body, 0.02))
+        )
+        bounce_e9 = curr_close > support_info["ema9"] and curr_close > prior_high * 0.995
+        is_shooting_star = (upper_wick > 2.0 * max(body, 0.02)) and (lower_wick <= 0.5 * upper_wick)
+
+        # Require bullish confirmation and strictly reject shooting stars / bull traps
+        has_candle_confirmation = (is_green or hammer or bounce_e9) and not is_shooting_star
+        trigger_fired = ((curr_high > prior_high) or (curr_close > prior_high)) and has_candle_confirmation
 
         if in_pullback_zone and trigger_fired:
             status = "BUY_TRIGGERED"
@@ -127,7 +153,13 @@ class ThaiConfluenceEngine:
             "bars_since_high": bars_since_high,
             "in_pullback_zone": in_pullback_zone,
             "trigger_fired": trigger_fired,
+            "has_candle_confirmation": has_candle_confirmation,
+            "is_shooting_star": is_shooting_star,
+            "is_green": is_green,
+            "hammer": hammer,
+            "bounce_e9": bounce_e9,
             "status": status,
             "action": action,
             "trigger_price": prior_high,
         }
+
