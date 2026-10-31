@@ -1,15 +1,21 @@
 from datetime import datetime
+import json
+import os
+import sys
+import tempfile
+import time
+from typing import Dict, List
 
 def send_weekly_summary(notifier, config, is_thai=True, bot_label="TH PULLBACK (Bot 4)"):
     history = config.get("trade_history", [])
     active = config.get("active_positions", {})
     total = len(history)
-    wins = sum(1 for h in history if float(h.get("realized_pnl", 0)) > 0)
+    wins = sum(1 for h in history if float(h.get("pnl_r", h.get("realized_pnl", 0))) > 0)
     win_rate = (wins / total * 100.0) if total > 0 else 0.0
-    total_r = sum(float(h.get("r_multiple", 0)) for h in history)
+    total_r = sum(float(h.get("pnl_r", h.get("r_multiple", 0))) for h in history)
     
-    win_rs = [float(h.get("r_multiple", 0)) for h in history if float(h.get("r_multiple", 0)) > 0]
-    loss_rs = [float(h.get("r_multiple", 0)) for h in history if float(h.get("r_multiple", 0)) < 0]
+    win_rs = [float(h.get("pnl_r", h.get("r_multiple", 0))) for h in history if float(h.get("pnl_r", h.get("r_multiple", 0))) > 0]
+    loss_rs = [float(h.get("pnl_r", h.get("r_multiple", 0))) for h in history if float(h.get("pnl_r", h.get("r_multiple", 0))) < 0]
     avg_win_r = (sum(win_rs) / len(win_rs)) if win_rs else 0.0
     avg_loss_r = (sum(loss_rs) / len(loss_rs)) if loss_rs else 0.0
     
@@ -33,11 +39,6 @@ Main Pipeline for Bot 4 (Thai Stocks Pullback & R-Multiple Strategy)
 Portfolio: 1,000,000 Baht | Risk: 0.5% (5,000 Baht) | Board Lot: 100 shares
 """
 
-import json
-import os
-import sys
-from typing import Dict, List
-
 # Ensure utf-8 stdout
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -47,26 +48,72 @@ if hasattr(sys.stderr, "reconfigure"):
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from bot4_thai_pullback.src.screener import ThaiBaseScreener
-from bot4_thai_pullback.src.confluence_engine import ThaiConfluenceEngine
-from bot4_thai_pullback.src.risk_manager import ThaiRiskManager
-from bot4_thai_pullback.src.exit_tracker import ThaiExitTracker
-from bot4_thai_pullback.src.chart_generator import generate_pullback_chart
-from bot4_thai_pullback.src.telegram_notifier import ThaiTelegramNotifier
-from bot4_thai_pullback.src.dashboard_builder import build_dashboard_html
+try:
+    from bot4_thai_pullback.src.screener import ThaiBaseScreener
+    from bot4_thai_pullback.src.confluence_engine import ThaiConfluenceEngine
+    from bot4_thai_pullback.src.risk_manager import ThaiRiskManager
+    from bot4_thai_pullback.src.exit_tracker import ThaiExitTracker
+    from bot4_thai_pullback.src.chart_generator import generate_pullback_chart
+    from bot4_thai_pullback.src.telegram_notifier import ThaiTelegramNotifier
+    from bot4_thai_pullback.src.dashboard_builder import build_dashboard_html
+except ImportError:
+    from screener import ThaiBaseScreener
+    from confluence_engine import ThaiConfluenceEngine
+    from risk_manager import ThaiRiskManager
+    from exit_tracker import ThaiExitTracker
+    from chart_generator import generate_pullback_chart
+    from telegram_notifier import ThaiTelegramNotifier
+    from dashboard_builder import build_dashboard_html
 
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "config.json")
 
 
 def load_config() -> Dict:
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+    max_attempts = 6
+    backoff = 0.05
+    for attempt in range(max_attempts):
+        try:
+            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (PermissionError, FileNotFoundError):
+            if attempt == max_attempts - 1:
+                raise
+            time.sleep(backoff)
+            backoff *= 2
 
 
-def save_config(config: Dict):
-    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
-        json.dump(config, f, indent=2, ensure_ascii=False)
+def save_config(cfg: Dict):
+    """Atomic state persistence using tempfile and os.replace with Windows concurrency retry."""
+    dir_name = os.path.dirname(os.path.abspath(CONFIG_PATH))
+    os.makedirs(dir_name, exist_ok=True)
+    temp_fd, temp_path = tempfile.mkstemp(dir=dir_name, text=True)
+    replaced = False
+    try:
+        with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
+            json.dump(cfg, f, indent=2, ensure_ascii=False)
+            f.flush()
+            os.fsync(f.fileno())
+
+        max_attempts = 6
+        backoff = 0.05
+        for attempt in range(max_attempts):
+            try:
+                os.replace(temp_path, CONFIG_PATH)
+                replaced = True
+                break
+            except PermissionError:
+                if attempt == max_attempts - 1:
+                    raise
+                time.sleep(backoff)
+                backoff *= 2
+    finally:
+        if not replaced and os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except OSError:
+                pass
+
 
 
 def run_bot4_pipeline():
@@ -91,27 +138,42 @@ def run_bot4_pipeline():
     if active_positions:
         print(f"\n[Phase 1] Evaluating {len(active_positions)} active Thai positions...")
         for ticker, pos in list(active_positions.items()):
-            df_daily, _ = screener.fetch_data(ticker, period="6mo")
-            if df_daily is not None:
-                updated_pos, actions = exit_tracker.evaluate_position(pos, df_daily)
-                for act in actions:
-                    print(f"Action on {ticker}: {act['message']}")
-                    notifier.send_message(act["message"])
+            try:
+                df_daily, _ = screener.fetch_data(ticker, period="6mo")
+                if df_daily is not None:
+                    updated_pos, actions = exit_tracker.evaluate_position(pos, df_daily)
+                    for act in actions:
+                        print(f"Action on {ticker}: {act['message']}")
+                        notifier.send_message(act["message"])
 
-                if updated_pos["current_shares"] == 0 or updated_pos.get("status", "").startswith("CLOSED"):
-                    trade_history.append({
-                        "ticker": ticker,
-                        "entry_date": updated_pos.get("entry_date", "-"),
-                        "exit_date": updated_pos.get("exit_date", today_str),
-                        "entry_price": updated_pos.get("entry_price", 0.0),
-                        "exit_price": updated_pos.get("exit_price", 0.0),
-                        "exit_reason": updated_pos.get("exit_reason", "-"),
-                        "realized_pnl": updated_pos.get("total_realized_pnl", 0.0),
-                        "r_multiple": updated_pos.get("current_r", 0.0),
-                    })
+                    if updated_pos["current_shares"] == 0 or updated_pos.get("status", "").startswith("CLOSED"):
+                        init_shares = int(pos.get("initial_shares", pos.get("shares", 0)))
+                        init_entry = float(pos.get("entry_price", 0.0))
+                        risk_per_sh = float(pos.get("risk_per_share", 0.0))
+                        tot_realized = float(updated_pos.get("total_realized_pnl", 0.0))
+                        init_risk_baht = init_shares * risk_per_sh
+                        true_r = round(tot_realized / init_risk_baht, 2) if init_risk_baht > 0 else 0.0
+                        pnl_pct = round((tot_realized / (init_shares * init_entry)) * 100.0, 2) if (init_shares * init_entry) > 0 else 0.0
+
+                        trade_history.append({
+                            "ticker": ticker,
+                            "entry_date": pos.get("entry_date", "-"),
+                            "exit_date": updated_pos.get("exit_date", today_str),
+                            "entry_price": init_entry,
+                            "exit_price": float(updated_pos.get("exit_price", 0.0)),
+                            "shares": init_shares,
+                            "realized_pnl": tot_realized,
+                            "r_multiple": true_r,
+                            "pnl_r": true_r,       # Schema sync with src/build_master_dashboard.py
+                            "pnl_pct": pnl_pct,   # Schema sync with src/build_master_dashboard.py
+                            "exit_reason": updated_pos.get("exit_reason", "-"),
+                        })
+                    else:
+                        updated_active[ticker] = updated_pos
                 else:
-                    updated_active[ticker] = updated_pos
-            else:
+                    updated_active[ticker] = pos
+            except Exception as e:
+                print(f"Error evaluating active position {ticker}: {e}")
                 updated_active[ticker] = pos
 
         config["active_positions"] = updated_active
@@ -152,20 +214,24 @@ def run_bot4_pipeline():
                 prior_low=prior_low,
             )
 
-            chart_path = generate_pullback_chart(
-                ticker=tk,
-                df=df_daily,
-                setup_info=setup_info,
-                trade_plan=plan,
-            )
+            # Strictly gate signal execution and chart generation on plan validity and board lot
+            if plan.is_valid and plan.shares >= 100:
+                chart_path = generate_pullback_chart(
+                    ticker=tk,
+                    df=df_daily,
+                    setup_info=setup_info,
+                    trade_plan=plan,
+                )
 
-            buy_signals.append({
-                "ticker": tk,
-                "plan": plan,
-                "setup": setup_info,
-                "chart_path": chart_path,
-            })
-            print(f"🔥 BUY TRIGGER for {tk}: Entry {plan.entry_price:.2f} B, SL {plan.stop_loss:.2f} B, Shares {plan.shares:,}")
+                buy_signals.append({
+                    "ticker": tk,
+                    "plan": plan,
+                    "setup": setup_info,
+                    "chart_path": chart_path,
+                })
+                print(f"🔥 BUY TRIGGER for {tk}: Entry {plan.entry_price:.2f} B, SL {plan.stop_loss:.2f} B, Shares {plan.shares:,}")
+            else:
+                print(f"⚠️ BUY TRIGGER skipped for {tk} (plan invalid): {plan.warning_note}")
 
     for cand in pullback_candidates:
         tk = cand["ticker"]
@@ -176,12 +242,12 @@ def run_bot4_pipeline():
             trade_plan=None,
         )
 
-    # Auto-Paper Trade Entry (ทุกตัวที่มีสัญญาณซื้อ)
+    # Auto-Paper Trade Entry (บันทึกเฉพาะตัวที่ผ่านกฎความเสี่ยงและมี shares >= 100)
     auto_bought_pb = []
     for s in buy_signals:
         tk = s["ticker"]
         plan = s["plan"]
-        if tk not in updated_active:
+        if tk not in updated_active and plan.is_valid and plan.shares >= 100:
             r_per_sh = round(plan.entry_price - plan.stop_loss, 2)
             updated_active[tk] = {
                 "ticker": tk,
@@ -195,12 +261,13 @@ def run_bot4_pipeline():
                 "target_3r": plan.target_3r,
                 "target_5r": getattr(plan, "target_5r", round(plan.entry_price + 5.0 * r_per_sh, 2)),
                 "entry_date": today_str,
-                "auto_paper_trade": True
+                "auto_paper_trade": True,
             }
             auto_bought_pb.append(tk)
-            print(f"Auto-Paper Trade Entry: {tk} @ {plan.entry_price:.2f} B")
+            print(f"Auto-Paper Trade Entry: {tk} @ {plan.entry_price:.2f} B ({plan.shares:,} shares)")
 
     config["active_positions"] = updated_active
+
 
     # 5. Build Dashboard & Send Summary
     print(f"\n[Phase 5] Building HTML Dashboard...")
