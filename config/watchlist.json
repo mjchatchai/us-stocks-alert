@@ -10,25 +10,72 @@
   "kdj_signal": 3,
   "last_telegram_update_id": 169916611,
   "portfolio": {
-    "CRWD": {
-      "buy_price": 268.02,
-      "buy_date": "2026-10-28"
-    },
-    "RXRX": {
-      "buy_price": 4.35,
-      "buy_date": "2026-10-29"
-    },
-    "PANW": {
-      "buy_price": 394.49,
-      "buy_date": "2026-10-29"
-    },
     "TEM": {
       "buy_price": 72.22,
       "buy_date": "2026-10-30",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 72.22,
+      "unrealized_pnl": 0.0,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     }
   },
-  "trade_history": [],
+  "trade_history": [
+    {
+      "ticker": "CRWD",
+      "entry_price": 268.02,
+      "exit_price": 250.43,
+      "buy_price": 268.02,
+      "sell_price": 250.43,
+      "shares": 1,
+      "realized_pnl": -17.59,
+      "r_multiple": -1.31,
+      "pnl_r": -1.31,
+      "pnl_pct": -6.56,
+      "buy_date": "2026-10-28",
+      "sell_date": "2026-10-30",
+      "entry_date": "2026-10-28",
+      "exit_date": "2026-10-30",
+      "days_held": 2,
+      "exit_reason": "Stop Loss Hit (-1R)"
+    },
+    {
+      "ticker": "RXRX",
+      "entry_price": 4.35,
+      "exit_price": 4.03,
+      "buy_price": 4.35,
+      "sell_price": 4.03,
+      "shares": 1,
+      "realized_pnl": -0.32,
+      "r_multiple": -1.45,
+      "pnl_r": -1.45,
+      "pnl_pct": -7.36,
+      "buy_date": "2026-10-29",
+      "sell_date": "2026-10-30",
+      "entry_date": "2026-10-29",
+      "exit_date": "2026-10-30",
+      "days_held": 1,
+      "exit_reason": "Stop Loss Hit (-1R)"
+    },
+    {
+      "ticker": "PANW",
+      "entry_price": 394.49,
+      "exit_price": 365.87,
+      "buy_price": 394.49,
+      "sell_price": 365.87,
+      "shares": 1,
+      "realized_pnl": -28.62,
+      "r_multiple": -1.45,
+      "pnl_r": -1.45,
+      "pnl_pct": -7.25,
+      "buy_date": "2026-10-29",
+      "sell_date": "2026-10-30",
+      "entry_date": "2026-10-29",
+      "exit_date": "2026-10-30",
+      "days_held": 1,
+      "exit_reason": "Stop Loss Hit (-1R)"
+    }
+  ],
   "tickers": [
     "ASTS",
     "AVGO",
