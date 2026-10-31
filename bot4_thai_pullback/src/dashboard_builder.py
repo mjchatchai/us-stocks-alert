@@ -502,7 +502,7 @@ def build_dashboard_html(
         for th in trade_history:
             tk = th["ticker"]
             pnl = th.get("realized_pnl", 0.0)
-            r_mult = th.get("r_multiple", 0.0)
+            r_mult = th.get("pnl_r", th.get("r_multiple", 0.0))
             html_content += f"""
                     <tr>
                         <td><b>{tk}</b></td>
