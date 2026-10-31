@@ -76,7 +76,11 @@
       "target_3r": 17.8,
       "target_5r": 18.4,
       "entry_date": "2026-10-31",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 16.9,
+      "unrealized_pnl": -0.0,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     },
     "KCE": {
       "ticker": "KCE",
@@ -90,7 +94,11 @@
       "target_3r": 79.25,
       "target_5r": 86.25,
       "entry_date": "2026-10-31",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 68.75,
+      "unrealized_pnl": 0.0,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     },
     "CENTEL": {
       "ticker": "CENTEL",
@@ -104,7 +112,11 @@
       "target_3r": 48.25,
       "target_5r": 50.75,
       "entry_date": "2026-10-31",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 44.5,
+      "unrealized_pnl": 0.0,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     },
     "BH": {
       "ticker": "BH",
@@ -118,7 +130,11 @@
       "target_3r": 228.0,
       "target_5r": 246.0,
       "entry_date": "2026-10-31",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 203.0,
+      "unrealized_pnl": 0.0,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     }
   },
   "trade_history": [],
