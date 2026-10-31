@@ -16,29 +16,101 @@ import pandas as pd
 
 def get_thai_tick_size(price: float) -> float:
     """
-    Get official SET Tick Size (spread) based on price level:
-    - Below 2 Baht: 0.01
-    - 2 to 4.98 Baht: 0.02
-    - 5 to 9.95 Baht: 0.05
-    - 10 to 24.90 Baht: 0.10
-    - 25 to 99.75 Baht: 0.25
-    - 100 to 199.50 Baht: 0.50
-    - 200 Baht and above: 1.00
+    Get official SET Tick Size (spread) based on 8-tier price schedule:
+    - Below 2.00 Baht: 0.01
+    - 2.00 to 4.98 Baht: 0.02
+    - 5.00 to 9.95 Baht: 0.05
+    - 10.00 to 24.90 Baht: 0.10
+    - 25.00 to 99.75 Baht: 0.25
+    - 100.00 to 199.50 Baht: 0.50
+    - 200.00 to 398.00 Baht: 1.00
+    - 400.00 Baht and above: 2.00 (Tier 8)
     """
-    if price < 2.0:
+    p = float(price)
+    if p < 2.0:
         return 0.01
-    elif price < 5.0:
+    elif p < 5.0:
         return 0.02
-    elif price < 10.0:
+    elif p < 10.0:
         return 0.05
-    elif price < 25.0:
+    elif p < 25.0:
         return 0.10
-    elif price < 100.0:
+    elif p < 100.0:
         return 0.25
-    elif price < 200.0:
+    elif p < 200.0:
         return 0.50
-    else:
+    elif p < 400.0:
         return 1.00
+    else:
+        return 2.00  # Official SET Tier 8 (>= 400.0 THB)
+
+
+def step_tick_down(price: float) -> float:
+    """
+    Steps down exactly 1 valid SET tick across tier boundaries.
+    Correctly transitions boundary prices into the lower tier:
+    - 2.00  -> 1.99
+    - 5.00  -> 4.98
+    - 10.00 -> 9.95
+    - 25.00 -> 24.90
+    - 100.00 -> 99.75
+    - 200.00 -> 199.50
+    - 400.00 -> 399.00
+    """
+    p = round(float(price), 4)
+    if p <= 0.01:
+        return 0.01
+    if 1.99 < p <= 2.00:
+        return 1.99
+    elif 4.98 < p <= 5.00:
+        return 4.98
+    elif 9.95 < p <= 10.00:
+        return 9.95
+    elif 24.90 < p <= 25.00:
+        return 24.90
+    elif 99.75 < p <= 100.00:
+        return 99.75
+    elif 199.50 < p <= 200.00:
+        return 199.50
+    elif 399.00 < p <= 400.00:
+        return 399.00
+    else:
+        # Step down using the tick size of the region just below current price
+        tick = get_thai_tick_size(p - 0.0001)
+        return round(max(0.01, p - tick), 2)
+
+
+def round_to_set_tick(price: float, mode: str = "nearest") -> float:
+    """
+    Snaps any arbitrary floating-point price to a legal SET tick increment.
+    Modes:
+      - 'nearest': Round to closest valid SET tick
+      - 'down': Floor to nearest valid SET tick
+      - 'up': Ceil to nearest valid SET tick
+    """
+    p = round(float(price), 4)
+    if p <= 0.01:
+        return 0.01
+    tick = get_thai_tick_size(p)
+    if mode == "down":
+        val = np.floor(p / tick + 1e-9) * tick
+    elif mode == "up":
+        val = np.ceil(p / tick - 1e-9) * tick
+    else:
+        val = np.round(p / tick) * tick
+
+    # Check if snapped value crossed into adjacent tick tier
+    new_tick = get_thai_tick_size(val)
+    if new_tick != tick:
+        if mode == "down":
+            val = np.floor(val / new_tick + 1e-9) * new_tick
+        elif mode == "up":
+            val = np.ceil(val / new_tick - 1e-9) * new_tick
+        else:
+            val = np.round(val / new_tick) * new_tick
+
+    return round(float(val), 2)
+
 
 
 def compute_ema(series: pd.Series, period: int) -> pd.Series:
