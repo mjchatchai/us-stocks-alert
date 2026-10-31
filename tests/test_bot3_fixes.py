@@ -342,22 +342,29 @@ def test_confluence_candlestick_rejection_and_confirmation():
 # ---------------------------------------------------------------------------
 # Test 7: TelegramNotifier HTML Escaping & Message Chunking
 # ---------------------------------------------------------------------------
-def test_telegram_html_escaping_and_chunking():
+def test_telegram_html_escaping_and_chunking(monkeypatch):
     # Sanitizer test
     unsafe_text = "Alert: Stock <NVDA> & Price > $100"
     safe_text = sanitize_html(unsafe_text)
     assert safe_text == "Alert: Stock &lt;NVDA&gt; &amp; Price &gt; $100"
 
-    # Chunking test
-    mock_notifier = TelegramNotifier(token="YOUR_TOKEN", chat_id="YOUR_CHAT_ID")
-    assert mock_notifier.is_configured() is False
+    # Chunking test - ensure Telegram is completely mocked
+    sent_payloads = []
+    def fake_post(url, **kwargs):
+        class MockResp:
+            status_code = 200
+        sent_payloads.append(kwargs)
+        return MockResp()
+
+    monkeypatch.setattr("requests.post", fake_post)
+    mock_notifier = TelegramNotifier(token="MOCK_TOKEN", chat_id="MOCK_CHAT_ID")
 
     long_msg = "A" * 1500 + "\n" + "B" * 1500 + "\n" + "C" * 1500 + "\n" + "D" * 1000
     assert len(long_msg) > 4000
 
-    # In unconfigured mode, returns False without raising any exception
-    assert mock_notifier.send_chunked_message(long_msg, max_chunk=2000) is False
-    assert mock_notifier.send_message(long_msg) is False
+    # In mock mode, sends chunked messages without contacting real Telegram
+    mock_notifier.send_chunked_message(long_msg, max_chunk=2000)
+    assert len(sent_payloads) >= 3
 
 
 # ---------------------------------------------------------------------------
