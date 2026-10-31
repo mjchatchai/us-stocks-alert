@@ -45,6 +45,8 @@ Workflow:
 import json
 import os
 import sys
+import tempfile
+import time
 from typing import Dict, List
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -69,13 +71,48 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "config.js
 
 
 def load_config() -> Dict:
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+    max_attempts = 6
+    backoff = 0.05
+    for attempt in range(max_attempts):
+        try:
+            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (PermissionError, FileNotFoundError):
+            if attempt == max_attempts - 1:
+                raise
+            time.sleep(backoff)
+            backoff *= 2
 
 
 def save_config(config: Dict):
-    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
-        json.dump(config, f, indent=2, ensure_ascii=False)
+    dir_name = os.path.dirname(os.path.abspath(CONFIG_PATH))
+    os.makedirs(dir_name, exist_ok=True)
+    temp_fd, temp_path = tempfile.mkstemp(dir=dir_name, text=True)
+    replaced = False
+    try:
+        with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2, ensure_ascii=False)
+            f.flush()
+            os.fsync(f.fileno())
+
+        max_attempts = 6
+        backoff = 0.05
+        for attempt in range(max_attempts):
+            try:
+                os.replace(temp_path, CONFIG_PATH)
+                replaced = True
+                break
+            except PermissionError:
+                if attempt == max_attempts - 1:
+                    raise
+                time.sleep(backoff)
+                backoff *= 2
+    finally:
+        if not replaced and os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except OSError:
+                pass
 
 
 def run_bot3_pipeline():
@@ -102,29 +139,49 @@ def run_bot3_pipeline():
     if active_positions:
         print(f"\n[Phase 1] Evaluating {len(active_positions)} active positions...")
         for ticker, pos in list(active_positions.items()):
-            df_daily, _ = screener.fetch_data(ticker, period="6mo")
+            try:
+                df_daily, _ = screener.fetch_data(ticker, period="6mo")
+            except Exception as e:
+                print(f"Error fetching data for {ticker}: {e}")
+                df_daily = None
+
             if df_daily is not None:
-                updated_pos, actions = exit_tracker.evaluate_position(pos, df_daily)
+                try:
+                    updated_pos, actions = exit_tracker.evaluate_position(pos, df_daily)
 
-                # Send Telegram notifications for actions
-                for act in actions:
-                    print(f"Action on {ticker}: {act['message']}")
-                    notifier.send_message(act["message"])
+                    # Send Telegram notifications for actions
+                    for act in actions:
+                        print(f"Action on {ticker}: {act['message']}")
+                        notifier.send_message(act["message"])
 
-                # If position closed, move to history
-                if updated_pos["current_shares"] == 0 or updated_pos.get("status", "").startswith("CLOSED"):
-                    trade_history.append({
-                        "ticker": ticker,
-                        "entry_date": updated_pos.get("entry_date", "-"),
-                        "exit_date": updated_pos.get("exit_date", today_str),
-                        "entry_price": updated_pos.get("entry_price", 0.0),
-                        "exit_price": updated_pos.get("exit_price", 0.0),
-                        "exit_reason": updated_pos.get("exit_reason", "-"),
-                        "realized_pnl": updated_pos.get("total_realized_pnl", 0.0),
-                        "r_multiple": updated_pos.get("current_r", 0.0),
-                    })
-                else:
-                    updated_active[ticker] = updated_pos
+                    # If position closed, move to history
+                    if updated_pos["current_shares"] == 0 or updated_pos.get("status", "").startswith("CLOSED"):
+                        init_shares = int(pos.get("initial_shares", pos.get("shares", 0)))
+                        init_entry = float(pos.get("entry_price", 0.0))
+                        risk_per_sh = float(pos.get("risk_per_share", 0.0))
+                        tot_realized = float(updated_pos.get("total_realized_pnl", 0.0))
+                        init_risk_dollar = init_shares * risk_per_sh
+                        true_r = round(tot_realized / init_risk_dollar, 2) if init_risk_dollar > 0 else 0.0
+                        pnl_pct = round((tot_realized / (init_shares * init_entry)) * 100.0, 2) if (init_shares * init_entry) > 0 else 0.0
+
+                        trade_history.append({
+                            "ticker": ticker,
+                            "entry_date": pos.get("entry_date", "-"),
+                            "exit_date": updated_pos.get("exit_date", today_str),
+                            "entry_price": init_entry,
+                            "exit_price": float(updated_pos.get("exit_price", 0.0)),
+                            "shares": init_shares,
+                            "realized_pnl": tot_realized,
+                            "r_multiple": true_r,
+                            "pnl_r": true_r,
+                            "pnl_pct": pnl_pct,
+                            "exit_reason": updated_pos.get("exit_reason", "-"),
+                        })
+                    else:
+                        updated_active[ticker] = updated_pos
+                except Exception as e:
+                    print(f"Error evaluating exit for {ticker}: {e}")
+                    updated_active[ticker] = pos
             else:
                 updated_active[ticker] = pos
 
@@ -175,22 +232,26 @@ def run_bot3_pipeline():
                 prior_low=prior_low,
             )
 
-            # Generate Chart with annotated levels
-            chart_path = generate_pullback_chart(
-                ticker=tk,
-                df=df_daily,
-                setup_info=setup_info,
-                trade_plan=plan,
-            )
+            if getattr(plan, "is_valid", True) and plan.shares > 0:
+                # Generate Chart with annotated levels
+                chart_path = generate_pullback_chart(
+                    ticker=tk,
+                    df=df_daily,
+                    setup_info=setup_info,
+                    trade_plan=plan,
+                )
 
-            buy_signals.append({
-                "ticker": tk,
-                "plan": plan,
-                "setup": setup_info,
-                "chart_path": chart_path,
-            })
+                buy_signals.append({
+                    "ticker": tk,
+                    "plan": plan,
+                    "setup": setup_info,
+                    "chart_path": chart_path,
+                })
 
-            print(f"🔥 BUY TRIGGER for ${tk}: Entry ${plan.entry_price:.2f}, SL ${plan.stop_loss:.2f}, Shares {plan.shares}")
+                print(f"🔥 BUY TRIGGER for ${tk}: Entry ${plan.entry_price:.2f}, SL ${plan.stop_loss:.2f}, Shares {plan.shares}")
+            else:
+                reason = getattr(plan, "invalid_reason", "") or getattr(plan, "warning_note", "Trade plan invalid or 0 shares")
+                print(f"⚠️ REJECTED BUY TRIGGER for ${tk}: {reason}")
 
     # Generate charts for remaining pullback candidates so user can view on dashboard
     for cand in pullback_candidates:
@@ -202,29 +263,30 @@ def run_bot3_pipeline():
             trade_plan=None,
         )
 
-    # Auto-Paper Trade Entry (ทุกตัวที่มีสัญญาณซื้อ)
+    # Auto-Paper Trade Entry (ทุกตัวที่มีสัญญาณซื้อที่ผ่านเกณฑ์)
     auto_bought_pb = []
     for s in buy_signals:
         tk = s["ticker"]
         plan = s["plan"]
-        if tk not in updated_active:
-            r_per_sh = round(plan.entry_price - plan.stop_loss, 2)
-            updated_active[tk] = {
-                "ticker": tk,
-                "entry_price": plan.entry_price,
-                "current_sl": plan.stop_loss,
-                "stop_loss": plan.stop_loss,
-                "risk_per_share": r_per_sh,
-                "shares": plan.shares,
-                "current_shares": plan.shares,
-                "initial_shares": plan.shares,
-                "target_3r": plan.target_3r,
-                "target_5r": getattr(plan, "target_5r", round(plan.entry_price + 5.0 * r_per_sh, 2)),
-                "entry_date": today_str,
-                "auto_paper_trade": True
-            }
-            auto_bought_pb.append(tk)
-            print(f"Auto-Paper Trade Entry: ${tk} @ ${plan.entry_price:.2f}")
+        if getattr(plan, "is_valid", True) and plan.shares > 0:
+            if tk not in updated_active:
+                r_per_sh = round(plan.entry_price - plan.stop_loss, 2)
+                updated_active[tk] = {
+                    "ticker": tk,
+                    "entry_price": plan.entry_price,
+                    "current_sl": plan.stop_loss,
+                    "stop_loss": plan.stop_loss,
+                    "risk_per_share": r_per_sh,
+                    "shares": plan.shares,
+                    "current_shares": plan.shares,
+                    "initial_shares": plan.shares,
+                    "target_3r": plan.target_3r,
+                    "target_5r": getattr(plan, "target_5r", round(plan.entry_price + 5.0 * r_per_sh, 2)),
+                    "entry_date": today_str,
+                    "auto_paper_trade": True
+                }
+                auto_bought_pb.append(tk)
+                print(f"Auto-Paper Trade Entry: ${tk} @ ${plan.entry_price:.2f}")
 
     config["active_positions"] = updated_active
 
