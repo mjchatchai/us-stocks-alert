@@ -63,7 +63,64 @@
     "MALEE",
     "KAMART"
   ],
-  "active_positions": {},
+  "active_positions": {
+    "ITC": {
+      "ticker": "ITC",
+      "entry_price": 16.9,
+      "current_sl": 16.6,
+      "stop_loss": 16.6,
+      "risk_per_share": 0.3,
+      "shares": 11800,
+      "current_shares": 11800,
+      "initial_shares": 11800,
+      "target_3r": 17.8,
+      "target_5r": 18.4,
+      "entry_date": "2026-10-31",
+      "auto_paper_trade": true
+    },
+    "KCE": {
+      "ticker": "KCE",
+      "entry_price": 68.75,
+      "current_sl": 65.25,
+      "stop_loss": 65.25,
+      "risk_per_share": 3.5,
+      "shares": 1400,
+      "current_shares": 1400,
+      "initial_shares": 1400,
+      "target_3r": 79.25,
+      "target_5r": 86.25,
+      "entry_date": "2026-10-31",
+      "auto_paper_trade": true
+    },
+    "CENTEL": {
+      "ticker": "CENTEL",
+      "entry_price": 44.5,
+      "current_sl": 43.25,
+      "stop_loss": 43.25,
+      "risk_per_share": 1.25,
+      "shares": 4000,
+      "current_shares": 4000,
+      "initial_shares": 4000,
+      "target_3r": 48.25,
+      "target_5r": 50.75,
+      "entry_date": "2026-10-31",
+      "auto_paper_trade": true
+    },
+    "BH": {
+      "ticker": "BH",
+      "entry_price": 203.0,
+      "current_sl": 194.5,
+      "stop_loss": 194.5,
+      "risk_per_share": 8.5,
+      "shares": 500,
+      "current_shares": 500,
+      "initial_shares": 500,
+      "target_3r": 228.0,
+      "target_5r": 246.0,
+      "entry_date": "2026-10-31",
+      "auto_paper_trade": true
+    }
+  },
   "trade_history": [],
-  "last_scan_date": "2026-10-30"
+  "last_scan_date": "2026-10-31"
 }
