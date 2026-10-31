@@ -17,6 +17,10 @@ on:
     types:
       - completed
 
+concurrency:
+  group: master-dashboard-builder
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -55,6 +59,7 @@ jobs:
           git add docs/
           if ! git diff --staged --quiet; then
             git commit -m "Auto-update 6-Bot Master Dashboard [skip ci]"
-            git pull --rebase origin main || true
-            git push
+            for i in 1 2 3 4 5; do
+              git pull --rebase -X ours origin main && git push && break || sleep $((RANDOM % 5 + 2))
+            done
           fi
