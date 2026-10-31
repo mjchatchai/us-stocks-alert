@@ -41,8 +41,12 @@ class BaseScreener:
             df_daily = tk.history(period=period, interval="1d")
             if df_daily is None or len(df_daily) < 60:
                 return None, None
+            if hasattr(df_daily.columns, "nlevels") and df_daily.columns.nlevels > 1:
+                df_daily.columns = df_daily.columns.get_level_values(0)
 
             df_weekly = tk.history(period=period, interval="1wk")
+            if df_weekly is not None and hasattr(df_weekly.columns, "nlevels") and df_weekly.columns.nlevels > 1:
+                df_weekly.columns = df_weekly.columns.get_level_values(0)
             return df_daily, df_weekly
         except Exception as e:
             print(f"Error fetching {ticker}: {e}")
@@ -65,8 +69,8 @@ class BaseScreener:
         ret_3m = perf.get("ret_3m", 0)
         ret_6m = perf.get("ret_6m", 0)
 
-        # Liquidity check
-        if vol_20 < self.min_vol and dollar_vol_20 < self.min_dollar_vol:
+        # Liquidity check: must satisfy both volume and dollar volume
+        if vol_20 < self.min_vol or dollar_vol_20 < self.min_dollar_vol:
             return None
 
         # Momentum check: 3M or 6M > min_perf (e.g. 30%)
