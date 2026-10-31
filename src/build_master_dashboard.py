@@ -185,8 +185,8 @@ def build_master_dashboard():
                 "exit_date": t.get("exit_date", "-"),
                 "entry_price": float(t.get("entry_price") or t.get("buy_price") or 0.0),
                 "exit_price": float(t.get("exit_price") or t.get("sell_price") or 0.0),
-                "pnl_pct": float(t.get("pnl_pct", 0.0)),
-                "pnl_r": float(t.get("pnl_r", 0.0)),
+                "pnl_pct": float(t.get("pnl_pct") if t.get("pnl_pct") is not None else t.get("realized_pnl_pct", 0.0)),
+                "pnl_r": float(t.get("pnl_r") if t.get("pnl_r") is not None else t.get("r_multiple", 0.0)),
                 "exit_reason": t.get("exit_reason", "SELL Signal")
             })
 
