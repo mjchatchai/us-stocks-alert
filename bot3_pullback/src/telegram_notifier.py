@@ -3,8 +3,11 @@ Telegram Notifier for Bot 3 (Pullback & R-Multiple Strategy)
 Handles:
 - One-Page Compact Daily Report (แบบที่ 2 มินิมอล ไม่รกแชท ข้อความเดียวจบ)
 - Take Profit (3R / 5R) & Trailing Stop Alerts
+- HTML Entity Escaping (Sanitization) to prevent Telegram parser HTTP 400 crashes
+- Message Chunking (<= 4000 characters) for payloads exceeding Telegram limit
 """
 
+import html
 import os
 from typing import Dict, List, Optional
 import requests
@@ -13,6 +16,11 @@ try:
     load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
 except ImportError:
     pass
+
+
+def sanitize_html(text: str) -> str:
+    """Safely escapes dynamic strings for Telegram HTML parse mode."""
+    return html.escape(str(text))
 
 
 class TelegramNotifier:
@@ -29,10 +37,10 @@ class TelegramNotifier:
             and not self.chat_id.startswith("YOUR_")
         )
 
-    def send_message(
+    def _send_single_payload(
         self, text: str, reply_markup: Optional[Dict] = None, parse_mode: str = "HTML"
     ) -> bool:
-        """Send formatted HTML message to Telegram chat."""
+        """Internal helper to dispatch a single HTTP request to Telegram."""
         if not self.is_configured():
             print(f"[Telegram Mock] Would send:\n{text}")
             return False
@@ -54,9 +62,59 @@ class TelegramNotifier:
             print(f"Telegram send_message error: {e}")
             return False
 
+    def send_chunked_message(
+        self,
+        text: str,
+        max_chunk: int = 4000,
+        reply_markup: Optional[Dict] = None,
+        parse_mode: str = "HTML",
+    ) -> bool:
+        """Splits message into blocks <= max_chunk characters to prevent Telegram HTTP 400."""
+        if len(text) <= max_chunk:
+            return self._send_single_payload(text, reply_markup=reply_markup, parse_mode=parse_mode)
+
+        chunks = []
+        lines = text.split("\n")
+        curr = []
+        curr_len = 0
+        for line in lines:
+            if curr_len + len(line) + 1 > max_chunk:
+                if curr:
+                    chunks.append("\n".join(curr))
+                    curr = [line]
+                    curr_len = len(line)
+                else:
+                    # Single line exceeds max_chunk: slice it
+                    for i in range(0, len(line), max_chunk):
+                        chunks.append(line[i : i + max_chunk])
+                    curr = []
+                    curr_len = 0
+            else:
+                curr.append(line)
+                curr_len += len(line) + 1
+        if curr:
+            chunks.append("\n".join(curr))
+
+        success = True
+        for i, chunk in enumerate(chunks):
+            # Only attach reply_markup to the final chunk
+            markup = reply_markup if i == len(chunks) - 1 else None
+            res = self._send_single_payload(chunk, reply_markup=markup, parse_mode=parse_mode)
+            if not res:
+                success = False
+        return success
+
+    def send_message(
+        self, text: str, reply_markup: Optional[Dict] = None, parse_mode: str = "HTML"
+    ) -> bool:
+        """Send formatted HTML message to Telegram chat (with automatic chunking if >4000 chars)."""
+        if len(text) > 4000:
+            return self.send_chunked_message(text, max_chunk=4000, reply_markup=reply_markup, parse_mode=parse_mode)
+        return self._send_single_payload(text, reply_markup=reply_markup, parse_mode=parse_mode)
+
     def send_compact_daily_report(self, summary: dict, buy_signals: list):
-        """Send concise, clean report."""
-        date_str = summary.get("date", "")
+        """Send concise, clean report with sanitized HTML."""
+        date_str = sanitize_html(summary.get("date", ""))
         pullback_list = summary.get("pullback_tickers", [])
 
         lines = [
@@ -69,7 +127,7 @@ class TelegramNotifier:
         if buy_signals:
             for s in buy_signals:
                 p = s["plan"]
-                t = p.ticker
+                t = sanitize_html(p.ticker)
                 ep = p.entry_price
                 sl = p.stop_loss
                 sh = p.shares
@@ -92,7 +150,7 @@ class TelegramNotifier:
             lines.append("⚪ <b>ไม่มีสัญญาณซื้อใหม่</b>")
 
         if pullback_list:
-            top_pb = [f"<code>{tk}</code>" for tk in pullback_list[:6]]
+            top_pb = [f"<code>{sanitize_html(tk)}</code>" for tk in pullback_list[:6]]
             lines.append(f"👀 <b>จ่อแนวรับ:</b> {' • '.join(top_pb)}")
 
         reply_markup = {"inline_keyboard": buttons} if buttons else None
