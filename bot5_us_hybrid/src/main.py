@@ -1,40 +1,10 @@
 from datetime import datetime
-
-def send_weekly_summary(notifier, config, is_thai=False, bot_label="US HYBRID (Bot 5)"):
-    history = config.get("trade_history", [])
-    active = config.get("active_positions", {})
-    total = len(history)
-    wins = sum(1 for h in history if float(h.get("realized_pnl", 0)) > 0)
-    win_rate = (wins / total * 100.0) if total > 0 else 0.0
-    total_r = sum(float(h.get("r_multiple", 0)) for h in history)
-    
-    win_rs = [float(h.get("r_multiple", 0)) for h in history if float(h.get("r_multiple", 0)) > 0]
-    loss_rs = [float(h.get("r_multiple", 0)) for h in history if float(h.get("r_multiple", 0)) < 0]
-    avg_win_r = (sum(win_rs) / len(win_rs)) if win_rs else 0.0
-    avg_loss_r = (sum(loss_rs) / len(loss_rs)) if loss_rs else 0.0
-    
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    lines = [
-        f"📊 <b>WEEKLY FORWARD TEST REPORT</b> • <code>{today_str}</code>",
-        f"<b>{bot_label}</b>",
-        "━━━━━━━━━━━━━━━━",
-        f"• หุ้นในพอร์ตปัจจุบัน: <code>{len(active)} ตัว</code>",
-        f"• ไม้ปิดรอบสะสม: <code>{total} ไม้</code>",
-        f"• Win Rate: <code>{win_rate:.1f}%</code> (ชนะ {wins} / แพ้ {total - wins})",
-        f"• กำไรสะสมสุทธิ: <code>{total_r:+.2f}R</code>",
-    ]
-    if win_rs or loss_rs:
-        lines.append(f"• ชนะเฉลี่ย: <code>+{avg_win_r:.2f}R</code> | SL เฉลี่ย: <code>{avg_loss_r:.2f}R</code>")
-    
-    notifier.send_message("\n".join(lines))
-
-from dataclasses import asdict
-"""
-Main Execution Pipeline for Bot 5 (US Hybrid Master Bot)
-"""
 import os
 import sys
 import json
+import tempfile
+import html
+from dataclasses import asdict
 import yfinance as yf
 import pandas as pd
 
@@ -52,13 +22,50 @@ from bot5_us_hybrid.src.dashboard_builder import build_dashboard_html
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "config.json")
 
+
 def load_config():
     with open(CONFIG_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 def save_config(cfg):
-    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+    """Atomic state persistence using tempfile and os.replace."""
+    dir_name = os.path.dirname(os.path.abspath(CONFIG_PATH))
+    os.makedirs(dir_name, exist_ok=True)
+    temp_fd, temp_path = tempfile.mkstemp(dir=dir_name, text=True)
+    with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
         json.dump(cfg, f, indent=2, ensure_ascii=False)
+    os.replace(temp_path, CONFIG_PATH)
+
+
+def send_weekly_summary(notifier, config, is_thai=False, bot_label="US HYBRID (Bot 5)"):
+    history = config.get("trade_history", [])
+    active = config.get("active_positions", {})
+    total = len(history)
+    wins = sum(1 for h in history if float(h.get("realized_pnl", 0)) > 0)
+    win_rate = (wins / total * 100.0) if total > 0 else 0.0
+    total_r = sum(float(h.get("pnl_r", h.get("r_multiple", 0))) for h in history)
+
+    win_rs = [float(h.get("pnl_r", h.get("r_multiple", 0))) for h in history if float(h.get("pnl_r", h.get("r_multiple", 0))) > 0]
+    loss_rs = [float(h.get("pnl_r", h.get("r_multiple", 0))) for h in history if float(h.get("pnl_r", h.get("r_multiple", 0))) < 0]
+    avg_win_r = (sum(win_rs) / len(win_rs)) if win_rs else 0.0
+    avg_loss_r = (sum(loss_rs) / len(loss_rs)) if loss_rs else 0.0
+
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    lines = [
+        f"📊 <b>WEEKLY FORWARD TEST REPORT</b> • <code>{today_str}</code>",
+        f"<b>{bot_label}</b>",
+        "━━━━━━━━━━━━━━━━",
+        f"• หุ้นในพอร์ตปัจจุบัน: <code>{len(active)} ตัว</code>",
+        f"• ไม้ปิดรอบสะสม: <code>{total} ไม้</code>",
+        f"• Win Rate: <code>{win_rate:.1f}%</code> (ชนะ {wins} / แพ้ {total - wins})",
+        f"• กำไรสะสมสุทธิ: <code>{total_r:+.2f}R</code>",
+    ]
+    if win_rs or loss_rs:
+        lines.append(f"• ชนะเฉลี่ย: <code>+{avg_win_r:.2f}R</code> | SL เฉลี่ย: <code>{avg_loss_r:.2f}R</code>")
+
+    notifier.send_message("\n".join(lines))
+
 
 def run_pipeline():
     print("=" * 60)
@@ -95,15 +102,25 @@ def run_pipeline():
                     notifier.send_message(act["message"])
 
                 if up_pos["current_shares"] == 0 or up_pos.get("status", "").startswith("CLOSED"):
+                    init_shares = int(pos.get("initial_shares", pos.get("shares", 0)))
+                    init_entry = float(pos.get("entry_price", 0.0))
+                    risk_per_sh = float(pos.get("risk_per_share", 0.0))
+                    tot_realized = float(up_pos.get("total_realized_pnl", 0.0))
+                    init_risk_dollar = init_shares * risk_per_sh
+                    true_r = round(tot_realized / init_risk_dollar, 2) if init_risk_dollar > 0 else 0.0
+                    pnl_pct = round((tot_realized / (init_shares * init_entry)) * 100.0, 2) if (init_shares * init_entry) > 0 else 0.0
+
                     trade_history.append({
                         "ticker": ticker,
-                        "entry_date": up_pos.get("entry_date", "-"),
+                        "entry_date": pos.get("entry_date", "-"),
                         "exit_date": up_pos.get("exit_date", today_str),
-                        "entry_price": up_pos.get("entry_price", 0.0),
-                        "exit_price": up_pos.get("exit_price", 0.0),
-                        "shares": pos.get("shares", 0),
-                        "realized_pnl": up_pos.get("total_realized_pnl", 0.0),
-                        "r_multiple": up_pos.get("current_r", 0.0),
+                        "entry_price": init_entry,
+                        "exit_price": float(up_pos.get("exit_price", 0.0)),
+                        "shares": init_shares,
+                        "realized_pnl": tot_realized,
+                        "r_multiple": true_r,
+                        "pnl_r": true_r,
+                        "pnl_pct": pnl_pct,
                         "exit_reason": up_pos.get("exit_reason", "-")
                     })
                 else:
@@ -137,44 +154,46 @@ def run_pipeline():
                 curr_low=sig.curr_low,
                 prior_low=sig.prior_low
             )
-            s_dict = asdict(sig)
-            s_dict["curr_close"] = sig.entry_price
-            s_dict["curr_high"] = sig.entry_price * 1.01
-            s_dict["zone_bottom"] = sig.support_level * 0.99
-            s_dict["zone_top"] = sig.support_level * 1.01
-            s_dict["ema9"] = sig.entry_price
-            s_dict["ema21"] = sig.support_level
-            s_dict["avwap"] = sig.support_level
-            s_dict["prior_high"] = sig.entry_price
-            s_dict["is_first_retest"] = True
-            s_dict["reversal_confirmed"] = True
-            s_dict["in_pullback_zone"] = True
-            s_dict["stage"] = "Stage 2 (Pullback Retest)"
-            new_signals.append({
-                "ticker": sig.ticker,
-                "signal": sig,
-                "setup": s_dict,
-                "plan": plan,
-                "close": sig.entry_price,
-                "rs_percentile": 85,
-                "ret_1m": sig.perf_3m / 3.0,
-                "ret_3m": sig.perf_3m,
-                "ret_6m": sig.perf_6m,
-                "vol_20": getattr(sig, 'volume_20d', getattr(sig, 'turnover_20d', 1000000)),
-                "higher_low_ok": True,
-                "vcp_ok": True,
-                "ema_flattening_or_up": True
-            })
+            # Only proceed if plan is viable and shares > 0
+            if plan.is_valid and plan.shares > 0:
+                s_dict = asdict(sig)
+                s_dict["curr_close"] = sig.entry_price
+                s_dict["curr_high"] = sig.entry_price * 1.01
+                s_dict["zone_bottom"] = sig.support_level * 0.99
+                s_dict["zone_top"] = sig.support_level * 1.01
+                s_dict["ema9"] = sig.entry_price
+                s_dict["ema21"] = sig.support_level
+                s_dict["avwap"] = sig.support_level
+                s_dict["prior_high"] = sig.entry_price
+                s_dict["is_first_retest"] = True
+                s_dict["reversal_confirmed"] = True
+                s_dict["in_pullback_zone"] = True
+                s_dict["stage"] = "Stage 2 (Pullback Retest)"
+                new_signals.append({
+                    "ticker": sig.ticker,
+                    "signal": sig,
+                    "setup": s_dict,
+                    "plan": plan,
+                    "close": sig.entry_price,
+                    "rs_percentile": 85,
+                    "ret_1m": sig.perf_3m / 3.0,
+                    "ret_3m": sig.perf_3m,
+                    "ret_6m": sig.perf_6m,
+                    "vol_20": getattr(sig, 'volume_20d', 1000000),
+                    "higher_low_ok": True,
+                    "vcp_ok": True,
+                    "ema_flattening_or_up": True
+                })
 
-    print(f"Found {len(new_signals)} valid Hybrid setups!")
+    print(f"Found {len(new_signals)} valid US Hybrid setups!")
 
-    # 2.5 Auto-Paper Trade Entry (ทุกตัวที่มีสัญญาณซื้อ)
+    # 2.5 Auto-Paper Trade Entry (บันทึกเฉพาะตัวที่ผ่านกฎความเสี่ยงและมีจำนวนหุ้น > 0)
     auto_bought = []
     for item in new_signals:
         s = item["signal"]
         p = item["plan"]
         tk = s.ticker
-        if tk not in updated_active:
+        if tk not in updated_active and p.is_valid and p.shares > 0:
             r_per_sh = round(p.entry_price - p.stop_loss, 2)
             updated_active[tk] = {
                 "ticker": tk,
@@ -191,13 +210,13 @@ def run_pipeline():
                 "auto_paper_trade": True
             }
             auto_bought.append(tk)
-            print(f"Auto-Paper Trade Entry: ${tk} @ ${p.entry_price:.2f}")
+            print(f"Auto-Paper Trade Entry: {tk} @ ${p.entry_price:.2f} ({p.shares} shares)")
 
     config["active_positions"] = updated_active
 
     # 3. Send Telegram Alerts
     lines = [
-        f"🎯 <b>US HYBRID SCAN</b> • <code>{today_str}</code>",
+        f"🎯 <b>US HYBRID SCAN (Bot 5)</b> • <code>{today_str}</code>",
         "━━━━━━━━━━━━━━━━"
     ]
     buttons = []
@@ -210,16 +229,19 @@ def run_pipeline():
             lines.append(f"🟢 <b>${s.ticker}</b>")
             lines.append(f"├ เข้า: <code>${p.entry_price:.2f}</code> | SL: <code>${p.stop_loss:.2f}</code> (-{r_pct:.1f}%)")
             lines.append(f"├ ซื้อ: <b>{p.shares} sh</b> (${p.capital_allocated:,.0f})")
-            lines.append(f"└ เป้า 3R: <code>${p.target_3r:.2f}</code>")
-            lines.append("")
-        if auto_bought:
-            lines.append(f"🤖 <b>[Auto-Paper Trade]</b> บันทึกเข้าพอร์ต {len(auto_bought)} ตัวแล้ว")
+            lines.append(f"└ เป้า 3R: <code>${p.target_3r:.2f}</code> | เป้า 5R: <code>${p.target_5r:.2f}</code>")
+            if p.warning_note:
+                lines.append(f"⚠️ <i>{html.escape(p.warning_note)}</i>")
             lines.append("")
 
             buttons.append([
                 {"text": f"✅ ซื้อ ${s.ticker} ({p.shares} sh)", "callback_data": f"bot5_buy_{s.ticker}_{p.shares}_{p.entry_price:.2f}"},
                 {"text": f"📈 กราฟ ${s.ticker}", "url": f"https://www.tradingview.com/chart/?symbol={s.ticker}"}
             ])
+
+        if auto_bought:
+            lines.append(f"🤖 <b>[Auto-Paper Trade]</b> บันทึกเข้าพอร์ต {len(auto_bought)} ตัวแล้ว")
+            lines.append("")
     else:
         lines.append("⚪ <b>ไม่มีสัญญาณซื้อใหม่</b>")
 
@@ -241,11 +263,13 @@ def run_pipeline():
         last_scan_date=today_str,
         output_path="bot5_us_hybrid/docs/index.html"
     )
-        # Weekly Summary Report (Saturday for US)
+
+    # Weekly Summary Report (Saturday for US market close)
     if datetime.now().weekday() == 5:
         send_weekly_summary(notifier, config, is_thai=False, bot_label="US HYBRID (Bot 5)")
 
-    print("Bot 5 Pipeline completed successfully!")
+    print("Bot 5 US Pipeline completed successfully!")
+
 
 if __name__ == "__main__":
     run_pipeline()
