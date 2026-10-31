@@ -14,15 +14,26 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 
-from .indicators import (
-    compute_ema,
-    compute_atr,
-    compute_bollinger_bands,
-    compute_performance_metrics,
-    check_higher_lows,
-    check_volatility_contraction,
-    check_ema_slopes,
-)
+try:
+    from .indicators import (
+        compute_ema,
+        compute_atr,
+        compute_bollinger_bands,
+        compute_performance_metrics,
+        check_higher_lows,
+        check_volatility_contraction,
+        check_ema_slopes,
+    )
+except ImportError:
+    from indicators import (
+        compute_ema,
+        compute_atr,
+        compute_bollinger_bands,
+        compute_performance_metrics,
+        check_higher_lows,
+        check_volatility_contraction,
+        check_ema_slopes,
+    )
 
 
 class ThaiBaseScreener:
@@ -41,10 +52,14 @@ class ThaiBaseScreener:
         try:
             tk = yf.Ticker(yf_ticker)
             df_daily = tk.history(period=period, interval="1d")
+            if df_daily is not None and df_daily.columns.nlevels > 1:
+                df_daily.columns = df_daily.columns.get_level_values(0)
             if df_daily is None or len(df_daily) < 60:
                 return None, None
 
             df_weekly = tk.history(period=period, interval="1wk")
+            if df_weekly is not None and df_weekly.columns.nlevels > 1:
+                df_weekly.columns = df_weekly.columns.get_level_values(0)
             return df_daily, df_weekly
         except Exception as e:
             return None, None
@@ -66,13 +81,14 @@ class ThaiBaseScreener:
         ret_3m = perf.get("ret_3m", 0)
         ret_6m = perf.get("ret_6m", 0)
 
-        # Liquidity check: at least 20M Baht/day (or 10M for growth mid-caps)
-        if turnover_20 < self.min_turnover and turnover_20 < 10000000:
+        # Strict liquidity check: at least min_turnover Baht/day (e.g. 20M Baht)
+        if turnover_20 < self.min_turnover:
             return None
 
         # Momentum check
         max_perf = max(ret_3m, ret_6m)
         has_strong_momentum = max_perf >= self.min_perf
+
 
         # 2. Daily EMAs & Slope
         close = df_daily["Close"]
