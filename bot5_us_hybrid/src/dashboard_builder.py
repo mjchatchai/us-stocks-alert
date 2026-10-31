@@ -39,7 +39,7 @@ def build_dashboard_html(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOT 3: US Trend Pullback & R-Multiple Dashboard</title>
+    <title>BOT 5: US Macro Trend Hybrid & R-Multiple Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {{
@@ -236,8 +236,8 @@ def build_dashboard_html(
 <body>
     <div class="header">
         <div class="title-group">
-            <h1>🚀 BOT 3: US Trend Leader Pullback <span class="badge badge-green">R-Multiple Engine</span></h1>
-            <p>กลยุทธ์คัดหุ้นผู้นำสร้างฐาน (VCP) + ย่อทดสอบแนวรับแรก (First Retest) + ล็อคกำไร 3R/5R & Trailing EMA 9</p>
+            <h1>🇺🇸 BOT 5: US Macro Trend Hybrid Master <span class="badge badge-green">พอร์ต $10,000</span></h1>
+            <p>กลยุทธ์หุ้นผู้นำสหรัฐฯ + Macro Trend EMA 50/200 + ย่อทดสอบแนวรับแรก + ล็อคกำไร 3R/5R & Trailing EMA 9</p>
         </div>
         <div>
             <span class="badge badge-blue">Last Scan: {last_scan_date}</span>
