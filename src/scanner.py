@@ -243,10 +243,10 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
         st = item["latest"]
         print(f"  {item['ticker']:<5} {_compact_buttons(st)} ${st['close']:.2f}")
 
-    # Build Web Dashboard
-    dashboard_path = os.path.join(PROJECT_ROOT, "docs", "index.html")
-    build_dashboard_html(scan_results, portfolio, dashboard_path)
-    print(f"\n[สำเร็จ] อัปเดตหน้าเว็บกระดานเม็ดกระดุม 3 โซนเรียบร้อยที่: {dashboard_path}")
+    # Build Web Dashboard for Bot 1
+    bot1_path = os.path.join(PROJECT_ROOT, "docs", "bot1.html")
+    build_dashboard_html(scan_results, portfolio, bot1_path)
+    print(f"\n[สำเร็จ] อัปเดตหน้าเว็บกระดานเม็ดกระดุม 3 โซน (Bot 1) เรียบร้อยที่: {bot1_path}")
 
     # Send Telegram Notifications if configured
     if scan_results:
