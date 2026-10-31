@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOT 3: US Trend Pullback & R-Multiple Dashboard</title>
+    <title>BOT 5: US Macro Trend Hybrid & R-Multiple Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -200,8 +200,8 @@
 <body>
     <div class="header">
         <div class="title-group">
-            <h1>🚀 BOT 3: US Trend Leader Pullback <span class="badge badge-green">R-Multiple Engine</span></h1>
-            <p>กลยุทธ์คัดหุ้นผู้นำสร้างฐาน (VCP) + ย่อทดสอบแนวรับแรก (First Retest) + ล็อคกำไร 3R/5R & Trailing EMA 9</p>
+            <h1>🇺🇸 BOT 5: US Macro Trend Hybrid Master <span class="badge badge-green">พอร์ต $10,000</span></h1>
+            <p>กลยุทธ์หุ้นผู้นำสหรัฐฯ + Macro Trend EMA 50/200 + ย่อทดสอบแนวรับแรก + ล็อคกำไร 3R/5R & Trailing EMA 9</p>
         </div>
         <div>
             <span class="badge badge-blue">Last Scan: 2026-10-31</span>
@@ -220,7 +220,7 @@
         </div>
         <div class="metric-card">
             <div class="label">🚀 สัญญาณซื้อวันนี้</div>
-            <div class="value text-green">1</div>
+            <div class="value text-green">0</div>
         </div>
         <div class="metric-card">
             <div class="label">📦 ออเดอร์ที่ถืออยู่ (Active)</div>
@@ -238,10 +238,10 @@
 
     <!-- Tabs -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (1)</button>
+        <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (0)</button>
         <button class="tab-btn" onclick="switchTab('tab-active')">💼 ออเดอร์ที่ถืออยู่ (1)</button>
-        <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (1)</button>
-        <button class="tab-btn" onclick="switchTab('tab-screener')">⭐ หุ้นแกร่ง VCP [1/4] (1)</button>
+        <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (0)</button>
+        <button class="tab-btn" onclick="switchTab('tab-screener')">⭐ หุ้นแกร่ง VCP [1/4] (0)</button>
         <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการเทรด (4)</button>
     </div>
 
@@ -264,20 +264,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('MSFT')">$MSFT</a></td>
-                        <td><b>$521.91</b></td>
-                        <td class="text-red"><b>$514.20</b> (-1.5%)</td>
-                        <td>$7.71</td>
-                        <td class="text-gold"><b>$545.04</b></td>
-                        <td class="text-green"><b>$560.46</b></td>
-                        <td><b class="text-green">3 หุ้น</b></td>
-                        <td>$1,565.73</td>
-                        <td>15.7%</td>
-                        <td><button class="btn-action" onclick="openChartModal('MSFT')">📊 ดูกราฟ</button></td>
-                    </tr>
-            
+<tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 30px;">วันนี้ยังไม่มีสัญญาณเข้าซื้อใหม่ที่ตรงเงื่อนไขครบทุกข้อ (รอแท่งยืนยันแนวรับ)</td></tr>
                 </tbody>
             </table>
         </div>
@@ -313,7 +300,7 @@
                         <td class="text-gold">545.04</td>
                         <td class="text-green">$560.46</td>
                         <td><b class="text-green">+0.00R</b></td>
-                        <td><b class="text-green">$+0.00</b></td>
+                        <td><b class="text-green">$-0.00</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('MSFT')">📊 กราฟ</button></td>
                     </tr>
@@ -342,20 +329,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('MSFT')">$MSFT</a></td>
-                        <td><b>$521.91</b></td>
-                        <td><b>85%</b></td>
-                        <td class="text-green">$521.15 - $531.67</td>
-                        <td>$521.91</td>
-                        <td>$526.41</td>
-                        <td>$526.41</td>
-                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
-                        <td><b class="text-gold">$521.91</b> (ทะลุ High แท่งก่อน)</td>
-                        <td><button class="btn-action" onclick="openChartModal('MSFT')">📊 กราฟ</button></td>
-                    </tr>
-            
+<tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 30px;">ไม่มีหุ้นในโซนแนวรับขณะนี้</td></tr>
                 </tbody>
             </table>
         </div>
@@ -381,19 +355,6 @@
                 </thead>
                 <tbody>
 
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('MSFT')">$MSFT</a></td>
-                        <td>$521.91</td>
-                        <td><b>85%</b></td>
-                        <td class="text-green">+2.4%</td>
-                        <td class="text-green"><b>+7.2%</b></td>
-                        <td class="text-green"><b>+26.4%</b></td>
-                        <td>22,013,400</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
                 </tbody>
             </table>
         </div>
