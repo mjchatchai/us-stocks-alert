@@ -2,10 +2,11 @@
 Exit Tracker & Trade Management Engine (Step [4/4])
 - Monitors Active Positions against:
   * Stop Loss Hit (Full Exit / Cut Loss)
-  * Target 3R Hit (Partial TP 1 + Move SL to Breakeven)
+  * Target 3R Hit (Partial TP 1 + Move SL to Breakeven, or Full Exit if 1 share)
   * Target 5R Hit (Partial TP 2)
   * Daily EMA 9 Trailing Stop for Runner (Full Exit on close < EMA9)
   * Overextended / Climax Alert (Distance from EMA 9 > threshold)
+- Calculates true cumulative blended R-multiple
 """
 
 from typing import Dict, List, Optional, Tuple
@@ -21,6 +22,33 @@ class ExitTracker:
         self.tp2_ratio = float(config.get("tp2_sell_ratio", 0.5))
         self.trailing_ema_period = int(config.get("trailing_ema", 9))
         self.overextended_pct = float(config.get("overextended_ema_threshold_pct", 15.0))
+
+    def _update_metrics(
+        self,
+        pos: Dict,
+        entry: float,
+        risk_per_share: float,
+        initial_shares: int,
+        curr_close: float,
+    ):
+        """Calculates true cumulative blended R-multiple and return metrics."""
+        initial_dollar_risk = initial_shares * risk_per_share
+        tot_realized = float(pos.get("total_realized_pnl", 0.0))
+        rem_shares = int(pos.get("current_shares", 0))
+
+        if rem_shares > 0:
+            unrealized = round((curr_close - entry) * rem_shares, 2)
+            pos["unrealized_pnl"] = unrealized
+            pos["unrealized_pct"] = round(((curr_close - entry) / entry) * 100.0, 2) if entry > 0 else 0.0
+            blended_pnl = tot_realized + unrealized
+        else:
+            pos["unrealized_pnl"] = 0.0
+            pos["unrealized_pct"] = 0.0
+            blended_pnl = tot_realized
+
+        pos["current_r"] = round(blended_pnl / initial_dollar_risk, 2) if initial_dollar_risk > 0 else 0.0
+        pos["total_pnl"] = round(blended_pnl, 2)
+        pos["current_price"] = round(curr_close, 2)
 
     def evaluate_position(
         self, position: Dict, df: pd.DataFrame
@@ -48,17 +76,14 @@ class ExitTracker:
         sl = float(pos["current_sl"])
         risk_per_share = float(pos["risk_per_share"])
         curr_shares = int(pos["current_shares"])
+        initial_shares = int(pos.get("initial_shares", pos.get("shares", curr_shares)))
         target_3r = float(pos["target_3r"])
         target_5r = float(pos["target_5r"])
         tp1_hit = bool(pos.get("tp1_hit", False))
         tp2_hit = bool(pos.get("tp2_hit", False))
 
-        # Current R-Multiple
-        curr_r = round((curr_close - entry) / risk_per_share, 2) if risk_per_share > 0 else 0.0
-        pos["current_price"] = round(curr_close, 2)
-        pos["current_r"] = curr_r
-        pos["unrealized_pnl"] = round((curr_close - entry) * curr_shares, 2)
-        pos["unrealized_pct"] = round(((curr_close - entry) / entry) * 100.0, 2)
+        # Initial metrics calculation
+        self._update_metrics(pos, entry, risk_per_share, initial_shares, curr_close)
 
         # 1. Check Stop Loss
         if curr_low <= sl or curr_close <= sl:
@@ -78,58 +103,116 @@ class ExitTracker:
                 "pnl": pnl,
                 "message": f"🛑 {pos['ticker']} แตะจุด Stop Loss ที่ ${exit_price:.2f} (ปิดออเดอร์ทั้งหมด)",
             })
+            self._update_metrics(pos, entry, risk_per_share, initial_shares, exit_price)
             return pos, actions
 
         # 2. Check Target 3R (Take Profit 1)
-        if not tp1_hit and curr_high >= target_3r:
-            sell_qty = max(1, int(curr_shares * self.tp1_ratio))
-            pnl = round((target_3r - entry) * sell_qty, 2)
+        if not tp1_hit and curr_high >= target_3r and curr_shares > 0:
             pos["tp1_hit"] = True
-            pos["current_shares"] = curr_shares - sell_qty
-            pos["total_realized_pnl"] = round(pos.get("total_realized_pnl", 0.0) + pnl, 2)
+            pos["current_sl"] = round(max(pos["current_sl"], entry), 2)  # Move SL to Breakeven
 
-            # Move SL to Breakeven (ทุน)
-            old_sl = pos["current_sl"]
-            pos["current_sl"] = round(max(old_sl, entry), 2)
-            curr_shares = pos["current_shares"]
+            if curr_shares <= 1:
+                # Single-share liquidation: 100% exit at 3R (eliminate zombie 0-share position)
+                sell_qty = curr_shares
+                pnl = round((target_3r - entry) * sell_qty, 2)
+                pos["status"] = "CLOSED_TP1"
+                pos["exit_price"] = target_3r
+                pos["exit_date"] = date_str
+                pos["exit_reason"] = "Target 3R Hit (100% Exit for 1 Share)"
+                pos["total_realized_pnl"] = round(pos.get("total_realized_pnl", 0.0) + pnl, 2)
+                pos["current_shares"] = 0
+                curr_shares = 0
 
-            actions.append({
-                "type": "TP1_3R",
-                "ticker": pos["ticker"],
-                "shares_sold": sell_qty,
-                "price": target_3r,
-                "pnl": pnl,
-                "new_sl": pos["current_sl"],
-                "remaining_shares": curr_shares,
-                "message": (
-                    f"🎯 {pos['ticker']} บรรลุเป้าหมาย 3R ที่ ${target_3r:.2f}!\n"
-                    f"• ขายทำกำไร 50% จำนวน {sell_qty} หุ้น (+${pnl:.2f})\n"
-                    f"• เลื่อน Stop Loss บังทุนมาที่ ${pos['current_sl']:.2f} (พอร์ตไร้ความเสี่ยงแล้ว!)"
-                ),
-            })
+                actions.append({
+                    "type": "TP1_3R_FULL",
+                    "ticker": pos["ticker"],
+                    "shares_sold": sell_qty,
+                    "price": target_3r,
+                    "pnl": pnl,
+                    "message": (
+                        f"🎯 <b>${pos['ticker']} บรรลุเป้าหมาย 3R ที่ ${target_3r:.2f}</b>\n"
+                        f"• ปิดทำกำไร 100% (ถือ 1 หุ้น) จำนวน {sell_qty} หุ้น (+${pnl:.2f})"
+                    ),
+                })
+                self._update_metrics(pos, entry, risk_per_share, initial_shares, target_3r)
+                return pos, actions
+            else:
+                raw_sell = int(curr_shares * self.tp1_ratio)
+                sell_qty = max(1, raw_sell)
+                if sell_qty >= curr_shares:
+                    sell_qty = curr_shares - 1  # Preserve at least 1 runner share
+
+                pnl = round((target_3r - entry) * sell_qty, 2)
+                pos["current_shares"] = curr_shares - sell_qty
+                pos["total_realized_pnl"] = round(pos.get("total_realized_pnl", 0.0) + pnl, 2)
+                curr_shares = pos["current_shares"]
+
+                actions.append({
+                    "type": "TP1_3R",
+                    "ticker": pos["ticker"],
+                    "shares_sold": sell_qty,
+                    "price": target_3r,
+                    "pnl": pnl,
+                    "new_sl": pos["current_sl"],
+                    "remaining_shares": curr_shares,
+                    "message": (
+                        f"🎯 {pos['ticker']} บรรลุเป้าหมาย 3R ที่ ${target_3r:.2f}!\n"
+                        f"• ขายทำกำไร 50% จำนวน {sell_qty} หุ้น (+${pnl:.2f})\n"
+                        f"• เลื่อน Stop Loss บังทุนมาที่ ${pos['current_sl']:.2f} (พอร์ตไร้ความเสี่ยงแล้ว!)"
+                    ),
+                })
 
         # 3. Check Target 5R (Take Profit 2)
         if pos.get("tp1_hit", False) and not tp2_hit and curr_high >= target_5r and curr_shares > 0:
-            sell_qty = max(1, int(curr_shares * self.tp2_ratio))
-            pnl = round((target_5r - entry) * sell_qty, 2)
-            pos["tp2_hit"] = True
-            pos["current_shares"] = curr_shares - sell_qty
-            pos["total_realized_pnl"] = round(pos.get("total_realized_pnl", 0.0) + pnl, 2)
-            curr_shares = pos["current_shares"]
+            if curr_shares <= 1:
+                sell_qty = curr_shares
+                pnl = round((target_5r - entry) * sell_qty, 2)
+                pos["status"] = "CLOSED_TP2"
+                pos["exit_price"] = target_5r
+                pos["exit_date"] = date_str
+                pos["exit_reason"] = "Target 5R Hit (100% Exit)"
+                pos["total_realized_pnl"] = round(pos.get("total_realized_pnl", 0.0) + pnl, 2)
+                pos["current_shares"] = 0
+                curr_shares = 0
 
-            actions.append({
-                "type": "TP2_5R",
-                "ticker": pos["ticker"],
-                "shares_sold": sell_qty,
-                "price": target_5r,
-                "pnl": pnl,
-                "remaining_shares": curr_shares,
-                "message": (
-                    f"🎯🎯 {pos['ticker']} บรรลุเป้าหมายใหญ่ 5R ที่ ${target_5r:.2f}!\n"
-                    f"• ขายทำกำไรก้อนที่สองจำนวน {sell_qty} หุ้น (+${pnl:.2f})\n"
-                    f"• หุ้นที่เหลือ {curr_shares} หุ้น ปล่อยรันเทรนด์ต่อด้วย Daily EMA 9"
-                ),
-            })
+                actions.append({
+                    "type": "TP2_5R_FULL",
+                    "ticker": pos["ticker"],
+                    "shares_sold": sell_qty,
+                    "price": target_5r,
+                    "pnl": pnl,
+                    "message": (
+                        f"🎯🎯 <b>${pos['ticker']} บรรลุเป้าหมายใหญ่ 5R ที่ ${target_5r:.2f}</b>\n"
+                        f"• ปิดทำกำไร 100% จำนวน {sell_qty} หุ้น (+${pnl:.2f})"
+                    ),
+                })
+                self._update_metrics(pos, entry, risk_per_share, initial_shares, target_5r)
+                return pos, actions
+            else:
+                raw_sell = int(curr_shares * self.tp2_ratio)
+                sell_qty = max(1, raw_sell)
+                if sell_qty >= curr_shares:
+                    sell_qty = curr_shares - 1  # Preserve runner
+
+                pnl = round((target_5r - entry) * sell_qty, 2)
+                pos["tp2_hit"] = True
+                pos["current_shares"] = curr_shares - sell_qty
+                pos["total_realized_pnl"] = round(pos.get("total_realized_pnl", 0.0) + pnl, 2)
+                curr_shares = pos["current_shares"]
+
+                actions.append({
+                    "type": "TP2_5R",
+                    "ticker": pos["ticker"],
+                    "shares_sold": sell_qty,
+                    "price": target_5r,
+                    "pnl": pnl,
+                    "remaining_shares": curr_shares,
+                    "message": (
+                        f"🎯🎯 {pos['ticker']} บรรลุเป้าหมายใหญ่ 5R ที่ ${target_5r:.2f}!\n"
+                        f"• ขายทำกำไรก้อนที่สองจำนวน {sell_qty} หุ้น (+${pnl:.2f})\n"
+                        f"• หุ้นที่เหลือ {curr_shares} หุ้น ปล่อยรันเทรนด์ต่อด้วย Daily EMA 9"
+                    ),
+                })
 
         # 4. Check Trailing EMA 9 Stop for Runner
         # Triggered when daily candle closes below EMA 9
@@ -153,6 +236,7 @@ class ExitTracker:
                     f"• ปิดทำกำไรหุ้นส่วนที่เหลือ {curr_shares} หุ้น (+${pnl:.2f})"
                 ),
             })
+            self._update_metrics(pos, entry, risk_per_share, initial_shares, curr_close)
             return pos, actions
 
         # 5. Check Climax / Overextension Warning
@@ -170,4 +254,5 @@ class ExitTracker:
                 ),
             })
 
+        self._update_metrics(pos, entry, risk_per_share, initial_shares, curr_close)
         return pos, actions
