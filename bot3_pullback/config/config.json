@@ -75,7 +75,12 @@
       "target_3r": 1099.88,
       "target_5r": 1158.28,
       "entry_date": "2026-10-31",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 1012.28,
+      "current_r": 0.0,
+      "unrealized_pnl": 0.0,
+      "unrealized_pct": 0.0,
+      "dist_ema9_pct": 1.8
     }
   },
   "trade_history": [
