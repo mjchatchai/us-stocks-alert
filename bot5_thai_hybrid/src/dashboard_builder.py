@@ -37,7 +37,7 @@ def build_dashboard_html(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOT 4: Thai Stocks Pullback & R-Multiple Dashboard</title>
+    <title>BOT 6: Thai SET Hybrid Trend & R-Multiple Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {{
@@ -233,8 +233,8 @@ def build_dashboard_html(
 <body>
     <div class="header">
         <div class="title-group">
-            <h1>🇹🇭 BOT 4: หุ้นไทย (SET) Pullback & R-Multiple <span class="badge badge-green">พอร์ต 1,000,000 ฿</span></h1>
-            <p>ระบบคัดกรองหุ้นนำตลาด + ย่อทดสอบแนวรับรอบแรก (First Retest) + บริหารความเสี่ยง Board Lot (100 หุ้น) และเป้า 3R/5R</p>
+            <h1>🇹🇭 BOT 6: หุ้นไทย (SET) Hybrid Trend Master <span class="badge badge-green">พอร์ต 1,000,000 ฿</span></h1>
+            <p>ระบบคัดกรองหุ้นนำตลาด SET + Macro Trend + ย่อทดสอบแนวรับรอบแรก + คุมความเสี่ยง Board Lot (100 หุ้น) และเป้า 3R/5R</p>
         </div>
         <div>
             <span class="badge badge-blue">Last Scan: {last_scan_date}</span>
