@@ -56,7 +56,7 @@ def compute_all_indicators(
     Computes all 3 indicators and their exact TradingView signals on OHLCV DataFrame.
     Expects columns: ['Open', 'High', 'Low', 'Close', 'Volume'].
     """
-    out = df.copy()
+    out = df.dropna(subset=["Close", "High", "Low"]).copy()
     close = out["Close"].astype(float)
     high = out["High"].astype(float)
     low = out["Low"].astype(float)
@@ -117,7 +117,7 @@ def compute_all_indicators(
     highest_h = high.rolling(window=kdj_period, min_periods=1).max()
     lowest_l = low.rolling(window=kdj_period, min_periods=1).min()
     hl_range = highest_h - lowest_l
-    rsv = np.where(hl_range == 0, 0.0, 100.0 * ((close - lowest_l) / hl_range))
+    rsv = np.where(hl_range == 0, 50.0, 100.0 * ((close - lowest_l) / np.maximum(hl_range, 1e-9)))
     out["rsv"] = pd.Series(rsv, index=out.index)
 
     out["kdj_k"] = pine_bcwsma(out["rsv"], kdj_signal, 1)
@@ -128,4 +128,27 @@ def compute_all_indicators(
     out["kdj_green"] = out["kdj_j"] > out["kdj_d"]
     out["kdj_red"] = ~out["kdj_green"]
 
+    # Volatility & Swing Low Metrics for Risk Management
+    prev_close = close.shift(1)
+    tr = pd.concat([
+        high - low,
+        (high - prev_close).abs(),
+        (low - prev_close).abs()
+    ], axis=1).max(axis=1)
+    out["atr14"] = tr.ewm(span=14, adjust=False).mean()
+    out["swing_low_10"] = low.rolling(window=10, min_periods=1).min()
+
     return out
+
+
+def compute_atr(df: pd.DataFrame, period: int = 14) -> pd.Series:
+    high = df["High"]
+    low = df["Low"]
+    close = df["Close"]
+    prev_close = close.shift(1)
+    tr = pd.concat([
+        high - low,
+        (high - prev_close).abs(),
+        (low - prev_close).abs()
+    ], axis=1).max(axis=1)
+    return tr.ewm(span=period, adjust=False).mean()
