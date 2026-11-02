@@ -99,7 +99,13 @@
       "target_3r": 92.25,
       "target_5r": 106.0,
       "entry_date": "2026-11-02",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 71.5,
+      "unrealized_pnl": -350.0,
+      "unrealized_pct": -0.69,
+      "dist_ema9_pct": 0.4,
+      "current_r": -0.07,
+      "total_pnl": -350.0
     },
     "SPRC": {
       "ticker": "SPRC",
@@ -113,7 +119,13 @@
       "target_3r": 15.2,
       "target_5r": 16.2,
       "entry_date": "2026-11-02",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 13.8,
+      "unrealized_pnl": 1000.0,
+      "unrealized_pct": 0.73,
+      "dist_ema9_pct": -4.0,
+      "current_r": 0.2,
+      "total_pnl": 1000.0
     },
     "COM7": {
       "ticker": "COM7",
@@ -127,7 +139,13 @@
       "target_3r": 37.0,
       "target_5r": 39.5,
       "entry_date": "2026-11-02",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 33.25,
+      "unrealized_pnl": 0.0,
+      "unrealized_pct": 0.0,
+      "dist_ema9_pct": 1.0,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     },
     "CENTEL": {
       "ticker": "CENTEL",
@@ -141,7 +159,13 @@
       "target_3r": 49.25,
       "target_5r": 52.25,
       "entry_date": "2026-11-02",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 44.5,
+      "unrealized_pnl": -825.0,
+      "unrealized_pct": -0.56,
+      "dist_ema9_pct": -0.5,
+      "current_r": -0.17,
+      "total_pnl": -825.0
     },
     "CBG": {
       "ticker": "CBG",
@@ -155,7 +179,13 @@
       "target_3r": 58.25,
       "target_5r": 62.25,
       "entry_date": "2026-11-02",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 53.25,
+      "unrealized_pnl": 2500.0,
+      "unrealized_pct": 1.91,
+      "dist_ema9_pct": 2.4,
+      "current_r": 0.5,
+      "total_pnl": 2500.0
     },
     "TFG": {
       "ticker": "TFG",
@@ -169,7 +199,13 @@
       "target_3r": 10.5,
       "target_5r": 11.0,
       "entry_date": "2026-11-02",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 9.55,
+      "unrealized_pnl": -4000.0,
+      "unrealized_pct": -2.05,
+      "dist_ema9_pct": 0.6,
+      "current_r": -0.8,
+      "total_pnl": -4000.0
     }
   },
   "trade_history": [
