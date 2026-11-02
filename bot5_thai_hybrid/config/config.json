@@ -77,10 +77,10 @@
       "target_5r": 18.4,
       "entry_date": "2026-10-31",
       "auto_paper_trade": true,
-      "current_price": 17.2,
-      "unrealized_pnl": 3540.01,
-      "current_r": 1.0,
-      "total_pnl": 3540.01
+      "current_price": 17.0,
+      "unrealized_pnl": 1180.0,
+      "current_r": 0.33,
+      "total_pnl": 1180.0
     },
     "KCE": {
       "ticker": "KCE",
@@ -95,10 +95,10 @@
       "target_5r": 86.25,
       "entry_date": "2026-10-31",
       "auto_paper_trade": true,
-      "current_price": 72.0,
-      "unrealized_pnl": 4550.0,
-      "current_r": 0.93,
-      "total_pnl": 4550.0
+      "current_price": 71.5,
+      "unrealized_pnl": 3850.0,
+      "current_r": 0.79,
+      "total_pnl": 3850.0
     },
     "CENTEL": {
       "ticker": "CENTEL",
@@ -113,10 +113,10 @@
       "target_5r": 50.75,
       "entry_date": "2026-10-31",
       "auto_paper_trade": true,
-      "current_price": 44.75,
-      "unrealized_pnl": 1000.0,
-      "current_r": 0.2,
-      "total_pnl": 1000.0
+      "current_price": 44.5,
+      "unrealized_pnl": 0.0,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     },
     "BH": {
       "ticker": "BH",
@@ -148,7 +148,11 @@
       "target_3r": 37.0,
       "target_5r": 39.5,
       "entry_date": "2026-11-02",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 33.25,
+      "unrealized_pnl": 0.0,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     },
     "TU": {
       "ticker": "TU",
@@ -162,7 +166,11 @@
       "target_3r": 13.8,
       "target_5r": 14.4,
       "entry_date": "2026-11-02",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 12.8,
+      "unrealized_pnl": -1550.0,
+      "current_r": -0.33,
+      "total_pnl": -1550.0
     },
     "STA": {
       "ticker": "STA",
@@ -176,7 +184,11 @@
       "target_3r": 23.6,
       "target_5r": 24.6,
       "entry_date": "2026-11-02",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 22.0,
+      "unrealized_pnl": -900.0,
+      "current_r": -0.2,
+      "total_pnl": -900.0
     }
   },
   "trade_history": [],
