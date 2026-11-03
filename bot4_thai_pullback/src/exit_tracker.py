@@ -2,9 +2,10 @@
 Exit Tracker & Trade Management for Thai Stocks (Step [4/4])
 - Monitors Active Positions against:
   * Stop Loss Hit (Full Exit)
+  * Intermediate Breakeven Ratchet (+1.5R Pre-TP1 Protection)
   * Target 3R Hit (Partial TP 1 + Move SL to Breakeven)
   * Target 5R Hit (Partial TP 2)
-  * Daily EMA 9 Trailing Stop for Runner
+  * Daily EMA Trailing Stop for Runner
   * Overextended / Climax Warning
 - Enforces Board Lot (100 shares multiples) on sales
 """
@@ -13,9 +14,9 @@ from typing import Dict, List, Optional, Tuple
 import pandas as pd
 
 try:
-    from .indicators import compute_ema, compute_atr, get_thai_tick_size
+    from .indicators import compute_ema, compute_atr, get_thai_tick_size, round_to_set_tick
 except ImportError:
-    from indicators import compute_ema, compute_atr, get_thai_tick_size
+    from indicators import compute_ema, compute_atr, get_thai_tick_size, round_to_set_tick
 
 
 class ThaiExitTracker:
@@ -26,6 +27,7 @@ class ThaiExitTracker:
         self.trailing_ema_period = int(config.get("trailing_ema", 9))
         self.overextended_pct = float(config.get("overextended_ema_threshold_pct", 12.0))
         self.board_lot = int(config.get("board_lot_size", 100))
+        self.be_ratchet_r = float(config.get("be_ratchet_r_multiple", 1.5))
 
     def evaluate_position(
         self, position: Dict, df: pd.DataFrame
@@ -51,10 +53,11 @@ class ThaiExitTracker:
         risk_per_share = float(pos["risk_per_share"])
         curr_shares = int(pos["current_shares"])
         initial_shares = int(pos.get("initial_shares", pos.get("shares", curr_shares)))
-        target_3r = float(pos["target_3r"])
-        target_5r = float(pos.get("target_5r", round(entry + 5.0 * risk_per_share, 2)))
+        target_3r = float(pos.get("target_3r", round_to_set_tick(entry + 3.0 * risk_per_share, mode="nearest")))
+        target_5r = float(pos.get("target_5r", round_to_set_tick(entry + 5.0 * risk_per_share, mode="nearest")))
         tp1_hit = bool(pos.get("tp1_hit", False))
         tp2_hit = bool(pos.get("tp2_hit", False))
+        be_ratchet_hit = bool(pos.get("be_ratchet_hit", pos.get("be_ratcheted", False)))
 
         pos["current_price"] = round(curr_close, 2)
         pos["unrealized_pnl"] = round((curr_close - entry) * curr_shares, 2)
@@ -67,7 +70,7 @@ class ThaiExitTracker:
             pos["status"] = "CLOSED_SL"
             pos["exit_price"] = exit_price
             pos["exit_date"] = date_str
-            pos["exit_reason"] = "Stop Loss Hit (-1R)" if not tp1_hit else "Breakeven Stop Loss Hit"
+            pos["exit_reason"] = "Breakeven Stop Loss Hit" if (tp1_hit or be_ratchet_hit) else "Stop Loss Hit (-1R)"
             pos["current_shares"] = 0
             pos["total_realized_pnl"] = round(pos.get("total_realized_pnl", 0.0) + pnl, 2)
             actions.append({
@@ -81,9 +84,28 @@ class ThaiExitTracker:
             self._update_metrics(pos, entry, risk_per_share, initial_shares, curr_close)
             return pos, actions
 
+        # 1.5 Intermediate Breakeven Ratchet (+1.5R Pre-TP1 Protection)
+        ratchet_price = round_to_set_tick(entry + (self.be_ratchet_r * risk_per_share), mode="nearest")
+        if not tp1_hit and not be_ratchet_hit and curr_high >= ratchet_price and curr_shares > 0:
+            pos["be_ratchet_hit"] = True
+            pos["be_ratcheted"] = True
+            pos["current_sl"] = round_to_set_tick(max(float(pos["current_sl"]), entry), mode="down")
+            sl = pos["current_sl"]
+            actions.append({
+                "type": "BREAKEVEN_RATCHET",
+                "ticker": tk,
+                "new_sl": pos["current_sl"],
+                "message": (
+                    f"🛡 <b>{tk} บวกทะลุ +{self.be_ratchet_r:.1f}R (@ {ratchet_price:.2f} บาท)</b>\n"
+                    f"• ยก Stop Loss มาบังทุนอัตโนมัติที่ <code>{pos['current_sl']:.2f} บาท</code> (ไร้ความเสี่ยงขาดทุน!)"
+                ),
+            })
+
         # 2. Target 3R Hit
         if not tp1_hit and curr_high >= target_3r and curr_shares > 0:
             pos["tp1_hit"] = True
+            pos["be_ratchet_hit"] = True
+            pos["be_ratcheted"] = True
             pos["current_sl"] = round(max(pos["current_sl"], entry), 2)  # Move SL to Breakeven
 
             if curr_shares <= self.board_lot:
@@ -267,4 +289,3 @@ class ThaiExitTracker:
         )
         pos["total_pnl"] = round(blended_pnl, 2)
         pos["current_price"] = round(curr_close, 2)
-
