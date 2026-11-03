@@ -2,20 +2,20 @@
   "bot_name": "Thai Trend Pullback & R-Multiple Bot (Bot 4)",
   "market": "TH",
   "currency": "฿",
-  "portfolio_equity": 1000000,
+  "portfolio_equity": 1000000.0,
   "risk_per_trade_pct": 0.5,
-  "max_allocation_per_trade_pct": 20,
+  "max_allocation_per_trade_pct": 20.0,
   "board_lot_size": 100,
-  "tp1_r_multiple": 3,
+  "tp1_r_multiple": 3.0,
   "tp1_sell_ratio": 0.5,
-  "tp2_r_multiple": 5,
+  "tp2_r_multiple": 5.0,
   "tp2_sell_ratio": 0.5,
   "trailing_ema": 9,
-  "overextended_ema_threshold_pct": 12,
+  "overextended_ema_threshold_pct": 12.0,
   "min_volume_20d": 200000,
   "min_dollar_volume_20d": 20000000,
-  "min_perf_3m_or_6m_pct": 15,
-  "top_rs_percentile": 70,
+  "min_perf_3m_or_6m_pct": 15.0,
+  "top_rs_percentile": 70.0,
   "universe": [
     "DELTA",
     "GULF",
@@ -234,5 +234,6 @@
       "exit_reason": "Stop Loss Hit (-1R)"
     }
   ],
-  "last_scan_date": "2026-11-02"
+  "last_scan_date": "2026-11-02",
+  "be_ratchet_r_multiple": 1.5
 }
