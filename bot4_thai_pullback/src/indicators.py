@@ -57,7 +57,7 @@ def step_tick_down(price: float) -> float:
     - 200.00 -> 199.50
     - 400.00 -> 399.00
     """
-    p = round(float(price), 4)
+    p = round_to_set_tick(price, mode="down")
     if p <= 0.01:
         return 0.01
     if 1.99 < p <= 2.00:
