@@ -30,80 +30,7 @@
       "auto_paper_trade": true
     }
   },
-  "trade_history": [
-    {
-      "ticker": "CRWD",
-      "entry_price": 268.02,
-      "exit_price": 250.43,
-      "buy_price": 268.02,
-      "sell_price": 250.43,
-      "shares": 1,
-      "realized_pnl": -17.59,
-      "r_multiple": -1.31,
-      "pnl_r": -1.31,
-      "pnl_pct": -6.56,
-      "buy_date": "2026-10-28",
-      "sell_date": "2026-10-30",
-      "entry_date": "2026-10-28",
-      "exit_date": "2026-10-30",
-      "days_held": 2,
-      "exit_reason": "Stop Loss Hit (-1R)"
-    },
-    {
-      "ticker": "RXRX",
-      "entry_price": 4.35,
-      "exit_price": 4.03,
-      "buy_price": 4.35,
-      "sell_price": 4.03,
-      "shares": 1,
-      "realized_pnl": -0.32,
-      "r_multiple": -1.45,
-      "pnl_r": -1.45,
-      "pnl_pct": -7.36,
-      "buy_date": "2026-10-29",
-      "sell_date": "2026-10-30",
-      "entry_date": "2026-10-29",
-      "exit_date": "2026-10-30",
-      "days_held": 1,
-      "exit_reason": "Stop Loss Hit (-1R)"
-    },
-    {
-      "ticker": "PANW",
-      "entry_price": 394.49,
-      "exit_price": 365.87,
-      "buy_price": 394.49,
-      "sell_price": 365.87,
-      "shares": 1,
-      "realized_pnl": -28.62,
-      "r_multiple": -1.45,
-      "pnl_r": -1.45,
-      "pnl_pct": -7.25,
-      "buy_date": "2026-10-29",
-      "sell_date": "2026-10-30",
-      "entry_date": "2026-10-29",
-      "exit_date": "2026-10-30",
-      "days_held": 1,
-      "exit_reason": "Stop Loss Hit (-1R)"
-    },
-    {
-      "ticker": "TEM",
-      "entry_price": 72.22,
-      "exit_price": 83.05,
-      "buy_price": 72.22,
-      "sell_price": 83.05,
-      "shares": 1,
-      "realized_pnl": 10.83,
-      "r_multiple": 3.0,
-      "pnl_r": 3.0,
-      "pnl_pct": 15.0,
-      "buy_date": "2026-10-30",
-      "sell_date": "2026-11-02",
-      "entry_date": "2026-10-30",
-      "exit_date": "2026-11-02",
-      "days_held": 3,
-      "exit_reason": "Target 3R Hit (100% Exit)"
-    }
-  ],
+  "trade_history": [],
   "tickers": [
     "ASTS",
     "AVGO",
@@ -168,5 +95,7 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-11-03"
+  "last_daily_scan_date": "2026-11-03",
+  "active_positions": {},
+  "last_scan_date": "2026-11-03"
 }
