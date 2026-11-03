@@ -172,6 +172,7 @@ def run_scan(config_path: str = "config/watchlist.json") -> List[Dict[str, Any]]
             updated_portfolio[tk] = pos
             continue
 
+        pos["ticker"] = tk
         latest_action = scan_results_map.get(tk, {}).get("latest", {}).get("action_today", "")
         up_pos, actions = exit_tracker.evaluate_position(pos, df_pos, action_today=latest_action)
         for act in actions:
