@@ -101,64 +101,6 @@
     "CRM"
   ],
   "active_positions": {},
-  "trade_history": [
-    {
-      "ticker": "PLTR",
-      "entry_date": "2026-10-30",
-      "exit_date": "2026-10-30",
-      "entry_price": 196.42,
-      "exit_price": 184.11000061035156,
-      "shares": 8,
-      "realized_pnl": -98.48,
-      "r_multiple": -1.98,
-      "exit_reason": "Stop Loss Hit"
-    },
-    {
-      "ticker": "AAPL",
-      "entry_date": "2026-10-30",
-      "exit_date": "2026-10-30",
-      "entry_price": 348.91,
-      "exit_price": 343.37,
-      "shares": 5,
-      "realized_pnl": -27.7,
-      "r_multiple": -0.77,
-      "exit_reason": "Stop Loss Hit"
-    },
-    {
-      "ticker": "CRWD",
-      "entry_date": "2026-10-30",
-      "exit_date": "2026-10-30",
-      "entry_price": 261.15,
-      "exit_price": 249.95,
-      "shares": 4,
-      "realized_pnl": -44.8,
-      "r_multiple": -0.96,
-      "exit_reason": "Stop Loss Hit"
-    },
-    {
-      "ticker": "PANW",
-      "entry_date": "2026-10-30",
-      "exit_date": "2026-10-30",
-      "entry_price": 380.57,
-      "exit_price": 365.8699951171875,
-      "shares": 3,
-      "realized_pnl": -44.1,
-      "r_multiple": -1.11,
-      "exit_reason": "Stop Loss Hit"
-    },
-    {
-      "ticker": "MSFT",
-      "entry_date": "2026-10-31",
-      "exit_date": "2026-11-02",
-      "entry_price": 521.91,
-      "exit_price": 507.1199951171875,
-      "shares": 3,
-      "realized_pnl": -44.37,
-      "r_multiple": -1.92,
-      "pnl_r": -1.92,
-      "pnl_pct": -2.83,
-      "exit_reason": "Stop Loss Hit (-1R)"
-    }
-  ],
+  "trade_history": [],
   "last_scan_date": "2026-11-03"
 }
