@@ -2,6 +2,7 @@ from datetime import datetime
 import os
 import sys
 import json
+import time
 import tempfile
 import html
 from dataclasses import asdict
@@ -29,13 +30,39 @@ def load_config():
 
 
 def save_config(cfg):
-    """Atomic state persistence using tempfile and os.replace."""
+    """Atomic state persistence using tempfile, fsync, and os.replace with Windows retry."""
     dir_name = os.path.dirname(os.path.abspath(CONFIG_PATH))
     os.makedirs(dir_name, exist_ok=True)
     temp_fd, temp_path = tempfile.mkstemp(dir=dir_name, text=True)
-    with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
-        json.dump(cfg, f, indent=2, ensure_ascii=False)
-    os.replace(temp_path, CONFIG_PATH)
+    try:
+        with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
+            json.dump(cfg, f, indent=2, ensure_ascii=False)
+            f.flush()
+            os.fsync(f.fileno())
+        for attempt in range(6):
+            try:
+                os.replace(temp_path, CONFIG_PATH)
+                break
+            except PermissionError:
+                if attempt == 5:
+                    raise
+                time.sleep(0.05 * (2 ** attempt))
+    finally:
+        if os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except OSError:
+                pass
+
+
+def _download_df(symbol: str, period: str = "3y") -> pd.DataFrame | None:
+    try:
+        df = yf.download(symbol, period=period, interval="1d", progress=False)
+        if df is not None and not df.empty and df.columns.nlevels > 1:
+            df.columns = df.columns.get_level_values(0)
+        return df
+    except Exception:
+        return None
 
 
 def send_weekly_summary(notifier, config, is_thai=False, bot_label="US HYBRID (Bot 5)"):
@@ -84,16 +111,11 @@ def run_pipeline():
     trade_history = config.get("trade_history", [])
     updated_active = {}
 
-    # 1. Evaluate Active Positions
+    # 1. Evaluate Active Positions (use 1y history so EMA 50 is fully converged)
     if active_positions:
         print(f"Evaluating {len(active_positions)} active positions...")
         for ticker, pos in list(active_positions.items()):
-            try:
-                df = yf.download(ticker, period="6mo", interval="1d", progress=False)
-                if df.columns.nlevels > 1:
-                    df.columns = df.columns.get_level_values(0)
-            except Exception:
-                df = None
+            df = _download_df(ticker, period="1y")
 
             if df is not None and len(df) >= 30:
                 up_pos, actions = exit_tracker.evaluate_position(pos, df)
@@ -131,65 +153,80 @@ def run_pipeline():
         config["active_positions"] = updated_active
         config["trade_history"] = trade_history
 
-    # 2. Scan Universe for New Signals
+    # 1.5 Evaluate Macro Benchmark Regime (SPY, QQQ, ^VIX)
+    macro_cfg = config.get("macro_regime", {})
+    macro_status = {"allow_new_entries": True, "regime_label": "RISK_ON", "reason": "OK"}
+    if macro_cfg.get("enabled", True):
+        spy_df = _download_df(macro_cfg.get("primary_benchmark", "SPY"), period="3y")
+        qqq_df = _download_df(macro_cfg.get("secondary_benchmark", "QQQ"), period="3y")
+        vix_df = _download_df(macro_cfg.get("vix_ticker", "^VIX"), period="6mo")
+        if spy_df is not None and len(spy_df) >= 200:
+            macro_status = engine.evaluate_macro_regime(spy_df, qqq_df, vix_df)
+            print(f"Macro Regime: {macro_status['regime_label']} ({macro_status['reason']})")
+
+    # 2. Scan Universe for New Signals (use 3y history so EMA 200 has >= 700 bars to converge)
     universe = config.get("universe", [])
-    print(f"Scanning {len(universe)} US Leaders...")
-
     new_signals = []
-    for ticker in universe:
-        if ticker in updated_active:
-            continue
-        try:
-            df = yf.download(ticker, period="1y", interval="1d", progress=False)
-            if df.columns.nlevels > 1:
-                df.columns = df.columns.get_level_values(0)
-        except Exception:
-            continue
 
-        sig = engine.evaluate_ticker(ticker, df)
-        if sig:
-            plan = risk_manager.calculate_trade_plan(
-                ticker=sig.ticker,
-                entry_price=sig.entry_price,
-                curr_low=sig.curr_low,
-                prior_low=sig.prior_low
-            )
-            # Only proceed if plan is viable and shares > 0
-            if plan.is_valid and plan.shares > 0:
-                s_dict = asdict(sig)
-                s_dict["curr_close"] = sig.entry_price
-                s_dict["curr_high"] = sig.entry_price * 1.01
-                s_dict["zone_bottom"] = sig.support_level * 0.99
-                s_dict["zone_top"] = sig.support_level * 1.01
-                s_dict["ema9"] = sig.entry_price
-                s_dict["ema21"] = sig.support_level
-                s_dict["avwap"] = sig.support_level
-                s_dict["prior_high"] = sig.entry_price
-                s_dict["is_first_retest"] = True
-                s_dict["reversal_confirmed"] = True
-                s_dict["in_pullback_zone"] = True
-                s_dict["stage"] = "Stage 2 (Pullback Retest)"
-                new_signals.append({
-                    "ticker": sig.ticker,
-                    "signal": sig,
-                    "setup": s_dict,
-                    "plan": plan,
-                    "close": sig.entry_price,
-                    "rs_percentile": 85,
-                    "ret_1m": sig.perf_3m / 3.0,
-                    "ret_3m": sig.perf_3m,
-                    "ret_6m": sig.perf_6m,
-                    "vol_20": getattr(sig, 'volume_20d', 1000000),
-                    "higher_low_ok": True,
-                    "vcp_ok": True,
-                    "ema_flattening_or_up": True
-                })
+    if macro_status.get("allow_new_entries", True):
+        print(f"Scanning {len(universe)} US Leaders...")
+        for ticker in universe:
+            if ticker in updated_active:
+                continue
+            df = _download_df(ticker, period="3y")
+            if df is None:
+                continue
+
+            sig = engine.evaluate_ticker(ticker, df)
+            if sig:
+                plan = risk_manager.calculate_trade_plan(
+                    ticker=sig.ticker,
+                    entry_price=sig.entry_price,
+                    curr_low=sig.curr_low,
+                    prior_low=sig.prior_low,
+                    atr=sig.atr
+                )
+                # Only proceed if plan is viable and shares > 0
+                if plan.is_valid and plan.shares > 0:
+                    s_dict = asdict(sig)
+                    s_dict["curr_close"] = sig.entry_price
+                    s_dict["curr_high"] = sig.entry_price * 1.01
+                    s_dict["zone_bottom"] = sig.support_level * 0.99
+                    s_dict["zone_top"] = sig.support_level * 1.01
+                    s_dict["ema9"] = sig.entry_price
+                    s_dict["ema21"] = sig.support_level
+                    s_dict["avwap"] = sig.support_level
+                    s_dict["prior_high"] = sig.entry_price
+                    s_dict["is_first_retest"] = True
+                    s_dict["reversal_confirmed"] = True
+                    s_dict["in_pullback_zone"] = True
+                    s_dict["stage"] = "Stage 2 (Pullback Retest)"
+                    new_signals.append({
+                        "ticker": sig.ticker,
+                        "signal": sig,
+                        "setup": s_dict,
+                        "plan": plan,
+                        "close": sig.entry_price,
+                        "rs_percentile": 85,
+                        "ret_1m": sig.perf_3m / 3.0,
+                        "ret_3m": sig.perf_3m,
+                        "ret_6m": sig.perf_6m,
+                        "vol_20": getattr(sig, 'volume_20d', 1000000),
+                        "higher_low_ok": True,
+                        "vcp_ok": True,
+                        "ema_flattening_or_up": True
+                    })
+    else:
+        print(f"Skipping new entries due to Macro Regime: {macro_status['reason']}")
 
     print(f"Found {len(new_signals)} valid US Hybrid setups!")
 
-    # 2.5 Auto-Paper Trade Entry (บันทึกเฉพาะตัวที่ผ่านกฎความเสี่ยงและมีจำนวนหุ้น > 0)
+    # 2.5 Auto-Paper Trade Entry (บันทึกเฉพาะตัวที่ผ่านกฎความเสี่ยงและมีจำนวนหุ้น > 0 และไม่เกิน max_open_positions)
+    max_open = int(config.get("max_open_positions", config.get("risk_management", {}).get("max_open_positions", 5)))
     auto_bought = []
     for item in new_signals:
+        if len(updated_active) >= max_open:
+            break
         s = item["signal"]
         p = item["plan"]
         tk = s.ticker
@@ -243,7 +280,10 @@ def run_pipeline():
             lines.append(f"🤖 <b>[Auto-Paper Trade]</b> บันทึกเข้าพอร์ต {len(auto_bought)} ตัวแล้ว")
             lines.append("")
     else:
-        lines.append("⚪ <b>ไม่มีสัญญาณซื้อใหม่</b>")
+        if not macro_status.get("allow_new_entries", True):
+            lines.append(f"🛡 <b>ชะลอการเปิดสถานะใหม่ (Macro Risk-Off)</b>\n<code>{html.escape(macro_status.get('reason', ''))}</code>")
+        else:
+            lines.append("⚪ <b>ไม่มีสัญญาณซื้อใหม่</b>")
 
     markup = {"inline_keyboard": buttons} if buttons else None
     notifier.send_message("\n".join(lines), reply_markup=markup)
