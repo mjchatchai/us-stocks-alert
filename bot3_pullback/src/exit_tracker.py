@@ -22,6 +22,7 @@ class ExitTracker:
         self.tp2_ratio = float(config.get("tp2_sell_ratio", 0.5))
         self.trailing_ema_period = int(config.get("trailing_ema", 9))
         self.overextended_pct = float(config.get("overextended_ema_threshold_pct", 15.0))
+        self.be_ratchet_r = float(config.get("be_ratchet_r_multiple", 1.5))
 
     def _update_metrics(
         self,
@@ -77,10 +78,11 @@ class ExitTracker:
         risk_per_share = float(pos["risk_per_share"])
         curr_shares = int(pos["current_shares"])
         initial_shares = int(pos.get("initial_shares", pos.get("shares", curr_shares)))
-        target_3r = float(pos["target_3r"])
-        target_5r = float(pos["target_5r"])
+        target_3r = float(pos.get("target_3r", round(entry + 3.0 * risk_per_share, 2)))
+        target_5r = float(pos.get("target_5r", round(entry + 5.0 * risk_per_share, 2)))
         tp1_hit = bool(pos.get("tp1_hit", False))
         tp2_hit = bool(pos.get("tp2_hit", False))
+        be_ratchet_hit = bool(pos.get("be_ratchet_hit", pos.get("be_ratcheted", False)))
 
         # Initial metrics calculation
         self._update_metrics(pos, entry, risk_per_share, initial_shares, curr_close)
@@ -92,7 +94,7 @@ class ExitTracker:
             pos["status"] = "CLOSED_SL"
             pos["exit_price"] = exit_price
             pos["exit_date"] = date_str
-            pos["exit_reason"] = "Stop Loss Hit"
+            pos["exit_reason"] = "Breakeven Stop Loss Hit" if (tp1_hit or be_ratchet_hit) else "Stop Loss Hit"
             pos["current_shares"] = 0
             pos["total_realized_pnl"] = round(pos.get("total_realized_pnl", 0.0) + pnl, 2)
             actions.append({
@@ -105,6 +107,23 @@ class ExitTracker:
             })
             self._update_metrics(pos, entry, risk_per_share, initial_shares, exit_price)
             return pos, actions
+
+        # 1.5 Intermediate Breakeven Ratchet (+1.5R Pre-TP1 Protection)
+        ratchet_price = round(entry + (self.be_ratchet_r * risk_per_share), 2)
+        if not tp1_hit and not be_ratchet_hit and curr_high >= ratchet_price and curr_shares > 0:
+            pos["be_ratchet_hit"] = True
+            pos["be_ratcheted"] = True
+            pos["current_sl"] = round(max(float(pos["current_sl"]), entry), 2)
+            sl = pos["current_sl"]
+            actions.append({
+                "type": "BREAKEVEN_RATCHET",
+                "ticker": pos["ticker"],
+                "new_sl": pos["current_sl"],
+                "message": (
+                    f"🛡 <b>${pos['ticker']} บวกทะลุ +{self.be_ratchet_r:.1f}R (@ ${ratchet_price:.2f})</b>\n"
+                    f"• ยก Stop Loss มาบังทุนอัตโนมัติที่ <code>${pos['current_sl']:.2f}</code> (ไร้ความเสี่ยงขาดทุน!)"
+                ),
+            })
 
         # 2. Check Target 3R (Take Profit 1)
         if not tp1_hit and curr_high >= target_3r and curr_shares > 0:
