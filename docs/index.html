@@ -487,8 +487,8 @@
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-title">💼 หุ้นที่ถืออยู่ในพอร์ตทั้งหมด</div>
-                <div class="kpi-value text-green">22 <span style="font-size: 14px; color: var(--text-muted);">ตัว</span></div>
-                <div class="kpi-sub">🇹🇭 หุ้นไทย: <b>19</b> | 🇺🇸 หุ้น US: <b>3</b></div>
+                <div class="kpi-value text-green">5 <span style="font-size: 14px; color: var(--text-muted);">ตัว</span></div>
+                <div class="kpi-sub">🇹🇭 หุ้นไทย: <b>4</b> | 🇺🇸 หุ้น US: <b>1</b></div>
             </div>
 
             <div class="kpi-card">
@@ -501,14 +501,14 @@
 
             <div class="kpi-card">
                 <div class="kpi-title">🏆 WIN RATE (ไม้ที่ปิดออเดอร์แล้ว)</div>
-                <div class="kpi-value">10.0%</div>
-                <div class="kpi-sub">ปิดแล้ว: <b>10</b> ไม้ (ชนะ 1 / แพ้ 9)</div>
+                <div class="kpi-value">0.0%</div>
+                <div class="kpi-sub">ปิดแล้ว: <b>0</b> ไม้ (ชนะ 0 / แพ้ 0)</div>
             </div>
 
             <div class="kpi-card">
                 <div class="kpi-title">🛡️ REALIZED NET PROFIT</div>
-                <div class="kpi-value text-red">
-                    -9.66R
+                <div class="kpi-value text-green">
+                    +0.00R
                 </div>
                 <div class="kpi-sub">ผลกำไรสุทธิสะสมจากออเดอร์ที่ปิดจริง (R-Multiples)</div>
             </div>
@@ -516,9 +516,9 @@
 
         <!-- Navigation Tabs -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('tab-portfolio')">💼 พอร์ตหุ้นรวม (22)</button>
+            <button class="tab-btn active" onclick="switchTab('tab-portfolio')">💼 พอร์ตหุ้นรวม (5)</button>
             <button class="tab-btn" onclick="switchTab('tab-leaderboard')">📊 ตารางเปรียบเทียบ 6 บอท</button>
-            <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการปิดออเดอร์ (10)</button>
+            <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการปิดออเดอร์ (0)</button>
             <button class="tab-btn" onclick="switchTab('tab-launchers')">🔗 เข้าหน้ารายละเอียดแยกบอท</button>
         </div>
 
@@ -526,9 +526,9 @@
         <div id="tab-portfolio" class="tab-section">
             <div class="filter-bar">
                 <div class="filter-pills">
-                    <button class="pill-btn active" onclick="filterPositions('all', this)">ทั้งหมด (22)</button>
-                    <button class="pill-btn" onclick="filterPositions('th', this)">🇹🇭 หุ้นไทย (19)</button>
-                    <button class="pill-btn" onclick="filterPositions('us', this)">🇺🇸 สหรัฐฯ (3)</button>
+                    <button class="pill-btn active" onclick="filterPositions('all', this)">ทั้งหมด (5)</button>
+                    <button class="pill-btn" onclick="filterPositions('th', this)">🇹🇭 หุ้นไทย (4)</button>
+                    <button class="pill-btn" onclick="filterPositions('us', this)">🇺🇸 สหรัฐฯ (1)</button>
                     <button class="pill-btn" onclick="filterPositions('bot1', this)">Bot 1 (US 6-Btn)</button>
                     <button class="pill-btn" onclick="filterPositions('bot2', this)">Bot 2 (TH 6-Btn)</button>
                     <button class="pill-btn" onclick="filterPositions('bot3', this)">Bot 3 (US Pullback)</button>
@@ -676,397 +676,6 @@
             </td>
         </tr>
         
-        <tr class="bot-row bot3 mkt-us">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('COST')">
-                    <span>🇺🇸</span>
-                    <b>COST</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 3: US Pullback</span></td>
-            <td><code>2026-10-31</code></td>
-            <td>1012.28 $</td>
-            <td><b>1012.28 $</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">968.35 $</td>
-            <td class="text-gold">1144.07 $</td>
-            <td class="text-green">1231.93 $</td>
-            <td>1</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('COST')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot3 mkt-us">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('TEM')">
-                    <span>🇺🇸</span>
-                    <b>TEM</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 3: US Pullback</span></td>
-            <td><code>2026-11-03</code></td>
-            <td>78.48 $</td>
-            <td><b>78.48 $</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">69.25 $</td>
-            <td class="text-gold">106.17 $</td>
-            <td class="text-green">124.63 $</td>
-            <td>5</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('TEM')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot4 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:BH')">
-                    <span>🇹🇭</span>
-                    <b>BH</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
-            <td><code>2026-10-31</code></td>
-            <td>203.00 ฿</td>
-            <td><b>203.00 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">194.50 ฿</td>
-            <td class="text-gold">228.00 ฿</td>
-            <td class="text-green">246.00 ฿</td>
-            <td>500</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:BH')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot4 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:KCE')">
-                    <span>🇹🇭</span>
-                    <b>KCE</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>72.00 ฿</td>
-            <td><b>72.00 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">65.25 ฿</td>
-            <td class="text-gold">92.25 ฿</td>
-            <td class="text-green">106.00 ฿</td>
-            <td>700</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:KCE')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot4 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:SPRC')">
-                    <span>🇹🇭</span>
-                    <b>SPRC</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>13.70 ฿</td>
-            <td><b>13.70 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">13.20 ฿</td>
-            <td class="text-gold">15.20 ฿</td>
-            <td class="text-green">16.20 ฿</td>
-            <td>10,000</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:SPRC')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot4 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:COM7')">
-                    <span>🇹🇭</span>
-                    <b>COM7</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>33.25 ฿</td>
-            <td><b>33.25 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">32.00 ฿</td>
-            <td class="text-gold">37.00 ฿</td>
-            <td class="text-green">39.50 ฿</td>
-            <td>4,000</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:COM7')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot4 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:CENTEL')">
-                    <span>🇹🇭</span>
-                    <b>CENTEL</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>44.75 ฿</td>
-            <td><b>44.75 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">43.25 ฿</td>
-            <td class="text-gold">49.25 ฿</td>
-            <td class="text-green">52.25 ฿</td>
-            <td>3,300</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:CENTEL')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot4 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:CBG')">
-                    <span>🇹🇭</span>
-                    <b>CBG</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>52.25 ฿</td>
-            <td><b>52.25 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">50.25 ฿</td>
-            <td class="text-gold">58.25 ฿</td>
-            <td class="text-green">62.25 ฿</td>
-            <td>2,500</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:CBG')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot4 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:TFG')">
-                    <span>🇹🇭</span>
-                    <b>TFG</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>9.75 ฿</td>
-            <td><b>9.75 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">9.50 ฿</td>
-            <td class="text-gold">10.50 ฿</td>
-            <td class="text-green">11.00 ฿</td>
-            <td>20,000</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:TFG')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot4 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:PTTEP')">
-                    <span>🇹🇭</span>
-                    <b>PTTEP</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
-            <td><code>2026-11-03</code></td>
-            <td>165.00 ฿</td>
-            <td><b>165.00 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">160.88 ฿</td>
-            <td class="text-gold">177.36 ฿</td>
-            <td class="text-green">185.60 ฿</td>
-            <td>1,200</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:PTTEP')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot6 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:ITC')">
-                    <span>🇹🇭</span>
-                    <b>ITC</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 6: TH Hybrid</span></td>
-            <td><code>2026-10-31</code></td>
-            <td>16.90 ฿</td>
-            <td><b>16.90 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">16.60 ฿</td>
-            <td class="text-gold">17.80 ฿</td>
-            <td class="text-green">18.40 ฿</td>
-            <td>11,800</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:ITC')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot6 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:KCE')">
-                    <span>🇹🇭</span>
-                    <b>KCE</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 6: TH Hybrid</span></td>
-            <td><code>2026-10-31</code></td>
-            <td>68.75 ฿</td>
-            <td><b>68.75 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">65.25 ฿</td>
-            <td class="text-gold">79.25 ฿</td>
-            <td class="text-green">86.25 ฿</td>
-            <td>1,400</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:KCE')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot6 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:CENTEL')">
-                    <span>🇹🇭</span>
-                    <b>CENTEL</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 6: TH Hybrid</span></td>
-            <td><code>2026-10-31</code></td>
-            <td>44.50 ฿</td>
-            <td><b>44.50 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">43.25 ฿</td>
-            <td class="text-gold">48.25 ฿</td>
-            <td class="text-green">50.75 ฿</td>
-            <td>4,000</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:CENTEL')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot6 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:BH')">
-                    <span>🇹🇭</span>
-                    <b>BH</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 6: TH Hybrid</span></td>
-            <td><code>2026-10-31</code></td>
-            <td>203.00 ฿</td>
-            <td><b>203.00 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">194.50 ฿</td>
-            <td class="text-gold">228.00 ฿</td>
-            <td class="text-green">246.00 ฿</td>
-            <td>500</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:BH')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot6 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:COM7')">
-                    <span>🇹🇭</span>
-                    <b>COM7</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 6: TH Hybrid</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>33.25 ฿</td>
-            <td><b>33.25 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">32.00 ฿</td>
-            <td class="text-gold">37.00 ฿</td>
-            <td class="text-green">39.50 ฿</td>
-            <td>4,000</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:COM7')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot6 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:TU')">
-                    <span>🇹🇭</span>
-                    <b>TU</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 6: TH Hybrid</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>12.90 ฿</td>
-            <td><b>12.90 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">12.60 ฿</td>
-            <td class="text-gold">13.80 ฿</td>
-            <td class="text-green">14.40 ฿</td>
-            <td>15,500</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:TU')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot6 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:STA')">
-                    <span>🇹🇭</span>
-                    <b>STA</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 6: TH Hybrid</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>22.10 ฿</td>
-            <td><b>22.10 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">21.60 ฿</td>
-            <td class="text-gold">23.60 ฿</td>
-            <td class="text-green">24.60 ฿</td>
-            <td>9,000</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:STA')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
                         </tbody>
                     </table>
                 </div>
@@ -1095,6 +704,22 @@
         <tr>
             <td><b>#1</b></td>
             <td>
+                <b>🇺🇸 Bot 1: US 6-Button</b>
+                <div style="font-size: 11px; color: var(--text-muted);">6-Button Multi-Layer Momentum</div>
+            </td>
+            <td><span class="badge badge-blue">US</span></td>
+            <td><b>1 ไม้</b></td>
+            <td>0 ไม้</td>
+            <td><b>0.0%</b></td>
+            <td><b class="text-green">+0.00R</b></td>
+            <td>
+                <a href="bot1.html" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
+            </td>
+        </tr>
+        
+        <tr>
+            <td><b>#2</b></td>
+            <td>
                 <b>🇹🇭 Bot 2: TH 6-Button</b>
                 <div style="font-size: 11px; color: var(--text-muted);">SET 6-Button Multi-Layer Momentum</div>
             </td>
@@ -1109,13 +734,13 @@
         </tr>
         
         <tr>
-            <td><b>#2</b></td>
+            <td><b>#3</b></td>
             <td>
                 <b>🇺🇸 Bot 3: US Pullback</b>
                 <div style="font-size: 11px; color: var(--text-muted);">Trend Confluence Support & Retest</div>
             </td>
             <td><span class="badge badge-blue">US</span></td>
-            <td><b>2 ไม้</b></td>
+            <td><b>0 ไม้</b></td>
             <td>0 ไม้</td>
             <td><b>0.0%</b></td>
             <td><b class="text-green">+0.00R</b></td>
@@ -1125,66 +750,50 @@
         </tr>
         
         <tr>
-            <td><b>#3</b></td>
-            <td>
-                <b>🇹🇭 Bot 6: TH Hybrid</b>
-                <div style="font-size: 11px; color: var(--text-muted);">SET Multi-Factor Hybrid Master</div>
-            </td>
-            <td><span class="badge badge-blue">TH</span></td>
-            <td><b>7 ไม้</b></td>
-            <td>0 ไม้</td>
-            <td><b>0.0%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td>
-                <a href="bot6.html" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
-            </td>
-        </tr>
-        
-        <tr>
             <td><b>#4</b></td>
-            <td>
-                <b>🇺🇸 Bot 1: US 6-Button</b>
-                <div style="font-size: 11px; color: var(--text-muted);">6-Button Multi-Layer Momentum</div>
-            </td>
-            <td><span class="badge badge-blue">US</span></td>
-            <td><b>1 ไม้</b></td>
-            <td>4 ไม้</td>
-            <td><b>25.0%</b></td>
-            <td><b class="text-red">-1.21R</b></td>
-            <td>
-                <a href="bot1.html" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
-            </td>
-        </tr>
-        
-        <tr>
-            <td><b>#5</b></td>
             <td>
                 <b>🇹🇭 Bot 4: TH Pullback</b>
                 <div style="font-size: 11px; color: var(--text-muted);">SET Confluence Support & Retest</div>
             </td>
             <td><span class="badge badge-blue">TH</span></td>
-            <td><b>8 ไม้</b></td>
-            <td>1 ไม้</td>
+            <td><b>0 ไม้</b></td>
+            <td>0 ไม้</td>
             <td><b>0.0%</b></td>
-            <td><b class="text-red">-1.71R</b></td>
+            <td><b class="text-green">+0.00R</b></td>
             <td>
                 <a href="bot4.html" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
             </td>
         </tr>
         
         <tr>
-            <td><b>#6</b></td>
+            <td><b>#5</b></td>
             <td>
                 <b>🇺🇸 Bot 5: US Hybrid</b>
                 <div style="font-size: 11px; color: var(--text-muted);">Multi-Factor Hybrid Master</div>
             </td>
             <td><span class="badge badge-blue">US</span></td>
             <td><b>0 ไม้</b></td>
-            <td>5 ไม้</td>
+            <td>0 ไม้</td>
             <td><b>0.0%</b></td>
-            <td><b class="text-red">-1.92R</b></td>
+            <td><b class="text-green">+0.00R</b></td>
             <td>
                 <a href="bot5.html" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
+            </td>
+        </tr>
+        
+        <tr>
+            <td><b>#6</b></td>
+            <td>
+                <b>🇹🇭 Bot 6: TH Hybrid</b>
+                <div style="font-size: 11px; color: var(--text-muted);">SET Multi-Factor Hybrid Master</div>
+            </td>
+            <td><span class="badge badge-blue">TH</span></td>
+            <td><b>0 ไม้</b></td>
+            <td>0 ไม้</td>
+            <td><b>0.0%</b></td>
+            <td><b class="text-green">+0.00R</b></td>
+            <td>
+                <a href="bot6.html" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
             </td>
         </tr>
         
@@ -1213,127 +822,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
-            <tr>
-                <td><b>🇺🇸 CRWD</b></td>
-                <td><span class="bot-pill">Bot 1: US 6-Button</span></td>
-                <td><code>2026-10-28</code></td>
-                <td><code>2026-10-30</code></td>
-                <td>268.02 $</td>
-                <td>250.43 $</td>
-                <td><b class="text-red">-6.56%</b></td>
-                <td><b class="text-red">-1.31R</b></td>
-                <td><span class="badge badge-blue">Stop Loss Hit (-1R)</span></td>
-            </tr>
-            
-            <tr>
-                <td><b>🇺🇸 RXRX</b></td>
-                <td><span class="bot-pill">Bot 1: US 6-Button</span></td>
-                <td><code>2026-10-29</code></td>
-                <td><code>2026-10-30</code></td>
-                <td>4.35 $</td>
-                <td>4.03 $</td>
-                <td><b class="text-red">-7.36%</b></td>
-                <td><b class="text-red">-1.45R</b></td>
-                <td><span class="badge badge-blue">Stop Loss Hit (-1R)</span></td>
-            </tr>
-            
-            <tr>
-                <td><b>🇺🇸 PANW</b></td>
-                <td><span class="bot-pill">Bot 1: US 6-Button</span></td>
-                <td><code>2026-10-29</code></td>
-                <td><code>2026-10-30</code></td>
-                <td>394.49 $</td>
-                <td>365.87 $</td>
-                <td><b class="text-red">-7.25%</b></td>
-                <td><b class="text-red">-1.45R</b></td>
-                <td><span class="badge badge-blue">Stop Loss Hit (-1R)</span></td>
-            </tr>
-            
-            <tr>
-                <td><b>🇺🇸 TEM</b></td>
-                <td><span class="bot-pill">Bot 1: US 6-Button</span></td>
-                <td><code>2026-10-30</code></td>
-                <td><code>2026-11-02</code></td>
-                <td>72.22 $</td>
-                <td>83.05 $</td>
-                <td><b class="text-green">+15.00%</b></td>
-                <td><b class="text-green">+3.00R</b></td>
-                <td><span class="badge badge-blue">Target 3R Hit (100% Exit)</span></td>
-            </tr>
-            
-            <tr>
-                <td><b>🇹🇭 PTTEP</b></td>
-                <td><span class="bot-pill">Bot 4: TH Pullback</span></td>
-                <td><code>2026-10-31</code></td>
-                <td><code>2026-11-02</code></td>
-                <td>165.00 ฿</td>
-                <td>159.00 ฿</td>
-                <td><b class="text-red">-3.64%</b></td>
-                <td><b class="text-red">-1.71R</b></td>
-                <td><span class="badge badge-blue">Stop Loss Hit (-1R)</span></td>
-            </tr>
-            
-            <tr>
-                <td><b>🇺🇸 PLTR</b></td>
-                <td><span class="bot-pill">Bot 5: US Hybrid</span></td>
-                <td><code>2026-10-30</code></td>
-                <td><code>2026-10-30</code></td>
-                <td>196.42 $</td>
-                <td>184.11 $</td>
-                <td><b class="text-red">+0.00%</b></td>
-                <td><b class="text-red">-1.98R</b></td>
-                <td><span class="badge badge-blue">Stop Loss Hit</span></td>
-            </tr>
-            
-            <tr>
-                <td><b>🇺🇸 AAPL</b></td>
-                <td><span class="bot-pill">Bot 5: US Hybrid</span></td>
-                <td><code>2026-10-30</code></td>
-                <td><code>2026-10-30</code></td>
-                <td>348.91 $</td>
-                <td>343.37 $</td>
-                <td><b class="text-red">+0.00%</b></td>
-                <td><b class="text-red">-0.77R</b></td>
-                <td><span class="badge badge-blue">Stop Loss Hit</span></td>
-            </tr>
-            
-            <tr>
-                <td><b>🇺🇸 CRWD</b></td>
-                <td><span class="bot-pill">Bot 5: US Hybrid</span></td>
-                <td><code>2026-10-30</code></td>
-                <td><code>2026-10-30</code></td>
-                <td>261.15 $</td>
-                <td>249.95 $</td>
-                <td><b class="text-red">+0.00%</b></td>
-                <td><b class="text-red">-0.96R</b></td>
-                <td><span class="badge badge-blue">Stop Loss Hit</span></td>
-            </tr>
-            
-            <tr>
-                <td><b>🇺🇸 PANW</b></td>
-                <td><span class="bot-pill">Bot 5: US Hybrid</span></td>
-                <td><code>2026-10-30</code></td>
-                <td><code>2026-10-30</code></td>
-                <td>380.57 $</td>
-                <td>365.87 $</td>
-                <td><b class="text-red">+0.00%</b></td>
-                <td><b class="text-red">-1.11R</b></td>
-                <td><span class="badge badge-blue">Stop Loss Hit</span></td>
-            </tr>
-            
-            <tr>
-                <td><b>🇺🇸 MSFT</b></td>
-                <td><span class="bot-pill">Bot 5: US Hybrid</span></td>
-                <td><code>2026-10-31</code></td>
-                <td><code>2026-11-02</code></td>
-                <td>521.91 $</td>
-                <td>507.12 $</td>
-                <td><b class="text-red">-2.83%</b></td>
-                <td><b class="text-red">-1.92R</b></td>
-                <td><span class="badge badge-blue">Stop Loss Hit (-1R)</span></td>
-            </tr>
-            
+                            <tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 25px;">ยังไม่มีรายการปิดออเดอร์ (ระบบกำลังรัน Forward Test ทุกออเดอร์)</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1426,7 +915,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>6-Bot Forward Testing Engine • Data as of <code>2026-11-03 03:24:23</code> • Auto-refreshes on GitHub Actions schedule</p>
+            <p>6-Bot Forward Testing Engine • Data as of <code>2026-11-03 03:53:02</code> • Auto-refreshes on GitHub Actions schedule</p>
         </footer>
     </div>
 
