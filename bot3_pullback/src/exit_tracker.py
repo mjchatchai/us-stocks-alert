@@ -110,7 +110,7 @@ class ExitTracker:
 
         # 1.5 Intermediate Breakeven Ratchet (+1.5R Pre-TP1 Protection)
         ratchet_price = round(entry + (self.be_ratchet_r * risk_per_share), 2)
-        if not tp1_hit and not be_ratchet_hit and curr_high >= ratchet_price and curr_shares > 0:
+        if not tp1_hit and not be_ratchet_hit and curr_high >= ratchet_price and curr_high < target_3r and curr_shares > 0:
             pos["be_ratchet_hit"] = True
             pos["be_ratcheted"] = True
             pos["current_sl"] = round(max(float(pos["current_sl"]), entry), 2)
