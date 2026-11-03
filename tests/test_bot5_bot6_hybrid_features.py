@@ -187,3 +187,41 @@ def test_macro_regime_gate_blocks_bear_market():
     res = engine.evaluate_macro_regime(spy_bear)
     assert res["allow_new_entries"] is False
     assert res["regime_label"] == "RISK_OFF"
+
+
+def test_bot3_and_bot4_1_5r_breakeven_ratchet():
+    """Verify Bot 3 (US Pullback) and Bot 4 (Thai Pullback) ratchet SL to Breakeven at +1.5R."""
+    from bot3_pullback.src.exit_tracker import ExitTracker as Bot3ExitTracker
+    from bot4_thai_pullback.src.exit_tracker import ThaiExitTracker as Bot4ExitTracker
+
+    df = _build_trending_df(n=100, start_price=100.0, step=0.2)
+    df.iloc[-1, df.columns.get_loc("Open")] = 106.0
+    df.iloc[-1, df.columns.get_loc("Low")] = 105.0
+    df.iloc[-1, df.columns.get_loc("High")] = 108.5
+    df.iloc[-1, df.columns.get_loc("Close")] = 107.5
+
+    pos_us = {
+        "ticker": "META",
+        "entry_price": 100.0,
+        "stop_loss": 95.0,
+        "current_sl": 95.0,
+        "risk_per_share": 5.0,
+        "shares": 10,
+        "current_shares": 10,
+        "initial_shares": 10,
+        "target_3r": 115.0,
+        "target_5r": 125.0,
+        "status": "OPEN",
+        "tp1_hit": False,
+    }
+    up_us, act_us = Bot3ExitTracker({}).evaluate_position(pos_us, df)
+    assert up_us["be_ratcheted"] is True
+    assert up_us["current_sl"] == 100.0
+    assert any(a["type"] == "BREAKEVEN_RATCHET" for a in act_us)
+
+    pos_th = dict(pos_us, ticker="ADVANC", shares=200, current_shares=200, initial_shares=200)
+    up_th, act_th = Bot4ExitTracker({}).evaluate_position(pos_th, df)
+    assert up_th["be_ratcheted"] is True
+    assert up_th["current_sl"] == 100.0
+    assert any(a["type"] == "BREAKEVEN_RATCHET" for a in act_th)
+
