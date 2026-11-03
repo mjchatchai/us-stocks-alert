@@ -1,6 +1,7 @@
 """
 Risk Management & Board Lot Enforcement for Bot 6 (Thai SET Hybrid Trend Scanner)
 Portfolio: 1,000,000 THB | Risk: 0.5% (5,000 THB) | Max Cap: 20% (200,000 THB) | Board Lot: 100 shares
+Enforces 100% Legal SET Tick Snapping on Entry, Stop Loss, and Profit Targets.
 """
 from dataclasses import dataclass
 from typing import Dict, Optional
@@ -35,19 +36,35 @@ class ThaiRiskManager:
         self.max_alloc_pct = float(config.get("max_allocation_per_trade_pct", 20.0))
         self.board_lot = int(config.get("board_lot_size", 100))
 
+        tm = config.get("trade_management", {})
+        self.atr_stop_mult = float(tm.get("atr_stop_multiplier", config.get("atr_stop_multiplier", 1.0)))
+        self.tp1_r_mult = float(tm.get("tp1_r_multiple", config.get("tp1_r_multiple", 3.0)))
+        self.tp2_r_mult = float(tm.get("tp2_r_multiple", config.get("tp2_r_multiple", 5.0)))
+
     def calculate_trade_plan(
         self,
         ticker: str,
         entry_price: float,
         curr_low: float,
         prior_low: float,
-        equity: Optional[float] = None
+        equity: Optional[float] = None,
+        atr: Optional[float] = None,
     ) -> ThaiTradePlan:
         port_equity = equity if equity is not None else self.portfolio_equity
+        entry_price = round_to_set_tick(entry_price, mode="nearest")
         raw_low = min(curr_low, prior_low)
 
-        # 1. Swing-low Stop Loss with boundary-aware SET tick stepping
-        stop_loss = step_tick_down(raw_low)
+        # 1. Sanitize raw_low to legal SET tick down, then step 1 legal tick down
+        legal_low = round_to_set_tick(raw_low, mode="down")
+        structural_sl = step_tick_down(legal_low)
+
+        if atr is not None and atr > 0:
+            atr_sl_raw = entry_price - (self.atr_stop_mult * float(atr))
+            atr_sl = round_to_set_tick(max(0.01, atr_sl_raw), mode="down")
+            stop_loss = min(structural_sl, atr_sl)
+        else:
+            stop_loss = structural_sl
+
         risk_per_share = round(entry_price - stop_loss, 2)
 
         if risk_per_share <= 0:
@@ -99,8 +116,8 @@ class ThaiRiskManager:
                     warning_note = f"จำกัดขนาดไม้ไม่เกิน {self.max_alloc_pct}% ({max_capital:,.0f} ฿) ความเสี่ยงจริง: {actual_risk:,.0f} ฿"
 
         # 4. Profit Targets snapped to legal SET ticks
-        target_3r = round_to_set_tick(entry_price + (3.0 * risk_per_share), mode="nearest")
-        target_5r = round_to_set_tick(entry_price + (5.0 * risk_per_share), mode="nearest")
+        target_3r = round_to_set_tick(entry_price + (self.tp1_r_mult * risk_per_share), mode="nearest")
+        target_5r = round_to_set_tick(entry_price + (self.tp2_r_mult * risk_per_share), mode="nearest")
 
         if target_5r <= target_3r:
             tick_size = get_thai_tick_size(target_3r)
@@ -122,5 +139,5 @@ class ThaiRiskManager:
             target_5r=target_5r,
             is_valid=is_valid,
             is_capped=is_capped,
-            warning_note=warning_note
+            warning_note=warning_note,
         )
