@@ -31,16 +31,25 @@ class US6ButtonExitTracker:
 
         ema21 = float(df["Close"].ewm(span=self.trailing_ema, adjust=False).mean().iloc[-1])
 
-        entry = float(pos.get("entry_price", pos.get("buy_price", curr_close)))
-        sl = float(pos.get("current_sl", pos.get("stop_loss", round(entry * 0.95, 2))))
-        risk_per_share = float(pos.get("risk_per_share", round(entry - sl, 2)))
+        entry = float(pos.get("entry_price") or pos.get("buy_price") or curr_close)
+        if entry <= 0:
+            entry = curr_close
+        sl = float(pos.get("current_sl") or pos.get("stop_loss") or round(entry * 0.95, 2))
+        risk_per_share = float(pos.get("risk_per_share") or max(0.01, round(entry - sl, 2)))
         curr_shares = int(pos.get("current_shares", pos.get("shares", 1)))
         initial_shares = int(pos.get("initial_shares", pos.get("shares", curr_shares)))
-        target_3r = float(pos.get("target_3r", round(entry + 3.0 * risk_per_share, 2)))
-        target_5r = float(pos.get("target_5r", round(entry + 5.0 * risk_per_share, 2)))
+        target_3r = float(pos.get("target_3r") or round(entry + 3.0 * risk_per_share, 2))
+        target_5r = float(pos.get("target_5r") or round(entry + 5.0 * risk_per_share, 2))
         tp1_hit = bool(pos.get("tp1_hit", False))
         tp2_hit = bool(pos.get("tp2_hit", False))
 
+        pos["entry_price"] = round(entry, 2)
+        pos["current_sl"] = round(sl, 2)
+        pos["risk_per_share"] = round(risk_per_share, 2)
+        pos["current_shares"] = curr_shares
+        pos["initial_shares"] = initial_shares
+        pos["target_3r"] = round(target_3r, 2)
+        pos["target_5r"] = round(target_5r, 2)
         pos["current_price"] = round(curr_close, 2)
         pos["unrealized_pnl"] = round((curr_close - entry) * curr_shares, 2)
 
@@ -69,7 +78,7 @@ class US6ButtonExitTracker:
         # 2. Target 3R Hit (TP1)
         if not tp1_hit and curr_high >= target_3r and curr_shares > 0:
             pos["tp1_hit"] = True
-            pos["current_sl"] = round(max(pos["current_sl"], entry), 2)  # Breakeven
+            pos["current_sl"] = round(max(float(pos.get("current_sl", sl)), entry), 2)  # Breakeven
 
             if curr_shares <= 1:
                 sell_qty = 1
