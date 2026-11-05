@@ -28,10 +28,10 @@
       "entry_date": "2026-11-02",
       "buy_price": 148.36,
       "auto_paper_trade": true,
-      "current_price": 144.67,
-      "unrealized_pnl": -14.76,
-      "current_r": -0.32,
-      "total_pnl": -14.76
+      "current_price": 150.36,
+      "unrealized_pnl": 8.0,
+      "current_r": 0.17,
+      "total_pnl": 8.0
     },
     "COST": {
       "ticker": "COST",
@@ -50,7 +50,11 @@
       "buy_date": "2026-11-03",
       "entry_date": "2026-11-03",
       "buy_price": 1019.26,
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 1046.47,
+      "unrealized_pnl": 27.21,
+      "current_r": 0.56,
+      "total_pnl": 27.21
     }
   },
   "trade_history": [],
@@ -118,7 +122,7 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-11-04",
+  "last_daily_scan_date": "2026-11-05",
   "active_positions": {},
   "last_scan_date": "2026-11-03"
 }
