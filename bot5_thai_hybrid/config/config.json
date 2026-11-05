@@ -115,7 +115,12 @@
       "target_3r": 37.0,
       "target_5r": 39.5,
       "entry_date": "2026-11-04",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 32.75,
+      "unrealized_pnl": -2000.0,
+      "bars_held": 1,
+      "current_r": -0.4,
+      "total_pnl": -2000.0
     },
     "BH": {
       "ticker": "BH",
@@ -129,9 +134,14 @@
       "target_3r": 212.0,
       "target_5r": 221.0,
       "entry_date": "2026-11-04",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 202.0,
+      "unrealized_pnl": 3500.0,
+      "bars_held": 1,
+      "current_r": 0.78,
+      "total_pnl": 3500.0
     }
   },
   "trade_history": [],
-  "last_scan_date": "2026-11-04"
+  "last_scan_date": "2026-11-05"
 }

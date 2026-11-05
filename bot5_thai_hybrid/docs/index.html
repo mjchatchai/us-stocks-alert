@@ -203,7 +203,7 @@
             <p>ระบบคัดกรองหุ้นนำตลาด SET + Macro Trend + ย่อทดสอบแนวรับรอบแรก + คุมความเสี่ยง Board Lot (100 หุ้น) และเป้า 3R/5R</p>
         </div>
         <div>
-            <span class="badge badge-blue">Last Scan: 2026-11-04</span>
+            <span class="badge badge-blue">Last Scan: 2026-11-05</span>
         </div>
     </div>
 
@@ -219,7 +219,7 @@
         </div>
         <div class="metric-card">
             <div class="label">🚀 สัญญาณซื้อวันนี้</div>
-            <div class="value text-green">2</div>
+            <div class="value text-green">0</div>
         </div>
         <div class="metric-card">
             <div class="label">📦 ออเดอร์ที่ถืออยู่ (Active)</div>
@@ -237,10 +237,10 @@
 
     <!-- Tabs -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (2)</button>
+        <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (0)</button>
         <button class="tab-btn" onclick="switchTab('tab-active')">💼 ออเดอร์ที่ถืออยู่ (2)</button>
-        <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (2)</button>
-        <button class="tab-btn" onclick="switchTab('tab-screener')">⭐ หุ้นแกร่ง VCP [1/4] (2)</button>
+        <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (0)</button>
+        <button class="tab-btn" onclick="switchTab('tab-screener')">⭐ หุ้นแกร่ง VCP [1/4] (0)</button>
         <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการเทรด (0)</button>
     </div>
 
@@ -263,33 +263,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('COM7')"><b>COM7</b></a></td>
-                        <td><b>33.25 ฿</b></td>
-                        <td class="text-red"><b>32.00 ฿</b> (-3.8%)</td>
-                        <td>1.25 ฿</td>
-                        <td class="text-gold"><b>37.00 ฿</b></td>
-                        <td class="text-green"><b>39.50 ฿</b></td>
-                        <td><b class="text-green">4,000 หุ้น</b></td>
-                        <td>133,000 ฿</td>
-                        <td>13.3%</td>
-                        <td><button class="btn-action" onclick="openChartModal('COM7')">📊 ดูกราฟ</button></td>
-                    </tr>
-            
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('BH')"><b>BH</b></a></td>
-                        <td><b>198.50 ฿</b></td>
-                        <td class="text-red"><b>194.00 ฿</b> (-2.3%)</td>
-                        <td>4.50 ฿</td>
-                        <td class="text-gold"><b>212.00 ฿</b></td>
-                        <td class="text-green"><b>221.00 ฿</b></td>
-                        <td><b class="text-green">1,000 หุ้น</b></td>
-                        <td>198,500 ฿</td>
-                        <td>19.9%</td>
-                        <td><button class="btn-action" onclick="openChartModal('BH')">📊 ดูกราฟ</button></td>
-                    </tr>
-            
+<tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 30px;">วันนี้ยังไม่มีสัญญาณเข้าซื้อใหม่ที่ตรงเงื่อนไขครบทุกข้อ (รอแท่งยืนยันแนวรับ)</td></tr>
                 </tbody>
             </table>
         </div>
@@ -319,13 +293,13 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('COM7')"><b>COM7</b></a></td>
                         <td>33.25 ฿</td>
-                        <td><b>33.25 ฿</b></td>
+                        <td><b>32.75 ฿</b></td>
                         <td><b>4,000</b> / 4,000</td>
                         <td class="text-red">32.00 ฿</td>
                         <td class="text-gold">37.00 ฿</td>
                         <td class="text-green">39.50 ฿</td>
-                        <td><b class="text-green">+0.00R</b></td>
-                        <td><b class="text-green">+0 ฿</b></td>
+                        <td><b class="text-red">-0.40R</b></td>
+                        <td><b class="text-red">-2,000 ฿</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('COM7')">📊 กราฟ</button></td>
                     </tr>
@@ -333,13 +307,13 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('BH')"><b>BH</b></a></td>
                         <td>198.50 ฿</td>
-                        <td><b>198.50 ฿</b></td>
+                        <td><b>202.00 ฿</b></td>
                         <td><b>1,000</b> / 1,000</td>
                         <td class="text-red">194.00 ฿</td>
                         <td class="text-gold">212.00 ฿</td>
                         <td class="text-green">221.00 ฿</td>
-                        <td><b class="text-green">+0.00R</b></td>
-                        <td><b class="text-green">+0 ฿</b></td>
+                        <td><b class="text-green">+0.78R</b></td>
+                        <td><b class="text-green">+3,500 ฿</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('BH')">📊 กราฟ</button></td>
                     </tr>
@@ -368,33 +342,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('COM7')"><b>COM7</b></a></td>
-                        <td><b>33.25 ฿</b></td>
-                        <td><b>85%</b></td>
-                        <td class="text-green">32.17 - 32.83 ฿</td>
-                        <td>33.25</td>
-                        <td>32.50</td>
-                        <td>32.50</td>
-                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
-                        <td><b class="text-gold">33.25 ฿</b></td>
-                        <td><button class="btn-action" onclick="openChartModal('COM7')">📊 กราฟ</button></td>
-                    </tr>
-            
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('BH')"><b>BH</b></a></td>
-                        <td><b>198.50 ฿</b></td>
-                        <td><b>85%</b></td>
-                        <td class="text-green">194.04 - 197.96 ฿</td>
-                        <td>198.50</td>
-                        <td>196.00</td>
-                        <td>196.00</td>
-                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
-                        <td><b class="text-gold">198.50 ฿</b></td>
-                        <td><button class="btn-action" onclick="openChartModal('BH')">📊 กราฟ</button></td>
-                    </tr>
-            
+<tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 30px;">ไม่มีหุ้นในโซนแนวรับขณะนี้</td></tr>
                 </tbody>
             </table>
         </div>
@@ -420,32 +368,6 @@
                 </thead>
                 <tbody>
 
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('COM7')"><b>COM7</b></a></td>
-                        <td>33.25 ฿</td>
-                        <td><b>85%</b></td>
-                        <td class="text-green">+3.0%</td>
-                        <td class="text-green"><b>+9.0%</b></td>
-                        <td class="text-green"><b>+53.9%</b></td>
-                        <td>0.0 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('BH')"><b>BH</b></a></td>
-                        <td>198.50 ฿</td>
-                        <td><b>85%</b></td>
-                        <td class="text-green">+2.5%</td>
-                        <td class="text-green"><b>+7.5%</b></td>
-                        <td class="text-green"><b>+19.1%</b></td>
-                        <td>0.0 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
                 </tbody>
             </table>
         </div>
