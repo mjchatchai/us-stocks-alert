@@ -62,9 +62,66 @@
     "CBRS",
     "PRCT"
   ],
-  "active_positions": {},
+  "active_positions": {
+    "AAPL": {
+      "ticker": "AAPL",
+      "entry_price": 349.51,
+      "current_sl": 320.45,
+      "stop_loss": 320.45,
+      "risk_per_share": 29.06,
+      "shares": 1,
+      "current_shares": 1,
+      "initial_shares": 1,
+      "target_3r": 436.69,
+      "target_5r": 494.81,
+      "entry_date": "2026-11-05",
+      "auto_paper_trade": true
+    },
+    "COST": {
+      "ticker": "COST",
+      "entry_price": 1046.47,
+      "current_sl": 1003.79,
+      "stop_loss": 1003.79,
+      "risk_per_share": 42.68,
+      "shares": 1,
+      "current_shares": 1,
+      "initial_shares": 1,
+      "target_3r": 1174.51,
+      "target_5r": 1259.87,
+      "entry_date": "2026-11-05",
+      "auto_paper_trade": true
+    },
+    "GS": {
+      "ticker": "GS",
+      "entry_price": 928.0,
+      "current_sl": 878.72,
+      "stop_loss": 878.72,
+      "risk_per_share": 49.28,
+      "shares": 1,
+      "current_shares": 1,
+      "initial_shares": 1,
+      "target_3r": 1075.84,
+      "target_5r": 1174.4,
+      "entry_date": "2026-11-05",
+      "auto_paper_trade": true
+    },
+    "JPM": {
+      "ticker": "JPM",
+      "entry_price": 352.11,
+      "current_sl": 330.78,
+      "stop_loss": 330.78,
+      "risk_per_share": 21.33,
+      "shares": 2,
+      "current_shares": 2,
+      "initial_shares": 2,
+      "target_3r": 416.1,
+      "target_5r": 458.76,
+      "entry_date": "2026-11-05",
+      "auto_paper_trade": true
+    }
+  },
   "trade_history": [],
-  "last_scan_date": "2026-11-04",
+  "last_scan_date": "2026-11-05",
   "last_telegram_update_id": 876479913,
   "be_ratchet_r_multiple": 1.5
 }
