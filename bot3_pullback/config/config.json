@@ -75,7 +75,13 @@
       "target_3r": 436.69,
       "target_5r": 494.81,
       "entry_date": "2026-11-05",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "unrealized_pnl": -5.34,
+      "unrealized_pct": -1.53,
+      "current_r": -0.18,
+      "total_pnl": -5.34,
+      "current_price": 344.17,
+      "dist_ema9_pct": 0.3
     },
     "COST": {
       "ticker": "COST",
@@ -89,21 +95,13 @@
       "target_3r": 1174.51,
       "target_5r": 1259.87,
       "entry_date": "2026-11-05",
-      "auto_paper_trade": true
-    },
-    "GS": {
-      "ticker": "GS",
-      "entry_price": 928.0,
-      "current_sl": 878.72,
-      "stop_loss": 878.72,
-      "risk_per_share": 49.28,
-      "shares": 1,
-      "current_shares": 1,
-      "initial_shares": 1,
-      "target_3r": 1075.84,
-      "target_5r": 1174.4,
-      "entry_date": "2026-11-05",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "unrealized_pnl": 19.12,
+      "unrealized_pct": 1.83,
+      "current_r": 0.45,
+      "total_pnl": 19.12,
+      "current_price": 1065.59,
+      "dist_ema9_pct": 4.0
     },
     "JPM": {
       "ticker": "JPM",
@@ -117,11 +115,31 @@
       "target_3r": 416.1,
       "target_5r": 458.76,
       "entry_date": "2026-11-05",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "unrealized_pnl": -29.54,
+      "unrealized_pct": -4.19,
+      "current_r": -0.69,
+      "total_pnl": -29.54,
+      "current_price": 337.34,
+      "dist_ema9_pct": -0.8
     }
   },
-  "trade_history": [],
-  "last_scan_date": "2026-11-05",
+  "trade_history": [
+    {
+      "ticker": "GS",
+      "entry_date": "2026-11-05",
+      "exit_date": "2026-11-05",
+      "entry_price": 928.0,
+      "exit_price": 868.9500122070312,
+      "shares": 1,
+      "realized_pnl": -59.05,
+      "r_multiple": -1.2,
+      "pnl_r": -1.2,
+      "pnl_pct": -6.36,
+      "exit_reason": "Stop Loss Hit"
+    }
+  ],
+  "last_scan_date": "2026-11-06",
   "last_telegram_update_id": 876479913,
   "be_ratchet_r_multiple": 1.5
 }
