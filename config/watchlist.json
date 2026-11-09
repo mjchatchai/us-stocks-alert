@@ -73,7 +73,11 @@
       "buy_date": "2026-11-05",
       "entry_date": "2026-11-05",
       "buy_price": 259.3,
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 259.3,
+      "unrealized_pnl": -0.0,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     }
   },
   "trade_history": [],
@@ -141,7 +145,7 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-11-07",
+  "last_daily_scan_date": "2026-11-09",
   "active_positions": {},
   "last_scan_date": "2026-11-03"
 }
