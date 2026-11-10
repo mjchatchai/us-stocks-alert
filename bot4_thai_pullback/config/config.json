@@ -80,12 +80,12 @@
       "target_5r": 66.0,
       "entry_date": "2026-11-03",
       "auto_paper_trade": true,
-      "current_price": 54.75,
-      "unrealized_pnl": 2500.0,
-      "unrealized_pct": 2.34,
-      "dist_ema9_pct": 1.7,
-      "current_r": 0.5,
-      "total_pnl": 2500.0
+      "current_price": 56.75,
+      "unrealized_pnl": 6500.0,
+      "unrealized_pct": 6.07,
+      "dist_ema9_pct": 4.3,
+      "current_r": 1.3,
+      "total_pnl": 6500.0
     },
     "TU": {
       "ticker": "TU",
@@ -100,12 +100,12 @@
       "target_5r": 16.6,
       "entry_date": "2026-11-03",
       "auto_paper_trade": true,
-      "current_price": 13.0,
-      "unrealized_pnl": -710.0,
-      "unrealized_pct": -0.76,
-      "dist_ema9_pct": 0.0,
-      "current_r": -0.14,
-      "total_pnl": -710.0
+      "current_price": 13.1,
+      "unrealized_pnl": 0.0,
+      "unrealized_pct": 0.0,
+      "dist_ema9_pct": 0.6,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     },
     "ITC": {
       "ticker": "ITC",
@@ -120,12 +120,12 @@
       "target_5r": 18.6,
       "entry_date": "2026-11-04",
       "auto_paper_trade": true,
-      "current_price": 17.0,
-      "unrealized_pnl": -1160.0,
-      "unrealized_pct": -0.58,
-      "dist_ema9_pct": -0.3,
-      "current_r": -0.33,
-      "total_pnl": -1160.0
+      "current_price": 17.2,
+      "unrealized_pnl": 1160.01,
+      "unrealized_pct": 0.58,
+      "dist_ema9_pct": 0.7,
+      "current_r": 0.33,
+      "total_pnl": 1160.01
     },
     "CENTEL": {
       "ticker": "CENTEL",
@@ -140,12 +140,12 @@
       "target_5r": 59.0,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "current_price": 43.5,
-      "unrealized_pnl": -3150.0,
-      "unrealized_pct": -3.87,
-      "dist_ema9_pct": -1.7,
-      "current_r": -0.64,
-      "total_pnl": -3150.0
+      "current_price": 44.5,
+      "unrealized_pnl": -1350.0,
+      "unrealized_pct": -1.66,
+      "dist_ema9_pct": 0.4,
+      "current_r": -0.27,
+      "total_pnl": -1350.0
     },
     "WHA": {
       "ticker": "WHA",
@@ -160,12 +160,12 @@
       "target_5r": 6.4,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "current_price": 4.84,
-      "unrealized_pnl": -2492.0,
-      "unrealized_pct": -2.81,
-      "dist_ema9_pct": -0.7,
-      "current_r": -0.5,
-      "total_pnl": -2492.0
+      "current_price": 5.2,
+      "unrealized_pnl": 3916.0,
+      "unrealized_pct": 4.42,
+      "dist_ema9_pct": 5.2,
+      "current_r": 0.79,
+      "total_pnl": 3916.0
     },
     "AOT": {
       "ticker": "AOT",
@@ -180,12 +180,12 @@
       "target_5r": 75.0,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "current_price": 60.0,
-      "unrealized_pnl": -2250.0,
-      "unrealized_pct": -2.04,
-      "dist_ema9_pct": -0.1,
-      "current_r": -0.45,
-      "total_pnl": -2250.0
+      "current_price": 61.25,
+      "unrealized_pnl": 0.0,
+      "unrealized_pct": 0.0,
+      "dist_ema9_pct": 1.6,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     },
     "BA": {
       "ticker": "BA",
@@ -200,12 +200,12 @@
       "target_5r": 23.5,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "current_price": 18.5,
-      "unrealized_pnl": -2750.0,
-      "unrealized_pct": -2.63,
-      "dist_ema9_pct": -0.2,
-      "current_r": -0.56,
-      "total_pnl": -2750.0
+      "current_price": 20.0,
+      "unrealized_pnl": 5500.0,
+      "unrealized_pct": 5.26,
+      "dist_ema9_pct": 6.2,
+      "current_r": 1.11,
+      "total_pnl": 5500.0
     },
     "BDMS": {
       "ticker": "BDMS",
@@ -219,6 +219,68 @@
       "target_3r": 21.6,
       "target_5r": 22.6,
       "entry_date": "2026-11-09",
+      "auto_paper_trade": true,
+      "current_price": 20.0,
+      "unrealized_pnl": -990.0,
+      "unrealized_pct": -0.5,
+      "dist_ema9_pct": 0.7,
+      "current_r": -0.2,
+      "total_pnl": -990.0
+    },
+    "COM7": {
+      "ticker": "COM7",
+      "entry_price": 32.75,
+      "current_sl": 31.75,
+      "stop_loss": 31.75,
+      "risk_per_share": 1.0,
+      "shares": 5000,
+      "current_shares": 5000,
+      "initial_shares": 5000,
+      "target_3r": 35.75,
+      "target_5r": 37.75,
+      "entry_date": "2026-11-10",
+      "auto_paper_trade": true
+    },
+    "KBANK": {
+      "ticker": "KBANK",
+      "entry_price": 243.0,
+      "current_sl": 238.0,
+      "stop_loss": 238.0,
+      "risk_per_share": 5.0,
+      "shares": 800,
+      "current_shares": 800,
+      "initial_shares": 800,
+      "target_3r": 258.0,
+      "target_5r": 268.0,
+      "entry_date": "2026-11-10",
+      "auto_paper_trade": true
+    },
+    "SCB": {
+      "ticker": "SCB",
+      "entry_price": 151.0,
+      "current_sl": 148.0,
+      "stop_loss": 148.0,
+      "risk_per_share": 3.0,
+      "shares": 1300,
+      "current_shares": 1300,
+      "initial_shares": 1300,
+      "target_3r": 160.0,
+      "target_5r": 166.0,
+      "entry_date": "2026-11-10",
+      "auto_paper_trade": true
+    },
+    "PR9": {
+      "ticker": "PR9",
+      "entry_price": 18.8,
+      "current_sl": 18.3,
+      "stop_loss": 18.3,
+      "risk_per_share": 0.5,
+      "shares": 10000,
+      "current_shares": 10000,
+      "initial_shares": 10000,
+      "target_3r": 20.3,
+      "target_5r": 21.3,
+      "entry_date": "2026-11-10",
       "auto_paper_trade": true
     }
   },
@@ -263,6 +325,6 @@
       "exit_reason": "Stop Loss Hit (-1R)"
     }
   ],
-  "last_scan_date": "2026-11-09",
+  "last_scan_date": "2026-11-10",
   "be_ratchet_r_multiple": 1.5
 }
