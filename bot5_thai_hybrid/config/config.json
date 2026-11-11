@@ -115,7 +115,12 @@
       "target_3r": 35.75,
       "target_5r": 37.75,
       "entry_date": "2026-11-10",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "current_price": 32.25,
+      "unrealized_pnl": -2500.0,
+      "bars_held": 1,
+      "current_r": -0.5,
+      "total_pnl": -2500.0
     }
   },
   "trade_history": [
@@ -146,5 +151,5 @@
       "exit_reason": "Stop Loss Hit (-1R)"
     }
   ],
-  "last_scan_date": "2026-11-10"
+  "last_scan_date": "2026-11-11"
 }
