@@ -203,7 +203,7 @@
             <p>ระบบคัดกรองหุ้นนำตลาด + ย่อทดสอบแนวรับรอบแรก (First Retest) + บริหารความเสี่ยง Board Lot (100 หุ้น) และเป้า 3R/5R</p>
         </div>
         <div>
-            <span class="badge badge-blue">Last Scan: 2026-11-12</span>
+            <span class="badge badge-blue">Last Scan: 2026-11-13</span>
         </div>
     </div>
 
@@ -219,11 +219,11 @@
         </div>
         <div class="metric-card">
             <div class="label">🚀 สัญญาณซื้อวันนี้</div>
-            <div class="value text-green">1</div>
+            <div class="value text-green">8</div>
         </div>
         <div class="metric-card">
             <div class="label">📦 ออเดอร์ที่ถืออยู่ (Active)</div>
-            <div class="value">11</div>
+            <div class="value">14</div>
         </div>
         <div class="metric-card">
             <div class="label">💵 กำไรที่รับรู้แล้ว (Realized)</div>
@@ -237,9 +237,9 @@
 
     <!-- Tabs -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (1)</button>
-        <button class="tab-btn" onclick="switchTab('tab-active')">💼 ออเดอร์ที่ถืออยู่ (11)</button>
-        <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (7)</button>
+        <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (8)</button>
+        <button class="tab-btn" onclick="switchTab('tab-active')">💼 ออเดอร์ที่ถืออยู่ (14)</button>
+        <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (10)</button>
         <button class="tab-btn" onclick="switchTab('tab-screener')">⭐ หุ้นแกร่ง VCP [1/4] (38)</button>
         <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการเทรด (4)</button>
     </div>
@@ -265,16 +265,107 @@
                 <tbody>
 
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('CENTEL')"><b>CENTEL</b></a></td>
-                        <td><b>45.00 ฿</b></td>
-                        <td class="text-red"><b>43.50 ฿</b> (-3.3%)</td>
-                        <td>1.50 ฿</td>
-                        <td class="text-gold"><b>49.50 ฿</b></td>
-                        <td class="text-green"><b>52.50 ฿</b></td>
-                        <td><b class="text-green">3,300 หุ้น</b></td>
-                        <td>148,500 ฿</td>
-                        <td>14.8%</td>
-                        <td><button class="btn-action" onclick="openChartModal('CENTEL')">📊 ดูกราฟ</button></td>
+                        <td><a class="ticker-link" onclick="openChartModal('KTB')"><b>KTB</b></a></td>
+                        <td><b>44.00 ฿</b></td>
+                        <td class="text-red"><b>42.00 ฿</b> (-4.5%)</td>
+                        <td>2.00 ฿</td>
+                        <td class="text-gold"><b>50.00 ฿</b></td>
+                        <td class="text-green"><b>54.00 ฿</b></td>
+                        <td><b class="text-green">2,500 หุ้น</b></td>
+                        <td>110,000 ฿</td>
+                        <td>11.0%</td>
+                        <td><button class="btn-action" onclick="openChartModal('KTB')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('KBANK')"><b>KBANK</b></a></td>
+                        <td><b>254.00 ฿</b></td>
+                        <td class="text-red"><b>242.00 ฿</b> (-4.7%)</td>
+                        <td>12.00 ฿</td>
+                        <td class="text-gold"><b>290.00 ฿</b></td>
+                        <td class="text-green"><b>314.00 ฿</b></td>
+                        <td><b class="text-green">400 หุ้น</b></td>
+                        <td>101,600 ฿</td>
+                        <td>10.2%</td>
+                        <td><button class="btn-action" onclick="openChartModal('KBANK')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('SCB')"><b>SCB</b></a></td>
+                        <td><b>154.50 ฿</b></td>
+                        <td class="text-red"><b>151.50 ฿</b> (-1.9%)</td>
+                        <td>3.00 ฿</td>
+                        <td class="text-gold"><b>163.50 ฿</b></td>
+                        <td class="text-green"><b>169.50 ฿</b></td>
+                        <td><b class="text-green">1,200 หุ้น</b></td>
+                        <td>185,400 ฿</td>
+                        <td>18.5%</td>
+                        <td><button class="btn-action" onclick="openChartModal('SCB')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('AOT')"><b>AOT</b></a></td>
+                        <td><b>61.75 ฿</b></td>
+                        <td class="text-red"><b>60.75 ฿</b> (-1.6%)</td>
+                        <td>1.00 ฿</td>
+                        <td class="text-gold"><b>64.75 ฿</b></td>
+                        <td class="text-green"><b>66.75 ฿</b></td>
+                        <td><b class="text-green">3,200 หุ้น</b></td>
+                        <td>197,600 ฿</td>
+                        <td>19.8%</td>
+                        <td><button class="btn-action" onclick="openChartModal('AOT')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('BDMS')"><b>BDMS</b></a></td>
+                        <td><b>20.10 ฿</b></td>
+                        <td class="text-red"><b>19.70 ฿</b> (-2.0%)</td>
+                        <td>0.40 ฿</td>
+                        <td class="text-gold"><b>21.30 ฿</b></td>
+                        <td class="text-green"><b>22.10 ฿</b></td>
+                        <td><b class="text-green">9,900 หุ้น</b></td>
+                        <td>198,990 ฿</td>
+                        <td>19.9%</td>
+                        <td><button class="btn-action" onclick="openChartModal('BDMS')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TISCO')"><b>TISCO</b></a></td>
+                        <td><b>127.50 ฿</b></td>
+                        <td class="text-red"><b>124.00 ฿</b> (-2.8%)</td>
+                        <td>3.50 ฿</td>
+                        <td class="text-gold"><b>138.00 ฿</b></td>
+                        <td class="text-green"><b>145.00 ฿</b></td>
+                        <td><b class="text-green">1,400 หุ้น</b></td>
+                        <td>178,500 ฿</td>
+                        <td>17.9%</td>
+                        <td><button class="btn-action" onclick="openChartModal('TISCO')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TTB')"><b>TTB</b></a></td>
+                        <td><b>2.72 ฿</b></td>
+                        <td class="text-red"><b>2.66 ฿</b> (-2.2%)</td>
+                        <td>0.06 ฿</td>
+                        <td class="text-gold"><b>2.90 ฿</b></td>
+                        <td class="text-green"><b>3.02 ฿</b></td>
+                        <td><b class="text-green">73,500 หุ้น</b></td>
+                        <td>199,920 ฿</td>
+                        <td>20.0%</td>
+                        <td><button class="btn-action" onclick="openChartModal('TTB')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PR9')"><b>PR9</b></a></td>
+                        <td><b>18.80 ฿</b></td>
+                        <td class="text-red"><b>18.30 ฿</b> (-2.7%)</td>
+                        <td>0.50 ฿</td>
+                        <td class="text-gold"><b>20.30 ฿</b></td>
+                        <td class="text-green"><b>21.30 ฿</b></td>
+                        <td><b class="text-green">10,000 หุ้น</b></td>
+                        <td>188,000 ฿</td>
+                        <td>18.8%</td>
+                        <td><button class="btn-action" onclick="openChartModal('PR9')">📊 ดูกราฟ</button></td>
                     </tr>
             
                 </tbody>
@@ -320,13 +411,13 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('TU')"><b>TU</b></a></td>
                         <td>13.10 ฿</td>
-                        <td><b>13.30 ฿</b></td>
+                        <td><b>13.40 ฿</b></td>
                         <td><b>7,100</b> / 7,100</td>
                         <td class="text-red">12.40 ฿</td>
                         <td class="text-gold">15.20 ฿</td>
                         <td class="text-green">16.60 ฿</td>
-                        <td><b class="text-green">+0.29R</b></td>
-                        <td><b class="text-green">+1,420 ฿</b></td>
+                        <td><b class="text-green">+0.43R</b></td>
+                        <td><b class="text-green">+2,130 ฿</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('TU')">📊 กราฟ</button></td>
                     </tr>
@@ -348,13 +439,13 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('CENTEL')"><b>CENTEL</b></a></td>
                         <td>45.25 ฿</td>
-                        <td><b>45.00 ฿</b></td>
+                        <td><b>47.00 ฿</b></td>
                         <td><b>1,800</b> / 1,800</td>
                         <td class="text-red">42.50 ฿</td>
                         <td class="text-gold">53.50 ฿</td>
                         <td class="text-green">59.00 ฿</td>
-                        <td><b class="text-red">-0.09R</b></td>
-                        <td><b class="text-red">-450 ฿</b></td>
+                        <td><b class="text-green">+0.64R</b></td>
+                        <td><b class="text-green">+3,150 ฿</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('CENTEL')">📊 กราฟ</button></td>
                     </tr>
@@ -362,13 +453,13 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('WHA')"><b>WHA</b></a></td>
                         <td>4.98 ฿</td>
-                        <td><b>5.10 ฿</b></td>
+                        <td><b>4.96 ฿</b></td>
                         <td><b>17,800</b> / 17,800</td>
                         <td class="text-red">4.70 ฿</td>
                         <td class="text-gold">5.80 ฿</td>
                         <td class="text-green">6.40 ฿</td>
-                        <td><b class="text-green">+0.43R</b></td>
-                        <td><b class="text-green">+2,136 ฿</b></td>
+                        <td><b class="text-red">-0.07R</b></td>
+                        <td><b class="text-red">-356 ฿</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('WHA')">📊 กราฟ</button></td>
                     </tr>
@@ -404,13 +495,13 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('BDMS')"><b>BDMS</b></a></td>
                         <td>20.10 ฿</td>
-                        <td><b>19.80 ฿</b></td>
+                        <td><b>20.10 ฿</b></td>
                         <td><b>9,900</b> / 9,900</td>
                         <td class="text-red">19.60 ฿</td>
                         <td class="text-gold">21.60 ฿</td>
                         <td class="text-green">22.60 ฿</td>
-                        <td><b class="text-red">-0.60R</b></td>
-                        <td><b class="text-red">-2,970 ฿</b></td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">+0 ฿</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('BDMS')">📊 กราฟ</button></td>
                     </tr>
@@ -418,13 +509,13 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('KBANK')"><b>KBANK</b></a></td>
                         <td>243.00 ฿</td>
-                        <td><b>246.00 ฿</b></td>
+                        <td><b>254.00 ฿</b></td>
                         <td><b>800</b> / 800</td>
-                        <td class="text-red">238.00 ฿</td>
+                        <td class="text-red">243.00 ฿</td>
                         <td class="text-gold">258.00 ฿</td>
                         <td class="text-green">268.00 ฿</td>
-                        <td><b class="text-green">+0.60R</b></td>
-                        <td><b class="text-green">+2,400 ฿</b></td>
+                        <td><b class="text-green">+2.20R</b></td>
+                        <td><b class="text-green">+8,800 ฿</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('KBANK')">📊 กราฟ</button></td>
                     </tr>
@@ -432,13 +523,13 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('SCB')"><b>SCB</b></a></td>
                         <td>151.00 ฿</td>
-                        <td><b>153.00 ฿</b></td>
+                        <td><b>154.50 ฿</b></td>
                         <td><b>1,300</b> / 1,300</td>
                         <td class="text-red">148.00 ฿</td>
                         <td class="text-gold">160.00 ฿</td>
                         <td class="text-green">166.00 ฿</td>
-                        <td><b class="text-green">+0.67R</b></td>
-                        <td><b class="text-green">+2,600 ฿</b></td>
+                        <td><b class="text-green">+1.17R</b></td>
+                        <td><b class="text-green">+4,550 ฿</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('SCB')">📊 กราฟ</button></td>
                     </tr>
@@ -446,15 +537,57 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('PR9')"><b>PR9</b></a></td>
                         <td>18.80 ฿</td>
-                        <td><b>18.60 ฿</b></td>
+                        <td><b>18.80 ฿</b></td>
                         <td><b>10,000</b> / 10,000</td>
                         <td class="text-red">18.30 ฿</td>
                         <td class="text-gold">20.30 ฿</td>
                         <td class="text-green">21.30 ฿</td>
-                        <td><b class="text-red">-0.40R</b></td>
-                        <td><b class="text-red">-2,000 ฿</b></td>
+                        <td><b class="text-green">-0.00R</b></td>
+                        <td><b class="text-red">-0 ฿</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('PR9')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('KTB')"><b>KTB</b></a></td>
+                        <td>44.00 ฿</td>
+                        <td><b>44.00 ฿</b></td>
+                        <td><b>2,500</b> / 2,500</td>
+                        <td class="text-red">42.00 ฿</td>
+                        <td class="text-gold">50.00 ฿</td>
+                        <td class="text-green">54.00 ฿</td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">+0 ฿</b></td>
+                        <td><span class="badge badge-blue">รันเทรนด์</span></td>
+                        <td><button class="btn-action" onclick="openChartModal('KTB')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TISCO')"><b>TISCO</b></a></td>
+                        <td>127.50 ฿</td>
+                        <td><b>127.50 ฿</b></td>
+                        <td><b>1,400</b> / 1,400</td>
+                        <td class="text-red">124.00 ฿</td>
+                        <td class="text-gold">138.00 ฿</td>
+                        <td class="text-green">145.00 ฿</td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">+0 ฿</b></td>
+                        <td><span class="badge badge-blue">รันเทรนด์</span></td>
+                        <td><button class="btn-action" onclick="openChartModal('TISCO')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TTB')"><b>TTB</b></a></td>
+                        <td>2.72 ฿</td>
+                        <td><b>2.72 ฿</b></td>
+                        <td><b>73,500</b> / 73,500</td>
+                        <td class="text-red">2.66 ฿</td>
+                        <td class="text-gold">2.90 ฿</td>
+                        <td class="text-green">3.02 ฿</td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">+0 ฿</b></td>
+                        <td><span class="badge badge-blue">รันเทรนด์</span></td>
+                        <td><button class="btn-action" onclick="openChartModal('TTB')">📊 กราฟ</button></td>
                     </tr>
             
                 </tbody>
@@ -483,94 +616,133 @@
                 <tbody>
 
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('CENTEL')"><b>CENTEL</b></a></td>
-                        <td><b>45.00 ฿</b></td>
-                        <td><b>100.0%</b></td>
-                        <td class="text-green">43.95 - 44.44 ฿</td>
-                        <td>44.44</td>
-                        <td>44.33</td>
-                        <td>43.95</td>
-                        <td><span class="badge badge-blue">ทั่วไป</span></td>
-                        <td><b class="text-gold">44.50 ฿</b></td>
-                        <td><button class="btn-action" onclick="openChartModal('CENTEL')">📊 กราฟ</button></td>
-                    </tr>
-            
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('COM7')"><b>COM7</b></a></td>
-                        <td><b>32.50 ฿</b></td>
-                        <td><b>94.7%</b></td>
-                        <td class="text-green">31.24 - 32.57 ฿</td>
-                        <td>32.57</td>
-                        <td>32.48</td>
-                        <td>31.24</td>
-                        <td><span class="badge badge-blue">ทั่วไป</span></td>
-                        <td><b class="text-gold">32.75 ฿</b></td>
-                        <td><button class="btn-action" onclick="openChartModal('COM7')">📊 กราฟ</button></td>
-                    </tr>
-            
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('CBG')"><b>CBG</b></a></td>
-                        <td><b>55.75 ฿</b></td>
+                        <td><a class="ticker-link" onclick="openChartModal('KTB')"><b>KTB</b></a></td>
+                        <td><b>44.00 ฿</b></td>
                         <td><b>92.1%</b></td>
-                        <td class="text-green">52.83 - 55.05 ฿</td>
-                        <td>55.05</td>
-                        <td>53.88</td>
-                        <td>52.83</td>
+                        <td class="text-green">42.63 - 43.00 ฿</td>
+                        <td>42.92</td>
+                        <td>43.00</td>
+                        <td>42.63</td>
                         <td><span class="badge badge-blue">ทั่วไป</span></td>
-                        <td><b class="text-gold">57.00 ฿</b></td>
-                        <td><button class="btn-action" onclick="openChartModal('CBG')">📊 กราฟ</button></td>
+                        <td><b class="text-gold">42.75 ฿</b></td>
+                        <td><button class="btn-action" onclick="openChartModal('KTB')">📊 กราฟ</button></td>
                     </tr>
             
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('KBANK')"><b>KBANK</b></a></td>
-                        <td><b>246.00 ฿</b></td>
+                        <td><b>254.00 ฿</b></td>
                         <td><b>89.5%</b></td>
-                        <td class="text-green">239.73 - 243.62 ฿</td>
-                        <td>243.62</td>
-                        <td>242.72</td>
-                        <td>239.73</td>
+                        <td class="text-green">240.53 - 245.69 ฿</td>
+                        <td>245.69</td>
+                        <td>243.74</td>
+                        <td>240.53</td>
                         <td><span class="badge badge-blue">ทั่วไป</span></td>
                         <td><b class="text-gold">247.00 ฿</b></td>
                         <td><button class="btn-action" onclick="openChartModal('KBANK')">📊 กราฟ</button></td>
                     </tr>
             
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('TU')"><b>TU</b></a></td>
-                        <td><b>13.30 ฿</b></td>
-                        <td><b>78.9%</b></td>
-                        <td class="text-green">12.81 - 13.12 ฿</td>
-                        <td>13.12</td>
-                        <td>12.98</td>
-                        <td>12.81</td>
+                        <td><a class="ticker-link" onclick="openChartModal('CBG')"><b>CBG</b></a></td>
+                        <td><b>55.75 ฿</b></td>
+                        <td><b>86.8%</b></td>
+                        <td class="text-green">52.89 - 55.19 ฿</td>
+                        <td>55.19</td>
+                        <td>54.05</td>
+                        <td>52.89</td>
                         <td><span class="badge badge-green">รอบแรก (First)</span></td>
-                        <td><b class="text-gold">13.40 ฿</b></td>
-                        <td><button class="btn-action" onclick="openChartModal('TU')">📊 กราฟ</button></td>
+                        <td><b class="text-gold">57.25 ฿</b></td>
+                        <td><button class="btn-action" onclick="openChartModal('CBG')">📊 กราฟ</button></td>
                     </tr>
             
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('SCB')"><b>SCB</b></a></td>
-                        <td><b>153.00 ฿</b></td>
-                        <td><b>76.3%</b></td>
-                        <td class="text-green">150.31 - 151.61 ฿</td>
-                        <td>151.61</td>
-                        <td>150.96</td>
-                        <td>150.31</td>
+                        <td><b>154.50 ฿</b></td>
+                        <td><b>81.6%</b></td>
+                        <td class="text-green">150.54 - 152.19 ฿</td>
+                        <td>152.19</td>
+                        <td>151.28</td>
+                        <td>150.54</td>
                         <td><span class="badge badge-blue">ทั่วไป</span></td>
-                        <td><b class="text-gold">154.00 ฿</b></td>
+                        <td><b class="text-gold">153.50 ฿</b></td>
                         <td><button class="btn-action" onclick="openChartModal('SCB')">📊 กราฟ</button></td>
                     </tr>
             
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('AOT')"><b>AOT</b></a></td>
                         <td><b>61.75 ฿</b></td>
-                        <td><b>73.7%</b></td>
-                        <td class="text-green">59.77 - 60.74 ฿</td>
-                        <td>60.74</td>
-                        <td>60.32</td>
-                        <td>59.77</td>
+                        <td><b>78.9%</b></td>
+                        <td class="text-green">59.82 - 60.94 ฿</td>
+                        <td>60.94</td>
+                        <td>60.45</td>
+                        <td>59.82</td>
                         <td><span class="badge badge-blue">ทั่วไป</span></td>
                         <td><b class="text-gold">61.75 ฿</b></td>
                         <td><button class="btn-action" onclick="openChartModal('AOT')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('BDMS')"><b>BDMS</b></a></td>
+                        <td><b>20.10 ฿</b></td>
+                        <td><b>73.7%</b></td>
+                        <td class="text-green">19.50 - 19.92 ฿</td>
+                        <td>19.92</td>
+                        <td>19.76</td>
+                        <td>19.50</td>
+                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
+                        <td><b class="text-gold">20.10 ฿</b></td>
+                        <td><button class="btn-action" onclick="openChartModal('BDMS')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TISCO')"><b>TISCO</b></a></td>
+                        <td><b>127.50 ฿</b></td>
+                        <td><b>71.1%</b></td>
+                        <td class="text-green">125.13 - 125.36 ฿</td>
+                        <td>125.36</td>
+                        <td>125.13</td>
+                        <td>125.24</td>
+                        <td><span class="badge badge-blue">ทั่วไป</span></td>
+                        <td><b class="text-gold">126.00 ฿</b></td>
+                        <td><button class="btn-action" onclick="openChartModal('TISCO')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TTB')"><b>TTB</b></a></td>
+                        <td><b>2.72 ฿</b></td>
+                        <td><b>68.4%</b></td>
+                        <td class="text-green">2.71 - 2.75 ฿</td>
+                        <td>2.70</td>
+                        <td>2.75</td>
+                        <td>2.71</td>
+                        <td><span class="badge badge-blue">ทั่วไป</span></td>
+                        <td><b class="text-gold">2.72 ฿</b></td>
+                        <td><button class="btn-action" onclick="openChartModal('TTB')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TU')"><b>TU</b></a></td>
+                        <td><b>13.40 ฿</b></td>
+                        <td><b>52.6%</b></td>
+                        <td class="text-green">12.82 - 13.18 ฿</td>
+                        <td>13.18</td>
+                        <td>13.02</td>
+                        <td>12.82</td>
+                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
+                        <td><b class="text-gold">13.40 ฿</b></td>
+                        <td><button class="btn-action" onclick="openChartModal('TU')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PR9')"><b>PR9</b></a></td>
+                        <td><b>18.80 ฿</b></td>
+                        <td><b>42.1%</b></td>
+                        <td class="text-green">18.59 - 18.73 ฿</td>
+                        <td>18.68</td>
+                        <td>18.73</td>
+                        <td>18.59</td>
+                        <td><span class="badge badge-blue">ทั่วไป</span></td>
+                        <td><b class="text-gold">18.80 ฿</b></td>
+                        <td><button class="btn-action" onclick="openChartModal('PR9')">📊 กราฟ</button></td>
                     </tr>
             
                 </tbody>
@@ -599,169 +771,143 @@
                 <tbody>
 
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('CENTEL')"><b>CENTEL</b></a></td>
-                        <td>45.00 ฿</td>
+                        <td><a class="ticker-link" onclick="openChartModal('SPRC')"><b>SPRC</b></a></td>
+                        <td>13.40 ฿</td>
                         <td><b>100.0%</b></td>
-                        <td class="text-green">+3.5%</td>
-                        <td class="text-green"><b>+9.8%</b></td>
-                        <td class="text-green"><b>+45.2%</b></td>
-                        <td>153.4 ล้านบาท/วัน</td>
+                        <td class="text-red">-11.8%</td>
+                        <td class="text-green"><b>+23.4%</b></td>
+                        <td class="text-green"><b>+99.2%</b></td>
+                        <td>537.4 ล้านบาท/วัน</td>
+                        <td>⚪</td>
+                        <td>🟢 บีบแคบ (0.86x)</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('CENTEL')"><b>CENTEL</b></a></td>
+                        <td>47.00 ฿</td>
+                        <td><b>97.4%</b></td>
+                        <td class="text-green">+6.8%</td>
+                        <td class="text-green"><b>+8.7%</b></td>
+                        <td class="text-green"><b>+54.1%</b></td>
+                        <td>163.2 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.9x)</td>
+                        <td>🟢 บีบแคบ (0.94x)</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('BANPU')"><b>BANPU</b></a></td>
                         <td>13.90 ฿</td>
-                        <td><b>97.4%</b></td>
+                        <td><b>94.7%</b></td>
                         <td class="text-green">+17.8%</td>
                         <td class="text-green"><b>+19.8%</b></td>
                         <td class="text-green"><b>+26.7%</b></td>
-                        <td>87.5 ล้านบาท/วัน</td>
+                        <td>85.7 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
                         <td>🟢 บีบแคบ (1.0x)</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('COM7')"><b>COM7</b></a></td>
-                        <td>32.50 ฿</td>
-                        <td><b>94.7%</b></td>
-                        <td class="text-green">+0.0%</td>
-                        <td class="text-green"><b>+10.2%</b></td>
-                        <td class="text-green"><b>+36.5%</b></td>
-                        <td>330.6 ล้านบาท/วัน</td>
+                        <td><a class="ticker-link" onclick="openChartModal('KTB')"><b>KTB</b></a></td>
+                        <td>44.00 ฿</td>
+                        <td><b>92.1%</b></td>
+                        <td class="text-green">+5.4%</td>
+                        <td class="text-green"><b>+1.1%</b></td>
+                        <td class="text-green"><b>+36.8%</b></td>
+                        <td>2215.5 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.04x)</td>
+                        <td>🟢 บีบแคบ (0.97x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('KBANK')"><b>KBANK</b></a></td>
+                        <td>254.00 ฿</td>
+                        <td><b>89.5%</b></td>
+                        <td class="text-green">+10.0%</td>
+                        <td class="text-green"><b>+2.8%</b></td>
+                        <td class="text-green"><b>+30.0%</b></td>
+                        <td>2837.6 ล้านบาท/วัน</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (1.01x)</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('CBG')"><b>CBG</b></a></td>
                         <td>55.75 ฿</td>
-                        <td><b>92.1%</b></td>
-                        <td class="text-green">+12.6%</td>
-                        <td class="text-green"><b>+10.7%</b></td>
-                        <td class="text-green"><b>+40.1%</b></td>
-                        <td>194.6 ล้านบาท/วัน</td>
+                        <td><b>86.8%</b></td>
+                        <td class="text-green">+11.5%</td>
+                        <td class="text-green"><b>+8.1%</b></td>
+                        <td class="text-green"><b>+41.0%</b></td>
+                        <td>193.0 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
                         <td>⚪ ปกติ</td>
                         <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('KBANK')"><b>KBANK</b></a></td>
-                        <td>246.00 ฿</td>
-                        <td><b>89.5%</b></td>
-                        <td class="text-green">+7.9%</td>
-                        <td class="text-red"><b>-0.4%</b></td>
-                        <td class="text-green"><b>+27.2%</b></td>
-                        <td>2873.1 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.96x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('SPRC')"><b>SPRC</b></a></td>
-                        <td>13.20 ฿</td>
-                        <td><b>86.8%</b></td>
-                        <td class="text-red">-18.0%</td>
-                        <td class="text-green"><b>+20.5%</b></td>
-                        <td class="text-green"><b>+93.5%</b></td>
-                        <td>590.8 ล้านบาท/วัน</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (0.81x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('KTB')"><b>KTB</b></a></td>
-                        <td>42.75 ฿</td>
-                        <td><b>84.2%</b></td>
-                        <td class="text-green">+1.8%</td>
-                        <td class="text-red"><b>-2.9%</b></td>
-                        <td class="text-green"><b>+31.9%</b></td>
-                        <td>2200.6 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.97x)</td>
-                        <td>🔴 ชี้ลง</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('BA')"><b>BA</b></a></td>
                         <td>19.80 ฿</td>
-                        <td><b>81.6%</b></td>
-                        <td class="text-green">+4.8%</td>
-                        <td class="text-green"><b>+8.4%</b></td>
-                        <td class="text-green"><b>+43.5%</b></td>
-                        <td>152.7 ล้านบาท/วัน</td>
+                        <td><b>84.2%</b></td>
+                        <td class="text-green">+4.2%</td>
+                        <td class="text-green"><b>+3.4%</b></td>
+                        <td class="text-green"><b>+47.7%</b></td>
+                        <td>154.8 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
                         <td>⚪ ปกติ</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('TU')"><b>TU</b></a></td>
-                        <td>13.30 ฿</td>
-                        <td><b>78.9%</b></td>
-                        <td class="text-green">+4.7%</td>
-                        <td class="text-green"><b>+3.1%</b></td>
-                        <td class="text-green"><b>+18.2%</b></td>
-                        <td>185.2 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.18x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('SCB')"><b>SCB</b></a></td>
-                        <td>153.00 ฿</td>
-                        <td><b>76.3%</b></td>
-                        <td class="text-green">+5.9%</td>
-                        <td class="text-green"><b>+2.0%</b></td>
-                        <td class="text-green"><b>+17.4%</b></td>
-                        <td>1747.4 ล้านบาท/วัน</td>
+                        <td>154.50 ฿</td>
+                        <td><b>81.6%</b></td>
+                        <td class="text-green">+5.5%</td>
+                        <td class="text-green"><b>+2.7%</b></td>
+                        <td class="text-green"><b>+19.1%</b></td>
+                        <td>1781.2 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.92x)</td>
+                        <td>🟢 บีบแคบ (0.89x)</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('AOT')"><b>AOT</b></a></td>
                         <td>61.75 ฿</td>
-                        <td><b>73.7%</b></td>
-                        <td class="text-green">+6.0%</td>
-                        <td class="text-red"><b>-2.0%</b></td>
-                        <td class="text-green"><b>+20.5%</b></td>
-                        <td>1601.9 ล้านบาท/วัน</td>
+                        <td><b>78.9%</b></td>
+                        <td class="text-green">+6.5%</td>
+                        <td class="text-red"><b>-2.8%</b></td>
+                        <td class="text-green"><b>+21.7%</b></td>
+                        <td>1518.9 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.83x)</td>
+                        <td>🟢 บีบแคบ (0.77x)</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('HANA')"><b>HANA</b></a></td>
-                        <td>48.00 ฿</td>
-                        <td><b>71.1%</b></td>
-                        <td class="text-red">-8.1%</td>
-                        <td class="text-green"><b>+33.3%</b></td>
-                        <td class="text-green"><b>+39.1%</b></td>
-                        <td>1410.6 ล้านบาท/วัน</td>
+                        <td><a class="ticker-link" onclick="openChartModal('KCE')"><b>KCE</b></a></td>
+                        <td>59.00 ฿</td>
+                        <td><b>76.3%</b></td>
+                        <td class="text-red">-22.1%</td>
+                        <td class="text-green"><b>+24.9%</b></td>
+                        <td class="text-green"><b>+79.4%</b></td>
+                        <td>2222.8 ล้านบาท/วัน</td>
                         <td>⚪</td>
-                        <td>⚪ ปกติ</td>
+                        <td>🟢 บีบแคบ (0.88x)</td>
                         <td>🔴 ชี้ลง</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('BDMS')"><b>BDMS</b></a></td>
-                        <td>19.80 ฿</td>
-                        <td><b>68.4%</b></td>
-                        <td class="text-green">+4.2%</td>
-                        <td class="text-green"><b>+2.3%</b></td>
-                        <td class="text-green"><b>+9.5%</b></td>
-                        <td>1353.4 ล้านบาท/วัน</td>
+                        <td>20.10 ฿</td>
+                        <td><b>73.7%</b></td>
+                        <td class="text-green">+5.2%</td>
+                        <td class="text-green"><b>+4.3%</b></td>
+                        <td class="text-green"><b>+11.2%</b></td>
+                        <td>1322.4 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
                         <td>🟢 บีบแคบ (0.89x)</td>
                         <td>🟢 ชี้ขึ้น</td>
@@ -769,103 +915,181 @@
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('TISCO')"><b>TISCO</b></a></td>
-                        <td>125.00 ฿</td>
-                        <td><b>65.8%</b></td>
-                        <td class="text-green">+1.2%</td>
-                        <td class="text-red"><b>-1.6%</b></td>
-                        <td class="text-green"><b>+13.4%</b></td>
-                        <td>274.6 ล้านบาท/วัน</td>
+                        <td>127.50 ฿</td>
+                        <td><b>71.1%</b></td>
+                        <td class="text-green">+2.4%</td>
+                        <td class="text-green"><b>+0.8%</b></td>
+                        <td class="text-green"><b>+15.2%</b></td>
+                        <td>275.2 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.03x)</td>
+                        <td>🟢 บีบแคบ (1.08x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TTB')"><b>TTB</b></a></td>
+                        <td>2.72 ฿</td>
+                        <td><b>68.4%</b></td>
+                        <td class="text-red">-6.2%</td>
+                        <td class="text-red"><b>-8.6%</b></td>
+                        <td class="text-green"><b>+24.8%</b></td>
+                        <td>1030.4 ล้านบาท/วัน</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (0.86x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('BBL')"><b>BBL</b></a></td>
+                        <td>185.50 ฿</td>
+                        <td><b>65.8%</b></td>
+                        <td class="text-green">+0.8%</td>
+                        <td class="text-red"><b>-2.1%</b></td>
+                        <td class="text-green"><b>+14.7%</b></td>
+                        <td>1408.4 ล้านบาท/วัน</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (0.89x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('COM7')"><b>COM7</b></a></td>
+                        <td>31.75 ฿</td>
+                        <td><b>63.2%</b></td>
+                        <td class="text-red">-3.8%</td>
+                        <td class="text-green"><b>+5.8%</b></td>
+                        <td class="text-green"><b>+34.0%</b></td>
+                        <td>344.5 ล้านบาท/วัน</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (1.14x)</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('ITC')"><b>ITC</b></a></td>
                         <td>17.20 ฿</td>
-                        <td><b>63.2%</b></td>
+                        <td><b>60.5%</b></td>
                         <td class="text-green">+2.4%</td>
-                        <td class="text-green"><b>+0.6%</b></td>
-                        <td class="text-green"><b>+9.6%</b></td>
-                        <td>95.8 ล้านบาท/วัน</td>
+                        <td class="text-red"><b>-0.6%</b></td>
+                        <td class="text-green"><b>+11.0%</b></td>
+                        <td>91.8 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.81x)</td>
+                        <td>🟢 บีบแคบ (0.78x)</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('BBL')"><b>BBL</b></a></td>
-                        <td>182.00 ฿</td>
-                        <td><b>60.5%</b></td>
-                        <td class="text-green">+0.3%</td>
-                        <td class="text-red"><b>-4.0%</b></td>
-                        <td class="text-green"><b>+12.8%</b></td>
-                        <td>1353.7 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.91x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('KCE')"><b>KCE</b></a></td>
-                        <td>58.25 ฿</td>
+                        <td><a class="ticker-link" onclick="openChartModal('CPN')"><b>CPN</b></a></td>
+                        <td>66.25 ฿</td>
                         <td><b>57.9%</b></td>
-                        <td class="text-red">-26.0%</td>
-                        <td class="text-green"><b>+32.3%</b></td>
-                        <td class="text-green"><b>+84.0%</b></td>
-                        <td>2235.6 ล้านบาท/วัน</td>
-                        <td>⚪</td>
-                        <td>⚪ ปกติ</td>
-                        <td>🔴 ชี้ลง</td>
+                        <td class="text-green">+5.6%</td>
+                        <td class="text-green"><b>+0.4%</b></td>
+                        <td class="text-green"><b>+4.3%</b></td>
+                        <td>466.4 ล้านบาท/วัน</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (0.95x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('GULF')"><b>GULF</b></a></td>
-                        <td>62.75 ฿</td>
+                        <td>62.50 ฿</td>
                         <td><b>55.3%</b></td>
-                        <td class="text-green">+3.7%</td>
-                        <td class="text-red"><b>-3.5%</b></td>
-                        <td class="text-green"><b>+4.6%</b></td>
-                        <td>2362.4 ล้านบาท/วัน</td>
+                        <td class="text-green">+2.9%</td>
+                        <td class="text-red"><b>-3.9%</b></td>
+                        <td class="text-green"><b>+6.4%</b></td>
+                        <td>2286.1 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.18x)</td>
+                        <td>🟢 บีบแคบ (1.03x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TU')"><b>TU</b></a></td>
+                        <td>13.40 ฿</td>
+                        <td><b>52.6%</b></td>
+                        <td class="text-green">+6.3%</td>
+                        <td class="text-green"><b>+3.1%</b></td>
+                        <td class="text-green"><b>+21.2%</b></td>
+                        <td>181.4 ล้านบาท/วัน</td>
+                        <td>🟢 ยก Low</td>
+                        <td>⚪ ปกติ</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('SPCG')"><b>SPCG</b></a></td>
                         <td>10.60 ฿</td>
-                        <td><b>52.6%</b></td>
-                        <td class="text-red">-13.1%</td>
-                        <td class="text-green"><b>+14.0%</b></td>
-                        <td class="text-green"><b>+17.1%</b></td>
-                        <td>56.0 ล้านบาท/วัน</td>
+                        <td><b>50.0%</b></td>
+                        <td class="text-red">-10.9%</td>
+                        <td class="text-green"><b>+13.4%</b></td>
+                        <td class="text-green"><b>+18.4%</b></td>
+                        <td>53.6 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.89x)</td>
+                        <td>🟢 บีบแคบ (0.75x)</td>
                         <td>🔴 ชี้ลง</td>
                     </tr>
         
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('SAWAD')"><b>SAWAD</b></a></td>
-                        <td>22.70 ฿</td>
-                        <td><b>50.0%</b></td>
-                        <td class="text-green">+5.6%</td>
-                        <td class="text-red"><b>-6.6%</b></td>
-                        <td class="text-green"><b>+3.0%</b></td>
-                        <td>284.7 ล้านบาท/วัน</td>
+                        <td><a class="ticker-link" onclick="openChartModal('TFG')"><b>TFG</b></a></td>
+                        <td>9.85 ฿</td>
+                        <td><b>47.4%</b></td>
+                        <td class="text-green">+8.2%</td>
+                        <td class="text-green"><b>+2.8%</b></td>
+                        <td class="text-red"><b>-5.9%</b></td>
+                        <td>137.1 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.01x)</td>
+                        <td>🟢 บีบแคบ (1.17x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('HANA')"><b>HANA</b></a></td>
+                        <td>46.75 ฿</td>
+                        <td><b>44.7%</b></td>
+                        <td class="text-red">-9.2%</td>
+                        <td class="text-green"><b>+23.8%</b></td>
+                        <td class="text-green"><b>+31.7%</b></td>
+                        <td>1443.3 ล้านบาท/วัน</td>
+                        <td>⚪</td>
+                        <td>⚪ ปกติ</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PR9')"><b>PR9</b></a></td>
+                        <td>18.80 ฿</td>
+                        <td><b>42.1%</b></td>
+                        <td class="text-green">+0.0%</td>
+                        <td class="text-green"><b>+5.6%</b></td>
+                        <td class="text-green"><b>+18.8%</b></td>
+                        <td>28.2 ล้านบาท/วัน</td>
+                        <td>🟢 ยก Low</td>
+                        <td>⚪ ปกติ</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('SAWAD')"><b>SAWAD</b></a></td>
+                        <td>22.50 ฿</td>
+                        <td><b>39.5%</b></td>
+                        <td class="text-green">+1.4%</td>
+                        <td class="text-red"><b>-6.7%</b></td>
+                        <td class="text-green"><b>+3.9%</b></td>
+                        <td>290.9 ล้านบาท/วัน</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (0.91x)</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('CPALL')"><b>CPALL</b></a></td>
-                        <td>49.00 ฿</td>
-                        <td><b>47.4%</b></td>
-                        <td class="text-green">+13.9%</td>
-                        <td class="text-green"><b>+2.1%</b></td>
-                        <td class="text-green"><b>+12.0%</b></td>
-                        <td>1888.1 ล้านบาท/วัน</td>
+                        <td>49.50 ฿</td>
+                        <td><b>36.8%</b></td>
+                        <td class="text-green">+15.1%</td>
+                        <td class="text-green"><b>+1.5%</b></td>
+                        <td class="text-green"><b>+12.5%</b></td>
+                        <td>1960.6 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
                         <td>⚪ ปกติ</td>
                         <td>🟢 ชี้ขึ้น</td>
@@ -873,90 +1097,38 @@
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('ADVANC')"><b>ADVANC</b></a></td>
-                        <td>343.00 ฿</td>
-                        <td><b>44.7%</b></td>
-                        <td class="text-green">+2.7%</td>
-                        <td class="text-red"><b>-6.1%</b></td>
-                        <td class="text-green"><b>+0.3%</b></td>
-                        <td>1992.9 ล้านบาท/วัน</td>
+                        <td>342.00 ฿</td>
+                        <td><b>34.2%</b></td>
+                        <td class="text-green">+3.0%</td>
+                        <td class="text-red"><b>-5.4%</b></td>
+                        <td class="text-green"><b>+0.1%</b></td>
+                        <td>1949.2 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.83x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('WHA')"><b>WHA</b></a></td>
-                        <td>5.10 ฿</td>
-                        <td><b>42.1%</b></td>
-                        <td class="text-green">+3.2%</td>
-                        <td class="text-green"><b>+6.2%</b></td>
-                        <td class="text-green"><b>+11.9%</b></td>
-                        <td>538.6 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>⚪ ปกติ</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('PR9')"><b>PR9</b></a></td>
-                        <td>18.60 ฿</td>
-                        <td><b>39.5%</b></td>
-                        <td class="text-red">-1.6%</td>
-                        <td class="text-green"><b>+5.0%</b></td>
-                        <td class="text-green"><b>+15.3%</b></td>
-                        <td>26.4 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>⚪ ปกติ</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('TFG')"><b>TFG</b></a></td>
-                        <td>9.70 ฿</td>
-                        <td><b>36.8%</b></td>
-                        <td class="text-green">+4.3%</td>
-                        <td class="text-green"><b>+0.2%</b></td>
-                        <td class="text-red"><b>-8.2%</b></td>
-                        <td>141.4 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.24x)</td>
+                        <td>🟢 บีบแคบ (0.74x)</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('BH')"><b>BH</b></a></td>
-                        <td>191.00 ฿</td>
-                        <td><b>34.2%</b></td>
+                        <td>192.00 ฿</td>
+                        <td><b>31.6%</b></td>
                         <td class="text-green">+1.6%</td>
                         <td class="text-green"><b>+3.1%</b></td>
-                        <td class="text-green"><b>+9.2%</b></td>
-                        <td>721.1 ล้านบาท/วัน</td>
+                        <td class="text-green"><b>+11.0%</b></td>
+                        <td>711.0 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.06x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('TTB')"><b>TTB</b></a></td>
-                        <td>2.70 ฿</td>
-                        <td><b>31.6%</b></td>
-                        <td class="text-red">-5.6%</td>
-                        <td class="text-red"><b>-9.9%</b></td>
-                        <td class="text-green"><b>+22.8%</b></td>
-                        <td>1040.7 ล้านบาท/วัน</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.86x)</td>
+                        <td>🟢 บีบแคบ (0.83x)</td>
                         <td>🔴 ชี้ลง</td>
                     </tr>
         
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('CPN')"><b>CPN</b></a></td>
-                        <td>67.00 ฿</td>
+                        <td><a class="ticker-link" onclick="openChartModal('WHA')"><b>WHA</b></a></td>
+                        <td>4.96 ฿</td>
                         <td><b>28.9%</b></td>
-                        <td class="text-green">+7.6%</td>
-                        <td class="text-green"><b>+1.5%</b></td>
-                        <td class="text-green"><b>+3.5%</b></td>
-                        <td>487.2 ล้านบาท/วัน</td>
+                        <td class="text-red">-0.8%</td>
+                        <td class="text-green"><b>+3.3%</b></td>
+                        <td class="text-green"><b>+9.2%</b></td>
+                        <td>563.0 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
                         <td>⚪ ปกติ</td>
                         <td>🟢 ชี้ขึ้น</td>
@@ -966,26 +1138,26 @@
                         <td><a class="ticker-link" onclick="openChartModal('MTC')"><b>MTC</b></a></td>
                         <td>30.50 ฿</td>
                         <td><b>26.3%</b></td>
-                        <td class="text-green">+9.9%</td>
-                        <td class="text-red"><b>-11.6%</b></td>
-                        <td class="text-green"><b>+1.7%</b></td>
-                        <td>418.2 ล้านบาท/วัน</td>
+                        <td class="text-green">+6.1%</td>
+                        <td class="text-red"><b>-9.6%</b></td>
+                        <td class="text-green"><b>+4.3%</b></td>
+                        <td>422.5 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
                         <td>⚪ ปกติ</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('TRUE')"><b>TRUE</b></a></td>
-                        <td>13.10 ฿</td>
+                        <td><a class="ticker-link" onclick="openChartModal('PTTEP')"><b>PTTEP</b></a></td>
+                        <td>144.50 ฿</td>
                         <td><b>23.7%</b></td>
-                        <td class="text-green">+4.8%</td>
-                        <td class="text-red"><b>-1.1%</b></td>
-                        <td class="text-red"><b>-7.1%</b></td>
-                        <td>1684.5 ล้านบาท/วัน</td>
+                        <td class="text-red">-3.7%</td>
+                        <td class="text-red"><b>-1.0%</b></td>
+                        <td class="text-red"><b>-0.7%</b></td>
+                        <td>2665.6 ล้านบาท/วัน</td>
                         <td>🟢 ยก Low</td>
-                        <td>⚪ ปกติ</td>
-                        <td>🟢 ชี้ขึ้น</td>
+                        <td>🟢 บีบแคบ (0.63x)</td>
+                        <td>🔴 ชี้ลง</td>
                     </tr>
         
                 </tbody>
