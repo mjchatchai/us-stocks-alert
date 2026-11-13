@@ -96,6 +96,29 @@
       "buy_date": "2026-11-10",
       "entry_date": "2026-11-10",
       "buy_price": 90.94,
+      "auto_paper_trade": true,
+      "current_price": NaN,
+      "unrealized_pnl": NaN,
+      "current_r": NaN,
+      "total_pnl": NaN
+    },
+    "ZETA": {
+      "ticker": "ZETA",
+      "entry_price": 37.74,
+      "current_sl": 34.72,
+      "stop_loss": 34.72,
+      "risk_per_share": 3.02,
+      "shares": 16,
+      "current_shares": 16,
+      "initial_shares": 16,
+      "target_3r": 46.8,
+      "target_5r": 52.84,
+      "position_capital": 603.84,
+      "tp1_hit": false,
+      "tp2_hit": false,
+      "buy_date": "2026-11-11",
+      "entry_date": "2026-11-11",
+      "buy_price": 37.74,
       "auto_paper_trade": true
     }
   },
@@ -164,7 +187,7 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-11-12",
+  "last_daily_scan_date": "2026-11-13",
   "active_positions": {},
   "last_scan_date": "2026-11-03"
 }
