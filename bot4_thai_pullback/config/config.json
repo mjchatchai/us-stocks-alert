@@ -83,7 +83,7 @@
       "current_price": 55.75,
       "unrealized_pnl": 4500.0,
       "unrealized_pct": 4.21,
-      "dist_ema9_pct": 1.3,
+      "dist_ema9_pct": 1.0,
       "current_r": 0.9,
       "total_pnl": 4500.0,
       "be_ratchet_hit": true,
@@ -102,12 +102,12 @@
       "target_5r": 16.6,
       "entry_date": "2026-11-03",
       "auto_paper_trade": true,
-      "current_price": 13.3,
-      "unrealized_pnl": 1420.0,
-      "unrealized_pct": 1.53,
-      "dist_ema9_pct": 1.4,
-      "current_r": 0.29,
-      "total_pnl": 1420.0
+      "current_price": 13.4,
+      "unrealized_pnl": 2130.0,
+      "unrealized_pct": 2.29,
+      "dist_ema9_pct": 1.7,
+      "current_r": 0.43,
+      "total_pnl": 2130.0
     },
     "ITC": {
       "ticker": "ITC",
@@ -142,12 +142,12 @@
       "target_5r": 59.0,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "current_price": 45.0,
-      "unrealized_pnl": -450.0,
-      "unrealized_pct": -0.55,
-      "dist_ema9_pct": 1.3,
-      "current_r": -0.09,
-      "total_pnl": -450.0
+      "current_price": 47.0,
+      "unrealized_pnl": 3150.0,
+      "unrealized_pct": 3.87,
+      "dist_ema9_pct": 4.6,
+      "current_r": 0.64,
+      "total_pnl": 3150.0
     },
     "WHA": {
       "ticker": "WHA",
@@ -162,12 +162,12 @@
       "target_5r": 6.4,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "current_price": 5.1,
-      "unrealized_pnl": 2136.0,
-      "unrealized_pct": 2.41,
-      "dist_ema9_pct": 1.7,
-      "current_r": 0.43,
-      "total_pnl": 2136.0
+      "current_price": 4.96,
+      "unrealized_pnl": -356.0,
+      "unrealized_pct": -0.4,
+      "dist_ema9_pct": -0.9,
+      "current_r": -0.07,
+      "total_pnl": -356.0
     },
     "AOT": {
       "ticker": "AOT",
@@ -185,7 +185,7 @@
       "current_price": 61.75,
       "unrealized_pnl": 900.0,
       "unrealized_pct": 0.82,
-      "dist_ema9_pct": 1.7,
+      "dist_ema9_pct": 1.3,
       "current_r": 0.18,
       "total_pnl": 900.0
     },
@@ -205,7 +205,7 @@
       "current_price": 19.8,
       "unrealized_pnl": 4400.0,
       "unrealized_pct": 4.21,
-      "dist_ema9_pct": 3.2,
+      "dist_ema9_pct": 2.5,
       "current_r": 0.89,
       "total_pnl": 4400.0
     },
@@ -222,17 +222,17 @@
       "target_5r": 22.6,
       "entry_date": "2026-11-09",
       "auto_paper_trade": true,
-      "current_price": 19.8,
-      "unrealized_pnl": -2970.01,
-      "unrealized_pct": -1.49,
-      "dist_ema9_pct": -0.4,
-      "current_r": -0.6,
-      "total_pnl": -2970.01
+      "current_price": 20.1,
+      "unrealized_pnl": 0.0,
+      "unrealized_pct": 0.0,
+      "dist_ema9_pct": 0.9,
+      "current_r": 0.0,
+      "total_pnl": 0.0
     },
     "KBANK": {
       "ticker": "KBANK",
       "entry_price": 243.0,
-      "current_sl": 238.0,
+      "current_sl": 243.0,
       "stop_loss": 238.0,
       "risk_per_share": 5.0,
       "shares": 800,
@@ -242,12 +242,14 @@
       "target_5r": 268.0,
       "entry_date": "2026-11-10",
       "auto_paper_trade": true,
-      "current_price": 246.0,
-      "unrealized_pnl": 2400.0,
-      "unrealized_pct": 1.23,
-      "dist_ema9_pct": 1.0,
-      "current_r": 0.6,
-      "total_pnl": 2400.0
+      "current_price": 254.0,
+      "unrealized_pnl": 8800.0,
+      "unrealized_pct": 4.53,
+      "dist_ema9_pct": 3.4,
+      "current_r": 2.2,
+      "total_pnl": 8800.0,
+      "be_ratchet_hit": true,
+      "be_ratcheted": true
     },
     "SCB": {
       "ticker": "SCB",
@@ -262,12 +264,12 @@
       "target_5r": 166.0,
       "entry_date": "2026-11-10",
       "auto_paper_trade": true,
-      "current_price": 153.0,
-      "unrealized_pnl": 2600.0,
-      "unrealized_pct": 1.32,
-      "dist_ema9_pct": 0.9,
-      "current_r": 0.67,
-      "total_pnl": 2600.0
+      "current_price": 154.5,
+      "unrealized_pnl": 4550.0,
+      "unrealized_pct": 2.32,
+      "dist_ema9_pct": 1.5,
+      "current_r": 1.17,
+      "total_pnl": 4550.0
     },
     "PR9": {
       "ticker": "PR9",
@@ -282,12 +284,54 @@
       "target_5r": 21.3,
       "entry_date": "2026-11-10",
       "auto_paper_trade": true,
-      "current_price": 18.6,
-      "unrealized_pnl": -2000.0,
-      "unrealized_pct": -1.06,
-      "dist_ema9_pct": -0.2,
-      "current_r": -0.4,
-      "total_pnl": -2000.0
+      "current_price": 18.8,
+      "unrealized_pnl": -0.01,
+      "unrealized_pct": -0.0,
+      "dist_ema9_pct": 0.7,
+      "current_r": -0.0,
+      "total_pnl": -0.01
+    },
+    "KTB": {
+      "ticker": "KTB",
+      "entry_price": 44.0,
+      "current_sl": 42.0,
+      "stop_loss": 42.0,
+      "risk_per_share": 2.0,
+      "shares": 2500,
+      "current_shares": 2500,
+      "initial_shares": 2500,
+      "target_3r": 50.0,
+      "target_5r": 54.0,
+      "entry_date": "2026-11-13",
+      "auto_paper_trade": true
+    },
+    "TISCO": {
+      "ticker": "TISCO",
+      "entry_price": 127.5,
+      "current_sl": 124.0,
+      "stop_loss": 124.0,
+      "risk_per_share": 3.5,
+      "shares": 1400,
+      "current_shares": 1400,
+      "initial_shares": 1400,
+      "target_3r": 138.0,
+      "target_5r": 145.0,
+      "entry_date": "2026-11-13",
+      "auto_paper_trade": true
+    },
+    "TTB": {
+      "ticker": "TTB",
+      "entry_price": 2.72,
+      "current_sl": 2.66,
+      "stop_loss": 2.66,
+      "risk_per_share": 0.06,
+      "shares": 73500,
+      "current_shares": 73500,
+      "initial_shares": 73500,
+      "target_3r": 2.9,
+      "target_5r": 3.02,
+      "entry_date": "2026-11-13",
+      "auto_paper_trade": true
     }
   },
   "trade_history": [
@@ -344,6 +388,6 @@
       "exit_reason": "Stop Loss Hit (-1R)"
     }
   ],
-  "last_scan_date": "2026-11-12",
+  "last_scan_date": "2026-11-13",
   "be_ratchet_r_multiple": 1.5
 }
