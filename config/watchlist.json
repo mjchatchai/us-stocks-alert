@@ -28,10 +28,10 @@
       "entry_date": "2026-11-02",
       "buy_price": 148.36,
       "auto_paper_trade": true,
-      "current_price": NaN,
-      "unrealized_pnl": NaN,
-      "current_r": NaN,
-      "total_pnl": NaN
+      "current_price": 147.76,
+      "unrealized_pnl": -2.4,
+      "current_r": -0.05,
+      "total_pnl": -2.4
     },
     "COST": {
       "ticker": "COST",
@@ -51,10 +51,10 @@
       "entry_date": "2026-11-03",
       "buy_price": 1019.26,
       "auto_paper_trade": true,
-      "current_price": NaN,
-      "unrealized_pnl": NaN,
-      "current_r": NaN,
-      "total_pnl": NaN
+      "current_price": 1106.21,
+      "unrealized_pnl": 86.95,
+      "current_r": 1.79,
+      "total_pnl": 86.95
     },
     "AMZN": {
       "ticker": "AMZN",
@@ -74,10 +74,10 @@
       "entry_date": "2026-11-05",
       "buy_price": 259.3,
       "auto_paper_trade": true,
-      "current_price": NaN,
-      "unrealized_pnl": NaN,
-      "current_r": NaN,
-      "total_pnl": NaN
+      "current_price": 266.66,
+      "unrealized_pnl": 14.72,
+      "current_r": 0.35,
+      "total_pnl": 14.72
     },
     "TMDX": {
       "ticker": "TMDX",
@@ -119,6 +119,29 @@
       "buy_date": "2026-11-11",
       "entry_date": "2026-11-11",
       "buy_price": 37.74,
+      "auto_paper_trade": true,
+      "current_price": NaN,
+      "unrealized_pnl": NaN,
+      "current_r": NaN,
+      "total_pnl": NaN
+    },
+    "RKLB": {
+      "ticker": "RKLB",
+      "entry_price": 64.07,
+      "current_sl": 58.94,
+      "stop_loss": 58.94,
+      "risk_per_share": 5.13,
+      "shares": 9,
+      "current_shares": 9,
+      "initial_shares": 9,
+      "target_3r": 79.46,
+      "target_5r": 89.72,
+      "position_capital": 576.63,
+      "tp1_hit": false,
+      "tp2_hit": false,
+      "buy_date": "2026-11-12",
+      "entry_date": "2026-11-12",
+      "buy_price": 64.07,
       "auto_paper_trade": true
     }
   },
@@ -187,7 +210,7 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-11-13",
+  "last_daily_scan_date": "2026-11-14",
   "active_positions": {},
   "last_scan_date": "2026-11-03"
 }
