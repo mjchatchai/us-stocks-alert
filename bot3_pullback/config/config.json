@@ -76,12 +76,12 @@
       "target_5r": 494.81,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": NaN,
-      "unrealized_pct": NaN,
-      "current_r": NaN,
-      "total_pnl": NaN,
-      "current_price": NaN,
-      "dist_ema9_pct": NaN
+      "unrealized_pnl": 6.76,
+      "unrealized_pct": 1.93,
+      "current_r": 0.23,
+      "total_pnl": 6.76,
+      "current_price": 356.27,
+      "dist_ema9_pct": 1.7
     },
     "COST": {
       "ticker": "COST",
@@ -96,12 +96,12 @@
       "target_5r": 1259.87,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": NaN,
-      "unrealized_pct": NaN,
-      "current_r": NaN,
-      "total_pnl": NaN,
-      "current_price": NaN,
-      "dist_ema9_pct": NaN
+      "unrealized_pnl": 59.74,
+      "unrealized_pct": 5.71,
+      "current_r": 1.4,
+      "total_pnl": 59.74,
+      "current_price": 1106.21,
+      "dist_ema9_pct": 3.4
     },
     "JPM": {
       "ticker": "JPM",
@@ -116,12 +116,12 @@
       "target_5r": 458.76,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": NaN,
-      "unrealized_pct": NaN,
-      "current_r": NaN,
-      "total_pnl": NaN,
-      "current_price": NaN,
-      "dist_ema9_pct": NaN
+      "unrealized_pnl": -11.84,
+      "unrealized_pct": -1.68,
+      "current_r": -0.28,
+      "total_pnl": -11.84,
+      "current_price": 346.19,
+      "dist_ema9_pct": 1.2
     },
     "TEM": {
       "ticker": "TEM",
@@ -159,7 +159,7 @@
       "exit_reason": "Stop Loss Hit"
     }
   ],
-  "last_scan_date": "2026-11-13",
+  "last_scan_date": "2026-11-14",
   "last_telegram_update_id": 876479913,
   "be_ratchet_r_multiple": 1.5
 }
