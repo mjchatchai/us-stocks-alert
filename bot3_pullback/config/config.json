@@ -136,12 +136,40 @@
       "target_5r": 135.85,
       "entry_date": "2026-11-09",
       "auto_paper_trade": true,
-      "unrealized_pnl": NaN,
-      "unrealized_pct": NaN,
-      "current_r": NaN,
-      "total_pnl": NaN,
-      "current_price": NaN,
-      "dist_ema9_pct": NaN
+      "unrealized_pnl": -17.8,
+      "unrealized_pct": -5.85,
+      "current_r": -0.37,
+      "total_pnl": -17.8,
+      "current_price": 71.6,
+      "dist_ema9_pct": -5.9
+    },
+    "VKTX": {
+      "ticker": "VKTX",
+      "entry_price": 29.22,
+      "current_sl": 26.29,
+      "stop_loss": 26.29,
+      "risk_per_share": 2.93,
+      "shares": 17,
+      "current_shares": 17,
+      "initial_shares": 17,
+      "target_3r": 38.01,
+      "target_5r": 43.87,
+      "entry_date": "2026-11-16",
+      "auto_paper_trade": true
+    },
+    "META": {
+      "ticker": "META",
+      "entry_price": 641.69,
+      "current_sl": 609.64,
+      "stop_loss": 609.64,
+      "risk_per_share": 32.05,
+      "shares": 1,
+      "current_shares": 1,
+      "initial_shares": 1,
+      "target_3r": 737.84,
+      "target_5r": 801.94,
+      "entry_date": "2026-11-16",
+      "auto_paper_trade": true
     }
   },
   "trade_history": [
@@ -159,7 +187,7 @@
       "exit_reason": "Stop Loss Hit"
     }
   ],
-  "last_scan_date": "2026-11-14",
+  "last_scan_date": "2026-11-16",
   "last_telegram_update_id": 876479913,
   "be_ratchet_r_multiple": 1.5
 }
