@@ -204,7 +204,7 @@
             <p>กลยุทธ์คัดหุ้นผู้นำสร้างฐาน (VCP) + ย่อทดสอบแนวรับแรก (First Retest) + ล็อคกำไร 3R/5R & Trailing EMA 9</p>
         </div>
         <div>
-            <span class="badge badge-blue">Last Scan: 2026-11-14</span>
+            <span class="badge badge-blue">Last Scan: 2026-11-16</span>
         </div>
     </div>
 
@@ -220,11 +220,11 @@
         </div>
         <div class="metric-card">
             <div class="label">🚀 สัญญาณซื้อวันนี้</div>
-            <div class="value text-green">0</div>
+            <div class="value text-green">2</div>
         </div>
         <div class="metric-card">
             <div class="label">📦 ออเดอร์ที่ถืออยู่ (Active)</div>
-            <div class="value">4</div>
+            <div class="value">6</div>
         </div>
         <div class="metric-card">
             <div class="label">💵 กำไรที่รับรู้แล้ว (Realized)</div>
@@ -238,9 +238,9 @@
 
     <!-- Tabs -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (0)</button>
-        <button class="tab-btn" onclick="switchTab('tab-active')">💼 ออเดอร์ที่ถืออยู่ (4)</button>
-        <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (3)</button>
+        <button class="tab-btn active" onclick="switchTab('tab-signals')">🚀 สัญญาณซื้อวันนี้ (2)</button>
+        <button class="tab-btn" onclick="switchTab('tab-active')">💼 ออเดอร์ที่ถืออยู่ (6)</button>
+        <button class="tab-btn" onclick="switchTab('tab-pullback')">📍 หุ้นจ่อแนวรับ & Watchlist (5)</button>
         <button class="tab-btn" onclick="switchTab('tab-screener')">⭐ หุ้นแกร่ง VCP [1/4] (45)</button>
         <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการเทรด (1)</button>
     </div>
@@ -264,7 +264,33 @@
                     </tr>
                 </thead>
                 <tbody>
-<tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 30px;">วันนี้ยังไม่มีสัญญาณเข้าซื้อใหม่ที่ตรงเงื่อนไขครบทุกข้อ (รอแท่งยืนยันแนวรับ)</td></tr>
+
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('VKTX')">$VKTX</a></td>
+                        <td><b>$29.22</b></td>
+                        <td class="text-red"><b>$26.29</b> (-10.0%)</td>
+                        <td>$2.93</td>
+                        <td class="text-gold"><b>$38.01</b></td>
+                        <td class="text-green"><b>$43.87</b></td>
+                        <td><b class="text-green">17 หุ้น</b></td>
+                        <td>$496.74</td>
+                        <td>5.0%</td>
+                        <td><button class="btn-action" onclick="openChartModal('VKTX')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('META')">$META</a></td>
+                        <td><b>$641.69</b></td>
+                        <td class="text-red"><b>$609.64</b> (-5.0%)</td>
+                        <td>$32.05</td>
+                        <td class="text-gold"><b>$737.84</b></td>
+                        <td class="text-green"><b>$801.94</b></td>
+                        <td><b class="text-green">1 หุ้น</b></td>
+                        <td>$641.69</td>
+                        <td>6.4%</td>
+                        <td><button class="btn-action" onclick="openChartModal('META')">📊 ดูกราฟ</button></td>
+                    </tr>
+            
                 </tbody>
             </table>
         </div>
@@ -336,15 +362,43 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('TEM')">$TEM</a></td>
                         <td>$76.05</td>
-                        <td><b>$nan</b></td>
+                        <td><b>$71.60</b></td>
                         <td><b>4</b> / 4</td>
                         <td class="text-red">$64.09</td>
                         <td class="text-gold">111.93</td>
                         <td class="text-green">$135.85</td>
-                        <td><b class="text-red">+nanR</b></td>
-                        <td><b class="text-red">$+nan</b></td>
+                        <td><b class="text-red">-0.37R</b></td>
+                        <td><b class="text-red">$-17.80</b></td>
                         <td><span class="badge badge-blue">รันเทรนด์</span></td>
                         <td><button class="btn-action" onclick="openChartModal('TEM')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('VKTX')">$VKTX</a></td>
+                        <td>$29.22</td>
+                        <td><b>$29.22</b></td>
+                        <td><b>17</b> / 17</td>
+                        <td class="text-red">$26.29</td>
+                        <td class="text-gold">38.01</td>
+                        <td class="text-green">$43.87</td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">$+0.00</b></td>
+                        <td><span class="badge badge-blue">รันเทรนด์</span></td>
+                        <td><button class="btn-action" onclick="openChartModal('VKTX')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('META')">$META</a></td>
+                        <td>$641.69</td>
+                        <td><b>$641.69</b></td>
+                        <td><b>1</b> / 1</td>
+                        <td class="text-red">$609.64</td>
+                        <td class="text-gold">737.84</td>
+                        <td class="text-green">$801.94</td>
+                        <td><b class="text-green">+0.00R</b></td>
+                        <td><b class="text-green">$+0.00</b></td>
+                        <td><span class="badge badge-blue">รันเทรนด์</span></td>
+                        <td><button class="btn-action" onclick="openChartModal('META')">📊 กราฟ</button></td>
                     </tr>
             
                 </tbody>
@@ -373,22 +427,9 @@
                 <tbody>
 
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('AAPL')">$AAPL</a></td>
-                        <td><b>$356.27</b></td>
-                        <td><b>95.7%</b></td>
-                        <td class="text-green">$335.41 - $350.21</td>
-                        <td>$350.21</td>
-                        <td>$346.05</td>
-                        <td>$335.41</td>
-                        <td><span class="badge badge-blue">ทั่วไป</span></td>
-                        <td><b class="text-gold">$359.37</b> (ทะลุ High แท่งก่อน)</td>
-                        <td><button class="btn-action" onclick="openChartModal('AAPL')">📊 กราฟ</button></td>
-                    </tr>
-            
-                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('LLY')">$LLY</a></td>
                         <td><b>$1443.50</b></td>
-                        <td><b>100.0%</b></td>
+                        <td><b>97.8%</b></td>
                         <td class="text-green">$1268.92 - $1408.17</td>
                         <td>$1408.17</td>
                         <td>$1355.10</td>
@@ -399,9 +440,22 @@
                     </tr>
             
                     <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('AAPL')">$AAPL</a></td>
+                        <td><b>$356.27</b></td>
+                        <td><b>95.6%</b></td>
+                        <td class="text-green">$335.41 - $350.21</td>
+                        <td>$350.21</td>
+                        <td>$346.05</td>
+                        <td>$335.41</td>
+                        <td><span class="badge badge-blue">ทั่วไป</span></td>
+                        <td><b class="text-gold">$359.37</b> (ทะลุ High แท่งก่อน)</td>
+                        <td><button class="btn-action" onclick="openChartModal('AAPL')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('JPM')">$JPM</a></td>
                         <td><b>$346.19</b></td>
-                        <td><b>87.0%</b></td>
+                        <td><b>86.7%</b></td>
                         <td class="text-green">$336.98 - $342.16</td>
                         <td>$342.16</td>
                         <td>$340.13</td>
@@ -409,6 +463,32 @@
                         <td><span class="badge badge-green">รอบแรก (First)</span></td>
                         <td><b class="text-gold">$347.20</b> (ทะลุ High แท่งก่อน)</td>
                         <td><button class="btn-action" onclick="openChartModal('JPM')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('VKTX')">$VKTX</a></td>
+                        <td><b>$29.22</b></td>
+                        <td><b>75.6%</b></td>
+                        <td class="text-green">$27.17 - $27.89</td>
+                        <td>$27.89</td>
+                        <td>$27.60</td>
+                        <td>$27.17</td>
+                        <td><span class="badge badge-green">รอบแรก (First)</span></td>
+                        <td><b class="text-gold">$28.56</b> (ทะลุ High แท่งก่อน)</td>
+                        <td><button class="btn-action" onclick="openChartModal('VKTX')">📊 กราฟ</button></td>
+                    </tr>
+            
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('META')">$META</a></td>
+                        <td><b>$641.69</b></td>
+                        <td><b>73.3%</b></td>
+                        <td class="text-green">$643.89 - $643.89</td>
+                        <td>$631.07</td>
+                        <td>$643.89</td>
+                        <td>$666.22</td>
+                        <td><span class="badge badge-blue">ทั่วไป</span></td>
+                        <td><b class="text-gold">$630.32</b> (ทะลุ High แท่งก่อน)</td>
+                        <td><button class="btn-action" onclick="openChartModal('META')">📊 กราฟ</button></td>
                     </tr>
             
                 </tbody>
@@ -437,256 +517,22 @@
                 <tbody>
 
                     <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('ALAB')">$ALAB</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>4,923,891</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('PLTR')">$PLTR</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>24,605,365</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('AAPL')">$AAPL</a></td>
-                        <td>$356.27</td>
-                        <td><b>95.7%</b></td>
-                        <td class="text-green">+4.2%</td>
-                        <td class="text-green"><b>+16.7%</b></td>
-                        <td class="text-green"><b>+18.9%</b></td>
-                        <td>47,205,220</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (0.85x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('META')">$META</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>23,758,003</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('ARM')">$ARM</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>5,784,288</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('MSFT')">$MSFT</a></td>
-                        <td>$523.88</td>
-                        <td><b>82.6%</b></td>
-                        <td class="text-red">-2.9%</td>
-                        <td class="text-green"><b>+9.3%</b></td>
-                        <td class="text-green"><b>+24.7%</b></td>
-                        <td>26,238,120</td>
-                        <td>🟢 ยก Low</td>
-                        <td>⚪ ปกติ</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('CRWD')">$CRWD</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>9,127,449</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('PANW')">$PANW</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>6,079,985</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('DDOG')">$DDOG</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>4,507,399</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('RKLB')">$RKLB</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>19,092,411</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('HOOD')">$HOOD</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>19,118,313</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('DASH')">$DASH</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>5,895,219</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('ASTS')">$ASTS</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>16,886,439</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('IONQ')">$IONQ</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>21,623,126</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('TEM')">$TEM</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>6,379,375</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('ZETA')">$ZETA</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>5,507,835</td>
+                        <td>$36.65</td>
+                        <td><b>100.0%</b></td>
+                        <td class="text-green">+9.2%</td>
+                        <td class="text-green"><b>+27.1%</b></td>
+                        <td class="text-green"><b>+113.2%</b></td>
+                        <td>5,509,695</td>
                         <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('HIMS')">$HIMS</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>15,156,892</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🔴 ชี้ลง</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('TMDX')">$TMDX</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>1,234,227</td>
-                        <td>⚪</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
-                        <td>🟢 ชี้ขึ้น</td>
-                    </tr>
-        
-                    <tr>
-                        <td><a class="ticker-link" onclick="openChartModal('VKTX')">$VKTX</a></td>
-                        <td>$nan</td>
-                        <td><b>nan%</b></td>
-                        <td class="text-red">+nan%</td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td class="text-red"><b>+nan%</b></td>
-                        <td>4,200,476</td>
-                        <td>🟢 ยก Low</td>
-                        <td>🟢 บีบแคบ (1.0x)</td>
+                        <td>⚪ ปกติ</td>
                         <td>🟢 ชี้ขึ้น</td>
                     </tr>
         
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('LLY')">$LLY</a></td>
                         <td>$1443.50</td>
-                        <td><b>100.0%</b></td>
+                        <td><b>97.8%</b></td>
                         <td class="text-green">+15.5%</td>
                         <td class="text-green"><b>+22.1%</b></td>
                         <td class="text-green"><b>+44.0%</b></td>
@@ -697,9 +543,22 @@
                     </tr>
         
                     <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('AAPL')">$AAPL</a></td>
+                        <td>$356.27</td>
+                        <td><b>95.6%</b></td>
+                        <td class="text-green">+4.2%</td>
+                        <td class="text-green"><b>+16.7%</b></td>
+                        <td class="text-green"><b>+18.9%</b></td>
+                        <td>47,205,220</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (0.85x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('COST')">$COST</a></td>
                         <td>$1106.21</td>
-                        <td><b>91.3%</b></td>
+                        <td><b>93.3%</b></td>
                         <td class="text-green">+13.3%</td>
                         <td class="text-green"><b>+16.2%</b></td>
                         <td class="text-green"><b>+5.8%</b></td>
@@ -710,9 +569,35 @@
                     </tr>
         
                     <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('RBRK')">$RBRK</a></td>
+                        <td>$109.88</td>
+                        <td><b>91.1%</b></td>
+                        <td class="text-red">-7.4%</td>
+                        <td class="text-green"><b>+8.8%</b></td>
+                        <td class="text-green"><b>+72.3%</b></td>
+                        <td>2,915,710</td>
+                        <td>⚪</td>
+                        <td>🟢 บีบแคบ (0.88x)</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TEM')">$TEM</a></td>
+                        <td>$71.60</td>
+                        <td><b>88.9%</b></td>
+                        <td class="text-green">+0.7%</td>
+                        <td class="text-green"><b>+38.6%</b></td>
+                        <td class="text-green"><b>+63.0%</b></td>
+                        <td>6,379,665</td>
+                        <td>⚪</td>
+                        <td>⚪ ปกติ</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('JPM')">$JPM</a></td>
                         <td>$346.19</td>
-                        <td><b>87.0%</b></td>
+                        <td><b>86.7%</b></td>
                         <td class="text-green">+3.2%</td>
                         <td class="text-red"><b>-3.6%</b></td>
                         <td class="text-green"><b>+17.4%</b></td>
@@ -723,9 +608,35 @@
                     </tr>
         
                     <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TMDX')">$TMDX</a></td>
+                        <td>$91.38</td>
+                        <td><b>84.4%</b></td>
+                        <td class="text-green">+19.4%</td>
+                        <td class="text-green"><b>+3.4%</b></td>
+                        <td class="text-green"><b>+44.6%</b></td>
+                        <td>1,234,250</td>
+                        <td>⚪</td>
+                        <td>⚪ ปกติ</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('MSFT')">$MSFT</a></td>
+                        <td>$523.88</td>
+                        <td><b>82.2%</b></td>
+                        <td class="text-red">-2.9%</td>
+                        <td class="text-green"><b>+9.3%</b></td>
+                        <td class="text-green"><b>+24.7%</b></td>
+                        <td>26,238,120</td>
+                        <td>🟢 ยก Low</td>
+                        <td>⚪ ปกติ</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('ISRG')">$ISRG</a></td>
                         <td>$443.59</td>
-                        <td><b>78.3%</b></td>
+                        <td><b>80.0%</b></td>
                         <td class="text-green">+3.7%</td>
                         <td class="text-green"><b>+13.6%</b></td>
                         <td class="text-green"><b>+5.3%</b></td>
@@ -736,9 +647,48 @@
                     </tr>
         
                     <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PRCT')">$PRCT</a></td>
+                        <td>$23.80</td>
+                        <td><b>77.8%</b></td>
+                        <td class="text-green">+31.1%</td>
+                        <td class="text-green"><b>+12.8%</b></td>
+                        <td class="text-red"><b>-8.9%</b></td>
+                        <td>1,322,425</td>
+                        <td>🟢 ยก Low</td>
+                        <td>⚪ ปกติ</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('VKTX')">$VKTX</a></td>
+                        <td>$29.22</td>
+                        <td><b>75.6%</b></td>
+                        <td class="text-green">+6.8%</td>
+                        <td class="text-red"><b>-13.1%</b></td>
+                        <td class="text-red"><b>-3.5%</b></td>
+                        <td>4,200,880</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (1.17x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('META')">$META</a></td>
+                        <td>$641.69</td>
+                        <td><b>73.3%</b></td>
+                        <td class="text-red">-12.9%</td>
+                        <td class="text-green"><b>+12.9%</b></td>
+                        <td class="text-green"><b>+4.7%</b></td>
+                        <td>23,759,955</td>
+                        <td>⚪</td>
+                        <td>🟢 บีบแคบ (0.9x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('AMZN')">$AMZN</a></td>
                         <td>$266.66</td>
-                        <td><b>73.9%</b></td>
+                        <td><b>71.1%</b></td>
                         <td class="text-green">+4.7%</td>
                         <td class="text-green"><b>+2.0%</b></td>
                         <td class="text-green"><b>+0.9%</b></td>
@@ -749,9 +699,22 @@
                     </tr>
         
                     <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('TTD')">$TTD</a></td>
+                        <td>$15.68</td>
+                        <td><b>68.9%</b></td>
+                        <td class="text-green">+19.4%</td>
+                        <td class="text-green"><b>+17.0%</b></td>
+                        <td class="text-red"><b>-25.9%</b></td>
+                        <td>21,252,420</td>
+                        <td>🟢 ยก Low</td>
+                        <td>⚪ ปกติ</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('NVO')">$NVO</a></td>
                         <td>$41.63</td>
-                        <td><b>69.6%</b></td>
+                        <td><b>66.7%</b></td>
                         <td class="text-green">+6.1%</td>
                         <td class="text-red"><b>-7.2%</b></td>
                         <td class="text-red"><b>-5.8%</b></td>
@@ -764,7 +727,7 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('TSLA')">$TSLA</a></td>
                         <td>$390.22</td>
-                        <td><b>65.2%</b></td>
+                        <td><b>64.4%</b></td>
                         <td class="text-green">+7.7%</td>
                         <td class="text-green"><b>+15.0%</b></td>
                         <td class="text-red"><b>-7.6%</b></td>
@@ -777,7 +740,7 @@
                     <tr>
                         <td><a class="ticker-link" onclick="openChartModal('CRM')">$CRM</a></td>
                         <td>$217.84</td>
-                        <td><b>60.9%</b></td>
+                        <td><b>62.2%</b></td>
                         <td class="text-red">-11.7%</td>
                         <td class="text-green"><b>+14.3%</b></td>
                         <td class="text-green"><b>+26.1%</b></td>
@@ -788,9 +751,48 @@
                     </tr>
         
                     <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('CRWD')">$CRWD</a></td>
+                        <td>$226.61</td>
+                        <td><b>60.0%</b></td>
+                        <td class="text-red">-7.3%</td>
+                        <td class="text-green"><b>+5.9%</b></td>
+                        <td class="text-green"><b>+52.6%</b></td>
+                        <td>9,134,225</td>
+                        <td>⚪</td>
+                        <td>⚪ ปกติ</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PLTR')">$PLTR</a></td>
+                        <td>$167.99</td>
+                        <td><b>57.8%</b></td>
+                        <td class="text-red">-16.2%</td>
+                        <td class="text-red"><b>-2.6%</b></td>
+                        <td class="text-green"><b>+25.4%</b></td>
+                        <td>24,607,265</td>
+                        <td>⚪</td>
+                        <td>🟢 บีบแคบ (0.76x)</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('PANW')">$PANW</a></td>
+                        <td>$322.24</td>
+                        <td><b>55.6%</b></td>
+                        <td class="text-red">-13.0%</td>
+                        <td class="text-red"><b>-14.2%</b></td>
+                        <td class="text-green"><b>+32.7%</b></td>
+                        <td>6,081,635</td>
+                        <td>⚪</td>
+                        <td>🟢 บีบแคบ (0.9x)</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('GS')">$GS</a></td>
                         <td>$916.56</td>
-                        <td><b>56.5%</b></td>
+                        <td><b>53.3%</b></td>
                         <td class="text-green">+2.8%</td>
                         <td class="text-red"><b>-12.4%</b></td>
                         <td class="text-red"><b>-2.5%</b></td>
@@ -801,9 +803,22 @@
                     </tr>
         
                     <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('DASH')">$DASH</a></td>
+                        <td>$171.51</td>
+                        <td><b>51.1%</b></td>
+                        <td class="text-red">-11.2%</td>
+                        <td class="text-red"><b>-19.4%</b></td>
+                        <td class="text-green"><b>+7.7%</b></td>
+                        <td>5,895,330</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (0.6x)</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('AVGO')">$AVGO</a></td>
                         <td>$347.01</td>
-                        <td><b>52.2%</b></td>
+                        <td><b>48.9%</b></td>
                         <td class="text-green">+0.8%</td>
                         <td class="text-red"><b>-11.4%</b></td>
                         <td class="text-red"><b>-18.1%</b></td>
@@ -814,9 +829,22 @@
                     </tr>
         
                     <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('RKLB')">$RKLB</a></td>
+                        <td>$61.53</td>
+                        <td><b>46.7%</b></td>
+                        <td class="text-green">+11.4%</td>
+                        <td class="text-red"><b>-25.0%</b></td>
+                        <td class="text-red"><b>-50.7%</b></td>
+                        <td>19,097,090</td>
+                        <td>⚪</td>
+                        <td>🟢 บีบแคบ (1.24x)</td>
+                        <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
                         <td><a class="ticker-link" onclick="openChartModal('GOOGL')">$GOOGL</a></td>
                         <td>$295.77</td>
-                        <td><b>47.8%</b></td>
+                        <td><b>44.4%</b></td>
                         <td class="text-red">-15.3%</td>
                         <td class="text-red"><b>-14.0%</b></td>
                         <td class="text-red"><b>-25.4%</b></td>
@@ -824,6 +852,58 @@
                         <td>🟢 ยก Low</td>
                         <td>🟢 บีบแคบ (0.89x)</td>
                         <td>🟢 ชี้ขึ้น</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('ASML')">$ASML</a></td>
+                        <td>$1495.16</td>
+                        <td><b>42.2%</b></td>
+                        <td class="text-red">-9.7%</td>
+                        <td class="text-red"><b>-20.5%</b></td>
+                        <td class="text-red"><b>-0.2%</b></td>
+                        <td>1,680,705</td>
+                        <td>⚪</td>
+                        <td>🟢 บีบแคบ (0.9x)</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('DDOG')">$DDOG</a></td>
+                        <td>$184.16</td>
+                        <td><b>40.0%</b></td>
+                        <td class="text-red">-30.8%</td>
+                        <td class="text-red"><b>-25.5%</b></td>
+                        <td class="text-red"><b>-11.4%</b></td>
+                        <td>4,507,465</td>
+                        <td>🟢 ยก Low</td>
+                        <td>🟢 บีบแคบ (0.58x)</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('MELI')">$MELI</a></td>
+                        <td>$1491.49</td>
+                        <td><b>37.8%</b></td>
+                        <td class="text-red">-19.7%</td>
+                        <td class="text-red"><b>-16.6%</b></td>
+                        <td class="text-red"><b>-3.6%</b></td>
+                        <td>735,055</td>
+                        <td>⚪</td>
+                        <td>🟢 บีบแคบ (0.62x)</td>
+                        <td>🔴 ชี้ลง</td>
+                    </tr>
+        
+                    <tr>
+                        <td><a class="ticker-link" onclick="openChartModal('HOOD')">$HOOD</a></td>
+                        <td>$77.86</td>
+                        <td><b>35.6%</b></td>
+                        <td class="text-red">-25.1%</td>
+                        <td class="text-red"><b>-19.1%</b></td>
+                        <td class="text-green"><b>+0.9%</b></td>
+                        <td>19,125,550</td>
+                        <td>⚪</td>
+                        <td>🟢 บีบแคบ (0.88x)</td>
+                        <td>🔴 ชี้ลง</td>
                     </tr>
         
                 </tbody>
