@@ -76,17 +76,17 @@
       "target_5r": 494.81,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": 6.76,
-      "unrealized_pct": 1.93,
-      "current_r": 0.23,
-      "total_pnl": 6.76,
-      "current_price": 356.27,
-      "dist_ema9_pct": 1.7
+      "unrealized_pnl": 3.27,
+      "unrealized_pct": 0.94,
+      "current_r": 0.11,
+      "total_pnl": 3.27,
+      "current_price": 352.78,
+      "dist_ema9_pct": 0.6
     },
     "COST": {
       "ticker": "COST",
       "entry_price": 1046.47,
-      "current_sl": 1003.79,
+      "current_sl": 1046.47,
       "stop_loss": 1003.79,
       "risk_per_share": 42.68,
       "shares": 1,
@@ -96,12 +96,14 @@
       "target_5r": 1259.87,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": 59.74,
-      "unrealized_pct": 5.71,
-      "current_r": 1.4,
-      "total_pnl": 59.74,
-      "current_price": 1106.21,
-      "dist_ema9_pct": 3.4
+      "unrealized_pnl": 67.27,
+      "unrealized_pct": 6.43,
+      "current_r": 1.58,
+      "total_pnl": 67.27,
+      "current_price": 1113.74,
+      "dist_ema9_pct": 3.3,
+      "be_ratchet_hit": true,
+      "be_ratcheted": true
     },
     "JPM": {
       "ticker": "JPM",
@@ -116,12 +118,12 @@
       "target_5r": 458.76,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": -11.84,
-      "unrealized_pct": -1.68,
-      "current_r": -0.28,
-      "total_pnl": -11.84,
-      "current_price": 346.19,
-      "dist_ema9_pct": 1.2
+      "unrealized_pnl": -27.8,
+      "unrealized_pct": -3.95,
+      "current_r": -0.65,
+      "total_pnl": -27.8,
+      "current_price": 338.21,
+      "dist_ema9_pct": -0.9
     },
     "TEM": {
       "ticker": "TEM",
@@ -136,12 +138,12 @@
       "target_5r": 135.85,
       "entry_date": "2026-11-09",
       "auto_paper_trade": true,
-      "unrealized_pnl": -17.8,
-      "unrealized_pct": -5.85,
-      "current_r": -0.37,
-      "total_pnl": -17.8,
-      "current_price": 71.6,
-      "dist_ema9_pct": -5.9
+      "unrealized_pnl": -45.16,
+      "unrealized_pct": -14.85,
+      "current_r": -0.94,
+      "total_pnl": -45.16,
+      "current_price": 64.76,
+      "dist_ema9_pct": -12.2
     },
     "VKTX": {
       "ticker": "VKTX",
@@ -155,7 +157,13 @@
       "target_3r": 38.01,
       "target_5r": 43.87,
       "entry_date": "2026-11-16",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "unrealized_pnl": -41.14,
+      "unrealized_pct": -8.28,
+      "current_r": -0.83,
+      "total_pnl": -41.14,
+      "current_price": 26.8,
+      "dist_ema9_pct": -3.2
     },
     "META": {
       "ticker": "META",
@@ -169,7 +177,13 @@
       "target_3r": 737.84,
       "target_5r": 801.94,
       "entry_date": "2026-11-16",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "unrealized_pnl": -15.28,
+      "unrealized_pct": -2.38,
+      "current_r": -0.48,
+      "total_pnl": -15.28,
+      "current_price": 626.41,
+      "dist_ema9_pct": -0.6
     }
   },
   "trade_history": [
@@ -187,7 +201,7 @@
       "exit_reason": "Stop Loss Hit"
     }
   ],
-  "last_scan_date": "2026-11-16",
+  "last_scan_date": "2026-11-17",
   "last_telegram_update_id": 876479913,
   "be_ratchet_r_multiple": 1.5
 }
