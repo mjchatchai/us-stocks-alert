@@ -28,10 +28,10 @@
       "entry_date": "2026-11-02",
       "buy_price": 148.36,
       "auto_paper_trade": true,
-      "current_price": 147.76,
-      "unrealized_pnl": -2.4,
-      "current_r": -0.05,
-      "total_pnl": -2.4
+      "current_price": 144.46,
+      "unrealized_pnl": -15.6,
+      "current_r": -0.34,
+      "total_pnl": -15.6
     },
     "COST": {
       "ticker": "COST",
@@ -51,10 +51,10 @@
       "entry_date": "2026-11-03",
       "buy_price": 1019.26,
       "auto_paper_trade": true,
-      "current_price": 1106.21,
-      "unrealized_pnl": 86.95,
-      "current_r": 1.79,
-      "total_pnl": 86.95
+      "current_price": 1113.74,
+      "unrealized_pnl": 94.48,
+      "current_r": 1.95,
+      "total_pnl": 94.48
     },
     "AMZN": {
       "ticker": "AMZN",
@@ -74,10 +74,10 @@
       "entry_date": "2026-11-05",
       "buy_price": 259.3,
       "auto_paper_trade": true,
-      "current_price": 266.66,
-      "unrealized_pnl": 14.72,
-      "current_r": 0.35,
-      "total_pnl": 14.72
+      "current_price": 257.75,
+      "unrealized_pnl": -3.1,
+      "current_r": -0.07,
+      "total_pnl": -3.1
     },
     "TMDX": {
       "ticker": "TMDX",
@@ -97,10 +97,10 @@
       "entry_date": "2026-11-10",
       "buy_price": 90.94,
       "auto_paper_trade": true,
-      "current_price": 91.38,
-      "unrealized_pnl": 2.64,
-      "current_r": 0.06,
-      "total_pnl": 2.64
+      "current_price": 92.21,
+      "unrealized_pnl": 7.62,
+      "current_r": 0.17,
+      "total_pnl": 7.62
     },
     "ZETA": {
       "ticker": "ZETA",
@@ -120,36 +120,32 @@
       "entry_date": "2026-11-11",
       "buy_price": 37.74,
       "auto_paper_trade": true,
-      "current_price": 36.65,
-      "unrealized_pnl": -17.44,
-      "current_r": -0.36,
-      "total_pnl": -17.44
-    },
-    "RKLB": {
-      "ticker": "RKLB",
-      "entry_price": 64.07,
-      "current_sl": 58.94,
-      "stop_loss": 58.94,
-      "risk_per_share": 5.13,
-      "shares": 9,
-      "current_shares": 9,
-      "initial_shares": 9,
-      "target_3r": 79.46,
-      "target_5r": 89.72,
-      "position_capital": 576.63,
-      "tp1_hit": false,
-      "tp2_hit": false,
-      "buy_date": "2026-11-12",
-      "entry_date": "2026-11-12",
-      "buy_price": 64.07,
-      "auto_paper_trade": true,
-      "current_price": 61.53,
-      "unrealized_pnl": -22.86,
-      "current_r": -0.5,
-      "total_pnl": -22.86
+      "current_price": 35.85,
+      "unrealized_pnl": -30.24,
+      "current_r": -0.63,
+      "total_pnl": -30.24
     }
   },
-  "trade_history": [],
+  "trade_history": [
+    {
+      "ticker": "RKLB",
+      "entry_price": 64.07,
+      "exit_price": 57.37,
+      "buy_price": 64.07,
+      "sell_price": 57.37,
+      "shares": 9,
+      "realized_pnl": -60.3,
+      "r_multiple": -1.31,
+      "pnl_r": -1.31,
+      "pnl_pct": -10.46,
+      "buy_date": "2026-11-12",
+      "sell_date": "2026-11-16",
+      "entry_date": "2026-11-12",
+      "exit_date": "2026-11-16",
+      "days_held": 4,
+      "exit_reason": "Stop Loss Hit (-1R)"
+    }
+  ],
   "tickers": [
     "ASTS",
     "AVGO",
@@ -214,7 +210,7 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-11-16",
+  "last_daily_scan_date": "2026-11-17",
   "active_positions": {},
   "last_scan_date": "2026-11-03"
 }
