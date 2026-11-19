@@ -487,8 +487,8 @@
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-title">💼 หุ้นที่ถืออยู่ในพอร์ตทั้งหมด</div>
-                <div class="kpi-value text-green">32 <span style="font-size: 14px; color: var(--text-muted);">ตัว</span></div>
-                <div class="kpi-sub">🇹🇭 หุ้นไทย: <b>23</b> | 🇺🇸 หุ้น US: <b>9</b></div>
+                <div class="kpi-value text-green">31 <span style="font-size: 14px; color: var(--text-muted);">ตัว</span></div>
+                <div class="kpi-sub">🇹🇭 หุ้นไทย: <b>22</b> | 🇺🇸 หุ้น US: <b>9</b></div>
             </div>
 
             <div class="kpi-card">
@@ -502,13 +502,13 @@
             <div class="kpi-card">
                 <div class="kpi-title">🏆 WIN RATE (ไม้ที่ปิดออเดอร์แล้ว)</div>
                 <div class="kpi-value">0.0%</div>
-                <div class="kpi-sub">ปิดแล้ว: <b>16</b> ไม้ (ชนะ 0 / แพ้ 16)</div>
+                <div class="kpi-sub">ปิดแล้ว: <b>17</b> ไม้ (ชนะ 0 / แพ้ 17)</div>
             </div>
 
             <div class="kpi-card">
                 <div class="kpi-title">🛡️ REALIZED NET PROFIT</div>
                 <div class="kpi-value text-red">
-                    -16.28R
+                    +nanR
                 </div>
                 <div class="kpi-sub">ผลกำไรสุทธิสะสมจากออเดอร์ที่ปิดจริง (R-Multiples)</div>
             </div>
@@ -516,9 +516,9 @@
 
         <!-- Navigation Tabs -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('tab-portfolio')">💼 พอร์ตหุ้นรวม (32)</button>
+            <button class="tab-btn active" onclick="switchTab('tab-portfolio')">💼 พอร์ตหุ้นรวม (31)</button>
             <button class="tab-btn" onclick="switchTab('tab-leaderboard')">📊 ตารางเปรียบเทียบ 6 บอท</button>
-            <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการปิดออเดอร์ (16)</button>
+            <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการปิดออเดอร์ (17)</button>
             <button class="tab-btn" onclick="switchTab('tab-launchers')">🔗 เข้าหน้ารายละเอียดแยกบอท</button>
         </div>
 
@@ -526,8 +526,8 @@
         <div id="tab-portfolio" class="tab-section">
             <div class="filter-bar">
                 <div class="filter-pills">
-                    <button class="pill-btn active" onclick="filterPositions('all', this)">ทั้งหมด (32)</button>
-                    <button class="pill-btn" onclick="filterPositions('th', this)">🇹🇭 หุ้นไทย (23)</button>
+                    <button class="pill-btn active" onclick="filterPositions('all', this)">ทั้งหมด (31)</button>
+                    <button class="pill-btn" onclick="filterPositions('th', this)">🇹🇭 หุ้นไทย (22)</button>
                     <button class="pill-btn" onclick="filterPositions('us', this)">🇺🇸 สหรัฐฯ (9)</button>
                     <button class="pill-btn" onclick="filterPositions('bot1', this)">Bot 1 (US 6-Btn)</button>
                     <button class="pill-btn" onclick="filterPositions('bot2', this)">Bot 2 (TH 6-Btn)</button>
@@ -696,29 +696,6 @@
             <td><span class="badge badge-blue">รันเทรนด์</span></td>
             <td>
                 <button class="btn-action" onclick="openTradingViewModal('SET:TRUE')">📈 กราฟ</button>
-            </td>
-        </tr>
-        
-        <tr class="bot-row bot2 mkt-th">
-            <td>
-                <div class="ticker-badge" onclick="openTradingViewModal('SET:TFG')">
-                    <span>🇹🇭</span>
-                    <b>TFG</b>
-                </div>
-            </td>
-            <td><span class="bot-pill">Bot 2: TH 6-Button</span></td>
-            <td><code>2026-11-02</code></td>
-            <td>9.75 ฿</td>
-            <td><b>9.75 ฿</b></td>
-            <td><b class="text-green">+0.00%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td class="text-red">8.95 ฿</td>
-            <td class="text-gold">12.20 ฿</td>
-            <td class="text-green">13.80 ฿</td>
-            <td>6,200</td>
-            <td><span class="badge badge-blue">รันเทรนด์</span></td>
-            <td>
-                <button class="btn-action" onclick="openTradingViewModal('SET:TFG')">📈 กราฟ</button>
             </td>
         </tr>
         
@@ -1325,38 +1302,6 @@
         <tr>
             <td><b>#1</b></td>
             <td>
-                <b>🇺🇸 Bot 5: US Hybrid</b>
-                <div style="font-size: 11px; color: var(--text-muted);">Multi-Factor Hybrid Master</div>
-            </td>
-            <td><span class="badge badge-blue">US</span></td>
-            <td><b>0 ไม้</b></td>
-            <td>0 ไม้</td>
-            <td><b>0.0%</b></td>
-            <td><b class="text-green">+0.00R</b></td>
-            <td>
-                <a href="bot5.html" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
-            </td>
-        </tr>
-        
-        <tr>
-            <td><b>#2</b></td>
-            <td>
-                <b>🇹🇭 Bot 2: TH 6-Button</b>
-                <div style="font-size: 11px; color: var(--text-muted);">SET 6-Button Multi-Layer Momentum</div>
-            </td>
-            <td><span class="badge badge-blue">TH</span></td>
-            <td><b>8 ไม้</b></td>
-            <td>1 ไม้</td>
-            <td><b>0.0%</b></td>
-            <td><b class="text-red">-0.24R</b></td>
-            <td>
-                <a href="https://mjchatchai.github.io/thai-stocks-alert/" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
-            </td>
-        </tr>
-        
-        <tr>
-            <td><b>#3</b></td>
-            <td>
                 <b>🇺🇸 Bot 1: US 6-Button</b>
                 <div style="font-size: 11px; color: var(--text-muted);">6-Button Multi-Layer Momentum</div>
             </td>
@@ -1367,6 +1312,38 @@
             <td><b class="text-red">-3.70R</b></td>
             <td>
                 <a href="bot1.html" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
+            </td>
+        </tr>
+        
+        <tr>
+            <td><b>#2</b></td>
+            <td>
+                <b>🇹🇭 Bot 2: TH 6-Button</b>
+                <div style="font-size: 11px; color: var(--text-muted);">SET 6-Button Multi-Layer Momentum</div>
+            </td>
+            <td><span class="badge badge-blue">TH</span></td>
+            <td><b>7 ไม้</b></td>
+            <td>2 ไม้</td>
+            <td><b>0.0%</b></td>
+            <td><b class="text-red">+nanR</b></td>
+            <td>
+                <a href="https://mjchatchai.github.io/thai-stocks-alert/" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
+            </td>
+        </tr>
+        
+        <tr>
+            <td><b>#3</b></td>
+            <td>
+                <b>🇺🇸 Bot 5: US Hybrid</b>
+                <div style="font-size: 11px; color: var(--text-muted);">Multi-Factor Hybrid Master</div>
+            </td>
+            <td><span class="badge badge-blue">US</span></td>
+            <td><b>0 ไม้</b></td>
+            <td>0 ไม้</td>
+            <td><b>0.0%</b></td>
+            <td><b class="text-green">+0.00R</b></td>
+            <td>
+                <a href="bot5.html" class="btn-action" target="_blank">เปิดหน้ารายละเอียด ↗</a>
             </td>
         </tr>
         
@@ -1490,6 +1467,18 @@
                 <td><b class="text-red">-1.19%</b></td>
                 <td><b class="text-red">-0.24R</b></td>
                 <td><span class="badge badge-blue">SELL Signal</span></td>
+            </tr>
+            
+            <tr>
+                <td><b>🇹🇭 TFG</b></td>
+                <td><span class="bot-pill">Bot 2: TH 6-Button</span></td>
+                <td><code>2026-11-02</code></td>
+                <td><code>2026-11-19</code></td>
+                <td>9.75 ฿</td>
+                <td>nan ฿</td>
+                <td><b class="text-red">+nan%</b></td>
+                <td><b class="text-red">+nanR</b></td>
+                <td><span class="badge badge-blue">Stop Loss Hit (-1R)</span></td>
             </tr>
             
             <tr>
@@ -1728,7 +1717,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>6-Bot Forward Testing Engine • Data as of <code>2026-11-19 19:05:19</code> • Auto-refreshes on GitHub Actions schedule</p>
+            <p>6-Bot Forward Testing Engine • Data as of <code>2026-11-19 19:10:22</code> • Auto-refreshes on GitHub Actions schedule</p>
         </footer>
     </div>
 
