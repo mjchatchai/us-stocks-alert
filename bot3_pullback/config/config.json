@@ -76,12 +76,12 @@
       "target_5r": 494.81,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": 2.94,
-      "unrealized_pct": 0.84,
-      "current_r": 0.1,
-      "total_pnl": 2.94,
-      "current_price": 352.45,
-      "dist_ema9_pct": 0.3
+      "unrealized_pnl": -0.3,
+      "unrealized_pct": -0.09,
+      "current_r": -0.01,
+      "total_pnl": -0.3,
+      "current_price": 349.21,
+      "dist_ema9_pct": -0.5
     },
     "COST": {
       "ticker": "COST",
@@ -96,34 +96,14 @@
       "target_5r": 1259.87,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": 50.15,
-      "unrealized_pct": 4.79,
-      "current_r": 1.18,
-      "total_pnl": 50.15,
-      "current_price": 1096.62,
-      "dist_ema9_pct": 0.9,
+      "unrealized_pnl": 47.36,
+      "unrealized_pct": 4.53,
+      "current_r": 1.11,
+      "total_pnl": 47.36,
+      "current_price": 1093.83,
+      "dist_ema9_pct": 0.5,
       "be_ratchet_hit": true,
       "be_ratcheted": true
-    },
-    "META": {
-      "ticker": "META",
-      "entry_price": 641.69,
-      "current_sl": 609.64,
-      "stop_loss": 609.64,
-      "risk_per_share": 32.05,
-      "shares": 1,
-      "current_shares": 1,
-      "initial_shares": 1,
-      "target_3r": 737.84,
-      "target_5r": 801.94,
-      "entry_date": "2026-11-16",
-      "auto_paper_trade": true,
-      "unrealized_pnl": -25.31,
-      "unrealized_pct": -3.94,
-      "current_r": -0.79,
-      "total_pnl": -25.31,
-      "current_price": 616.38,
-      "dist_ema9_pct": -1.5
     },
     "PRCT": {
       "ticker": "PRCT",
@@ -137,7 +117,13 @@
       "target_3r": 32.68,
       "target_5r": 37.68,
       "entry_date": "2026-11-19",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "unrealized_pnl": 11.4,
+      "unrealized_pct": 2.26,
+      "current_r": 0.23,
+      "total_pnl": 11.4,
+      "current_price": 25.75,
+      "dist_ema9_pct": 8.3
     },
     "AMZN": {
       "ticker": "AMZN",
@@ -151,7 +137,13 @@
       "target_3r": 320.39,
       "target_5r": 355.49,
       "entry_date": "2026-11-19",
-      "auto_paper_trade": true
+      "auto_paper_trade": true,
+      "unrealized_pnl": -20.74,
+      "unrealized_pct": -3.87,
+      "current_r": -0.59,
+      "total_pnl": -20.74,
+      "current_price": 257.37,
+      "dist_ema9_pct": -1.6
     }
   },
   "trade_history": [
@@ -206,9 +198,22 @@
       "pnl_r": -1.04,
       "pnl_pct": -10.44,
       "exit_reason": "Stop Loss Hit"
+    },
+    {
+      "ticker": "META",
+      "entry_date": "2026-11-16",
+      "exit_date": "2026-11-19",
+      "entry_price": 641.69,
+      "exit_price": 596.219970703125,
+      "shares": 1,
+      "realized_pnl": -45.47,
+      "r_multiple": -1.42,
+      "pnl_r": -1.42,
+      "pnl_pct": -7.09,
+      "exit_reason": "Stop Loss Hit"
     }
   ],
-  "last_scan_date": "2026-11-19",
+  "last_scan_date": "2026-11-20",
   "last_telegram_update_id": 876479913,
   "be_ratchet_r_multiple": 1.5
 }
