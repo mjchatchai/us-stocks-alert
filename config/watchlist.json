@@ -28,10 +28,10 @@
       "entry_date": "2026-11-03",
       "buy_price": 1019.26,
       "auto_paper_trade": true,
-      "current_price": 1096.62,
-      "unrealized_pnl": 77.36,
-      "current_r": 1.6,
-      "total_pnl": 77.36
+      "current_price": 1093.83,
+      "unrealized_pnl": 74.57,
+      "current_r": 1.54,
+      "total_pnl": 74.57
     },
     "AMZN": {
       "ticker": "AMZN",
@@ -51,10 +51,10 @@
       "entry_date": "2026-11-05",
       "buy_price": 259.3,
       "auto_paper_trade": true,
-      "current_price": 267.74,
-      "unrealized_pnl": 16.88,
-      "current_r": 0.41,
-      "total_pnl": 16.88
+      "current_price": 257.37,
+      "unrealized_pnl": -3.86,
+      "current_r": -0.09,
+      "total_pnl": -3.86
     },
     "TMDX": {
       "ticker": "TMDX",
@@ -74,10 +74,10 @@
       "entry_date": "2026-11-10",
       "buy_price": 90.94,
       "auto_paper_trade": true,
-      "current_price": 96.43,
-      "unrealized_pnl": 32.94,
-      "current_r": 0.75,
-      "total_pnl": 32.94
+      "current_price": 94.02,
+      "unrealized_pnl": 18.48,
+      "current_r": 0.42,
+      "total_pnl": 18.48
     },
     "AVGO": {
       "ticker": "AVGO",
@@ -97,10 +97,10 @@
       "entry_date": "2026-11-17",
       "buy_price": 341.6,
       "auto_paper_trade": true,
-      "current_price": 354.05,
-      "unrealized_pnl": 12.45,
-      "current_r": 0.46,
-      "total_pnl": 12.45
+      "current_price": 346.65,
+      "unrealized_pnl": 5.05,
+      "current_r": 0.18,
+      "total_pnl": 5.05
     }
   },
   "trade_history": [
@@ -223,7 +223,7 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-11-19",
+  "last_daily_scan_date": "2026-11-20",
   "active_positions": {},
   "last_scan_date": "2026-11-03"
 }
