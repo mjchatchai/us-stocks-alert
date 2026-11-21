@@ -76,12 +76,12 @@
       "target_5r": 494.81,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": -0.3,
-      "unrealized_pct": -0.09,
-      "current_r": -0.01,
-      "total_pnl": -0.3,
-      "current_price": 349.21,
-      "dist_ema9_pct": -0.5
+      "unrealized_pnl": -6.95,
+      "unrealized_pct": -1.99,
+      "current_r": -0.24,
+      "total_pnl": -6.95,
+      "current_price": 342.56,
+      "dist_ema9_pct": -1.9
     },
     "COST": {
       "ticker": "COST",
@@ -96,12 +96,12 @@
       "target_5r": 1259.87,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": 47.36,
-      "unrealized_pct": 4.53,
-      "current_r": 1.11,
-      "total_pnl": 47.36,
-      "current_price": 1093.83,
-      "dist_ema9_pct": 0.5,
+      "unrealized_pnl": 55.68,
+      "unrealized_pct": 5.32,
+      "current_r": 1.3,
+      "total_pnl": 55.68,
+      "current_price": 1102.15,
+      "dist_ema9_pct": 1.0,
       "be_ratchet_hit": true,
       "be_ratcheted": true
     },
@@ -118,32 +118,12 @@
       "target_5r": 37.68,
       "entry_date": "2026-11-19",
       "auto_paper_trade": true,
-      "unrealized_pnl": 11.4,
-      "unrealized_pct": 2.26,
-      "current_r": 0.23,
-      "total_pnl": 11.4,
-      "current_price": 25.75,
-      "dist_ema9_pct": 8.3
-    },
-    "AMZN": {
-      "ticker": "AMZN",
-      "entry_price": 267.74,
-      "current_sl": 250.19,
-      "stop_loss": 250.19,
-      "risk_per_share": 17.55,
-      "shares": 2,
-      "current_shares": 2,
-      "initial_shares": 2,
-      "target_3r": 320.39,
-      "target_5r": 355.49,
-      "entry_date": "2026-11-19",
-      "auto_paper_trade": true,
-      "unrealized_pnl": -20.74,
-      "unrealized_pct": -3.87,
-      "current_r": -0.59,
-      "total_pnl": -20.74,
-      "current_price": 257.37,
-      "dist_ema9_pct": -1.6
+      "unrealized_pnl": -9.6,
+      "unrealized_pct": -1.91,
+      "current_r": -0.19,
+      "total_pnl": -9.6,
+      "current_price": 24.7,
+      "dist_ema9_pct": 3.1
     }
   },
   "trade_history": [
@@ -211,9 +191,22 @@
       "pnl_r": -1.42,
       "pnl_pct": -7.09,
       "exit_reason": "Stop Loss Hit"
+    },
+    {
+      "ticker": "AMZN",
+      "entry_date": "2026-11-19",
+      "exit_date": "2026-11-20",
+      "entry_price": 267.74,
+      "exit_price": 246.82000732421875,
+      "shares": 2,
+      "realized_pnl": -41.84,
+      "r_multiple": -1.19,
+      "pnl_r": -1.19,
+      "pnl_pct": -7.81,
+      "exit_reason": "Stop Loss Hit"
     }
   ],
-  "last_scan_date": "2026-11-20",
+  "last_scan_date": "2026-11-21",
   "last_telegram_update_id": 876479913,
   "be_ratchet_r_multiple": 1.5
 }
