@@ -28,10 +28,10 @@
       "entry_date": "2026-11-03",
       "buy_price": 1019.26,
       "auto_paper_trade": true,
-      "current_price": 1102.15,
-      "unrealized_pnl": 82.89,
-      "current_r": 1.71,
-      "total_pnl": 82.89
+      "current_price": 1097.91,
+      "unrealized_pnl": 78.65,
+      "current_r": 1.62,
+      "total_pnl": 78.65
     },
     "AMZN": {
       "ticker": "AMZN",
@@ -43,7 +43,7 @@
       "current_shares": 2,
       "initial_shares": 2,
       "target_3r": 321.52,
-      "target_5r": 363,
+      "target_5r": 363.0,
       "position_capital": 518.6,
       "tp1_hit": false,
       "tp2_hit": false,
@@ -51,10 +51,10 @@
       "entry_date": "2026-11-05",
       "buy_price": 259.3,
       "auto_paper_trade": true,
-      "current_price": 246.82,
-      "unrealized_pnl": -24.96,
-      "current_r": -0.6,
-      "total_pnl": -24.96
+      "current_price": 255.39,
+      "unrealized_pnl": -7.82,
+      "current_r": -0.19,
+      "total_pnl": -7.82
     }
   },
   "trade_history": [
@@ -213,7 +213,7 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-11-23",
+  "last_daily_scan_date": "2026-11-24",
   "active_positions": {},
   "last_scan_date": "2026-11-03"
 }
