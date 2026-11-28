@@ -28,10 +28,10 @@
       "entry_date": "2026-11-03",
       "buy_price": 1019.26,
       "auto_paper_trade": true,
-      "current_price": 1086.81,
-      "unrealized_pnl": 67.55,
-      "current_r": 1.39,
-      "total_pnl": 67.55
+      "current_price": 1097.81,
+      "unrealized_pnl": 78.55,
+      "current_r": 1.62,
+      "total_pnl": 78.55
     },
     "VKTX": {
       "ticker": "VKTX",
@@ -50,6 +50,29 @@
       "buy_date": "2026-11-25",
       "entry_date": "2026-11-25",
       "buy_price": 31.38,
+      "auto_paper_trade": true,
+      "current_price": 31.41,
+      "unrealized_pnl": 0.57,
+      "current_r": 0.01,
+      "total_pnl": 0.57
+    },
+    "O": {
+      "ticker": "O",
+      "entry_price": 60.51,
+      "current_sl": 56.74,
+      "stop_loss": 56.74,
+      "risk_per_share": 3.77,
+      "shares": 13,
+      "current_shares": 13,
+      "initial_shares": 13,
+      "target_3r": 71.82,
+      "target_5r": 79.36,
+      "position_capital": 786.63,
+      "tp1_hit": false,
+      "tp2_hit": false,
+      "buy_date": "2026-11-27",
+      "entry_date": "2026-11-27",
+      "buy_price": 60.51,
       "auto_paper_trade": true
     }
   },
@@ -245,7 +268,7 @@
     "ISRG",
     "CAT"
   ],
-  "last_daily_scan_date": "2026-11-27",
+  "last_daily_scan_date": "2026-11-28",
   "active_positions": {},
   "last_scan_date": "2026-11-03"
 }
