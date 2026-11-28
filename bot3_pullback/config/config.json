@@ -76,12 +76,12 @@
       "target_5r": 494.81,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": 6.07,
-      "unrealized_pct": 1.74,
-      "current_r": 0.21,
-      "total_pnl": 6.07,
-      "current_price": 355.58,
-      "dist_ema9_pct": 1.2
+      "unrealized_pnl": 9.03,
+      "unrealized_pct": 2.58,
+      "current_r": 0.31,
+      "total_pnl": 9.03,
+      "current_price": 358.54,
+      "dist_ema9_pct": 1.7
     },
     "COST": {
       "ticker": "COST",
@@ -96,12 +96,12 @@
       "target_5r": 1259.87,
       "entry_date": "2026-11-05",
       "auto_paper_trade": true,
-      "unrealized_pnl": 40.34,
-      "unrealized_pct": 3.85,
-      "current_r": 0.95,
-      "total_pnl": 40.34,
-      "current_price": 1086.81,
-      "dist_ema9_pct": 1.4,
+      "unrealized_pnl": 51.34,
+      "unrealized_pct": 4.91,
+      "current_r": 1.2,
+      "total_pnl": 51.34,
+      "current_price": 1097.81,
+      "dist_ema9_pct": 1.9,
       "be_ratchet_hit": true,
       "be_ratcheted": true
     },
@@ -118,12 +118,12 @@
       "target_5r": 37.68,
       "entry_date": "2026-11-19",
       "auto_paper_trade": true,
-      "unrealized_pnl": -10.0,
-      "unrealized_pct": -1.99,
-      "current_r": -0.2,
-      "total_pnl": -10.0,
-      "current_price": 24.68,
-      "dist_ema9_pct": 1.2
+      "unrealized_pnl": 3.6,
+      "unrealized_pct": 0.71,
+      "current_r": 0.07,
+      "total_pnl": 3.6,
+      "current_price": 25.36,
+      "dist_ema9_pct": 3.2
     },
     "VKTX": {
       "ticker": "VKTX",
@@ -138,12 +138,68 @@
       "target_5r": 50.48,
       "entry_date": "2026-11-25",
       "auto_paper_trade": true,
-      "unrealized_pnl": 20.9,
-      "unrealized_pct": 6.45,
-      "current_r": 0.45,
-      "total_pnl": 20.9,
-      "current_price": 31.38,
-      "dist_ema9_pct": 11.6
+      "unrealized_pnl": 21.23,
+      "unrealized_pct": 6.55,
+      "current_r": 0.46,
+      "total_pnl": 21.23,
+      "current_price": 31.41,
+      "dist_ema9_pct": 9.2
+    },
+    "RBRK": {
+      "ticker": "RBRK",
+      "entry_price": 112.89,
+      "current_sl": 99.87,
+      "stop_loss": 99.87,
+      "risk_per_share": 13.02,
+      "shares": 3,
+      "current_shares": 3,
+      "initial_shares": 3,
+      "target_3r": 151.95,
+      "target_5r": 177.99,
+      "entry_date": "2026-11-28",
+      "auto_paper_trade": true
+    },
+    "PANW": {
+      "ticker": "PANW",
+      "entry_price": 366.76,
+      "current_sl": 332.17,
+      "stop_loss": 332.17,
+      "risk_per_share": 34.59,
+      "shares": 1,
+      "current_shares": 1,
+      "initial_shares": 1,
+      "target_3r": 470.53,
+      "target_5r": 539.71,
+      "entry_date": "2026-11-28",
+      "auto_paper_trade": true
+    },
+    "TSLA": {
+      "ticker": "TSLA",
+      "entry_price": 400.0,
+      "current_sl": 352.28,
+      "stop_loss": 352.28,
+      "risk_per_share": 47.72,
+      "shares": 1,
+      "current_shares": 1,
+      "initial_shares": 1,
+      "target_3r": 543.16,
+      "target_5r": 638.6,
+      "entry_date": "2026-11-28",
+      "auto_paper_trade": true
+    },
+    "PLTR": {
+      "ticker": "PLTR",
+      "entry_price": 172.17,
+      "current_sl": 149.24,
+      "stop_loss": 149.24,
+      "risk_per_share": 22.93,
+      "shares": 2,
+      "current_shares": 2,
+      "initial_shares": 2,
+      "target_3r": 240.96,
+      "target_5r": 286.82,
+      "entry_date": "2026-11-28",
+      "auto_paper_trade": true
     }
   },
   "trade_history": [
@@ -226,7 +282,7 @@
       "exit_reason": "Stop Loss Hit"
     }
   ],
-  "last_scan_date": "2026-11-27",
+  "last_scan_date": "2026-11-28",
   "last_telegram_update_id": 876479913,
   "be_ratchet_r_multiple": 1.5
 }
