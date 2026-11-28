@@ -487,8 +487,8 @@
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-title">💼 หุ้นที่ถืออยู่ในพอร์ตทั้งหมด</div>
-                <div class="kpi-value text-green">23 <span style="font-size: 14px; color: var(--text-muted);">ตัว</span></div>
-                <div class="kpi-sub">🇹🇭 หุ้นไทย: <b>16</b> | 🇺🇸 หุ้น US: <b>7</b></div>
+                <div class="kpi-value text-green">27 <span style="font-size: 14px; color: var(--text-muted);">ตัว</span></div>
+                <div class="kpi-sub">🇹🇭 หุ้นไทย: <b>16</b> | 🇺🇸 หุ้น US: <b>11</b></div>
             </div>
 
             <div class="kpi-card">
@@ -516,7 +516,7 @@
 
         <!-- Navigation Tabs -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('tab-portfolio')">💼 พอร์ตหุ้นรวม (23)</button>
+            <button class="tab-btn active" onclick="switchTab('tab-portfolio')">💼 พอร์ตหุ้นรวม (27)</button>
             <button class="tab-btn" onclick="switchTab('tab-leaderboard')">📊 ตารางเปรียบเทียบ 6 บอท</button>
             <button class="tab-btn" onclick="switchTab('tab-history')">📜 ประวัติการปิดออเดอร์ (30)</button>
             <button class="tab-btn" onclick="switchTab('tab-launchers')">🔗 เข้าหน้ารายละเอียดแยกบอท</button>
@@ -526,9 +526,9 @@
         <div id="tab-portfolio" class="tab-section">
             <div class="filter-bar">
                 <div class="filter-pills">
-                    <button class="pill-btn active" onclick="filterPositions('all', this)">ทั้งหมด (23)</button>
+                    <button class="pill-btn active" onclick="filterPositions('all', this)">ทั้งหมด (27)</button>
                     <button class="pill-btn" onclick="filterPositions('th', this)">🇹🇭 หุ้นไทย (16)</button>
-                    <button class="pill-btn" onclick="filterPositions('us', this)">🇺🇸 สหรัฐฯ (7)</button>
+                    <button class="pill-btn" onclick="filterPositions('us', this)">🇺🇸 สหรัฐฯ (11)</button>
                     <button class="pill-btn" onclick="filterPositions('bot1', this)">Bot 1 (US 6-Btn)</button>
                     <button class="pill-btn" onclick="filterPositions('bot2', this)">Bot 2 (TH 6-Btn)</button>
                     <button class="pill-btn" onclick="filterPositions('bot3', this)">Bot 3 (US Pullback)</button>
@@ -811,6 +811,98 @@
             <td><span class="badge badge-blue">รันเทรนด์</span></td>
             <td>
                 <button class="btn-action" onclick="openTradingViewModal('VKTX')">📈 กราฟ</button>
+            </td>
+        </tr>
+        
+        <tr class="bot-row bot3 mkt-us">
+            <td>
+                <div class="ticker-badge" onclick="openTradingViewModal('RBRK')">
+                    <span>🇺🇸</span>
+                    <b>RBRK</b>
+                </div>
+            </td>
+            <td><span class="bot-pill">Bot 3: US Pullback</span></td>
+            <td><code>2026-11-28</code></td>
+            <td>112.89 $</td>
+            <td><b>112.89 $</b></td>
+            <td><b class="text-green">+0.00%</b></td>
+            <td><b class="text-green">+0.00R</b></td>
+            <td class="text-red">99.87 $</td>
+            <td class="text-gold">151.95 $</td>
+            <td class="text-green">177.99 $</td>
+            <td>3</td>
+            <td><span class="badge badge-blue">รันเทรนด์</span></td>
+            <td>
+                <button class="btn-action" onclick="openTradingViewModal('RBRK')">📈 กราฟ</button>
+            </td>
+        </tr>
+        
+        <tr class="bot-row bot3 mkt-us">
+            <td>
+                <div class="ticker-badge" onclick="openTradingViewModal('PANW')">
+                    <span>🇺🇸</span>
+                    <b>PANW</b>
+                </div>
+            </td>
+            <td><span class="bot-pill">Bot 3: US Pullback</span></td>
+            <td><code>2026-11-28</code></td>
+            <td>366.76 $</td>
+            <td><b>366.76 $</b></td>
+            <td><b class="text-green">+0.00%</b></td>
+            <td><b class="text-green">+0.00R</b></td>
+            <td class="text-red">332.17 $</td>
+            <td class="text-gold">470.53 $</td>
+            <td class="text-green">539.71 $</td>
+            <td>1</td>
+            <td><span class="badge badge-blue">รันเทรนด์</span></td>
+            <td>
+                <button class="btn-action" onclick="openTradingViewModal('PANW')">📈 กราฟ</button>
+            </td>
+        </tr>
+        
+        <tr class="bot-row bot3 mkt-us">
+            <td>
+                <div class="ticker-badge" onclick="openTradingViewModal('TSLA')">
+                    <span>🇺🇸</span>
+                    <b>TSLA</b>
+                </div>
+            </td>
+            <td><span class="bot-pill">Bot 3: US Pullback</span></td>
+            <td><code>2026-11-28</code></td>
+            <td>400.00 $</td>
+            <td><b>400.00 $</b></td>
+            <td><b class="text-green">+0.00%</b></td>
+            <td><b class="text-green">+0.00R</b></td>
+            <td class="text-red">352.28 $</td>
+            <td class="text-gold">543.16 $</td>
+            <td class="text-green">638.60 $</td>
+            <td>1</td>
+            <td><span class="badge badge-blue">รันเทรนด์</span></td>
+            <td>
+                <button class="btn-action" onclick="openTradingViewModal('TSLA')">📈 กราฟ</button>
+            </td>
+        </tr>
+        
+        <tr class="bot-row bot3 mkt-us">
+            <td>
+                <div class="ticker-badge" onclick="openTradingViewModal('PLTR')">
+                    <span>🇺🇸</span>
+                    <b>PLTR</b>
+                </div>
+            </td>
+            <td><span class="bot-pill">Bot 3: US Pullback</span></td>
+            <td><code>2026-11-28</code></td>
+            <td>172.17 $</td>
+            <td><b>172.17 $</b></td>
+            <td><b class="text-green">+0.00%</b></td>
+            <td><b class="text-green">+0.00R</b></td>
+            <td class="text-red">149.24 $</td>
+            <td class="text-gold">240.96 $</td>
+            <td class="text-green">286.82 $</td>
+            <td>2</td>
+            <td><span class="badge badge-blue">รันเทรนด์</span></td>
+            <td>
+                <button class="btn-action" onclick="openTradingViewModal('PLTR')">📈 กราฟ</button>
             </td>
         </tr>
         
@@ -1170,7 +1262,7 @@
                 <div style="font-size: 11px; color: var(--text-muted);">Trend Confluence Support & Retest</div>
             </td>
             <td><span class="badge badge-blue">US</span></td>
-            <td><b>4 ไม้</b></td>
+            <td><b>8 ไม้</b></td>
             <td>6 ไม้</td>
             <td><b>0.0%</b></td>
             <td><b class="text-red">-6.95R</b></td>
@@ -1689,7 +1781,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>6-Bot Forward Testing Engine • Data as of <code>2026-11-28 09:28:15</code> • Auto-refreshes on GitHub Actions schedule</p>
+            <p>6-Bot Forward Testing Engine • Data as of <code>2026-11-28 09:28:39</code> • Auto-refreshes on GitHub Actions schedule</p>
         </footer>
     </div>
 
